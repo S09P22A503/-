@@ -1,4 +1,4 @@
-package com.sshmarket.trade.global.config.kafka;
+package com.sshmarket.trade.domain.trade.infra;
 
 import java.util.HashMap;
 import java.util.Map;

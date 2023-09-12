@@ -1,6 +1,7 @@
-package com.sshmarket.trade.global.config.kafka;
+package com.sshmarket.trade.domain.trade.application.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sshmarket.trade.domain.trade.dto.MessageDto;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ public class KafkaConsumer {
     @KafkaListener(topics = TOPIC_NAME)
     public void listenMessage(String jsonMessage) {
         try {
-            MyMessage message = objectMapper.readValue(jsonMessage, MyMessage.class);
+            MessageDto message = objectMapper.readValue(jsonMessage, MessageDto.class);
             System.out.println(">>>" + message.getName() + "," +message.getMessage());
         } catch (Exception e) {
             e.printStackTrace();

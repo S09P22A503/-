@@ -1,5 +1,6 @@
-package com.sshmarket.trade.global.config.kafka;
+package com.sshmarket.trade.domain.trade.infra;
 
+import com.sshmarket.trade.domain.trade.dto.MessageDto;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -31,7 +32,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, MyMessage> newProducerFactory() {
+    public ProducerFactory<String, MessageDto> newProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -41,7 +42,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, MyMessage> newKafkaTemplate() {
+    public KafkaTemplate<String, MessageDto> newKafkaTemplate() {
         return new KafkaTemplate<>(newProducerFactory());
     }
 }
