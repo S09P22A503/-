@@ -1,6 +1,6 @@
-package com.sshmarket.trade.domain.trade.application.kafka;
+package com.sshmarket.trade.application.kafka;
 
-import com.sshmarket.trade.domain.trade.dto.MessageDto;
+import com.sshmarket.trade.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
