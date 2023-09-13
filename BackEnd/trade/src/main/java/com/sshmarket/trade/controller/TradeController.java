@@ -1,7 +1,7 @@
-package com.sshmarket.trade.domain.trade.controller;
+package com.sshmarket.trade.controller;
 
-import com.sshmarket.trade.domain.trade.application.kafka.KafkaProducer;
-import com.sshmarket.trade.domain.trade.dto.MessageDto;
+import com.sshmarket.trade.application.kafka.KafkaProducer;
+import com.sshmarket.trade.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
