@@ -1,6 +1,6 @@
-package com.sshmarket.trade.domain.trade.infra;
+package com.sshmarket.trade.infra;
 
-import com.sshmarket.trade.domain.trade.dto.MessageDto;
+import com.sshmarket.trade.dto.MessageDto;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -16,6 +16,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 public class KafkaProducerConfig {
 
     private static final String BOOTSTRAP_SERVER = "localhost:9092";
+
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
