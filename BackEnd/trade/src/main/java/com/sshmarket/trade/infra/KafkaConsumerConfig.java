@@ -1,4 +1,4 @@
-package com.sshmarket.trade.domain.trade.infra;
+package com.sshmarket.trade.infra;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +14,7 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {
+
     private static final String BOOTSTRAP_SERVER = "localhost:9092";
     private static final String GROUP_ID = "group3";
 

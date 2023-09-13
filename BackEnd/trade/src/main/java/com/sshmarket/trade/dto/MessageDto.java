@@ -1,4 +1,4 @@
-package com.sshmarket.trade.domain.trade.dto;
+package com.sshmarket.trade.dto;
 
 import lombok.Getter;
 import lombok.Setter;
