@@ -3,10 +3,12 @@ package com.sshmarket.trade.domain.trade.controller;
 import com.sshmarket.trade.domain.trade.application.kafka.KafkaProducer;
 import com.sshmarket.trade.domain.trade.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class TradeController {
@@ -16,6 +18,12 @@ public class TradeController {
     @RequestMapping("/publish")
     public String publishJson(MessageDto message) {
         kafkaProducer.sendWithCallback(message);
-        return "published a message with callback :" + message.getName() + "," + message.getMessage();
+        return "published a message with callback :" + message.getName() + ","
+                + message.getMessage();
+    }
+
+    @MessageMapping("/hello")
+    public void message(MessageDto message) {
+        log.info(message.getMessage());
     }
 }
