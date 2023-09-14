@@ -1,5 +1,5 @@
 package com.sshmarket.trade.domain;
 
 public enum Status {
-    CANCEL, BUY, SELL
+    CANCEL, BUY, SELL, CONTACT
 }
