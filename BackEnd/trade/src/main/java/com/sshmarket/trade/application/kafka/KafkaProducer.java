@@ -23,13 +23,10 @@ public class KafkaProducer {
         future.addCallback(new ListenableFutureCallback<SendResult<String, MessageDto>>() {
             @Override
             public void onFailure(Throwable ex) {
-                System.out.println("Failed " + message + " due to : " + ex.getMessage());
             }
 
             @Override
             public void onSuccess(SendResult<String, MessageDto> result) {
-                System.out.println(
-                        "Sent " + message + " offset:" + result.getRecordMetadata().offset());
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.sshmarket.trade.controller;
 
+import com.sshmarket.trade.application.MessageSendUseCase;
 import com.sshmarket.trade.application.kafka.KafkaProducer;
 import com.sshmarket.trade.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TradeController {
 
-    private final KafkaProducer kafkaProducer;
+    private final MessageSendUseCase messageSendUseCase;
 
-    @RequestMapping("/publish")
-    public String publishJson(MessageDto message) {
-        kafkaProducer.sendWithCallback(message);
-        return "published a message with callback :" + message.getName() + ","
-                + message.getMessage();
-    }
-
-    @MessageMapping("/hello")
+    @MessageMapping("/send")
     public void message(MessageDto message) {
         log.info(message.getMessage());
+        messageSendUseCase.sendMessage(message);
     }
 }

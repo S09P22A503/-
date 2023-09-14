@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 @Configuration
 public class MongoDBConfig {
 
-    @Value("${spring.data.mongodb.test.connectionString}")
+    @Value("${spring.data.mongodb.uri}")
     private String connectionString;
 
     @Bean
