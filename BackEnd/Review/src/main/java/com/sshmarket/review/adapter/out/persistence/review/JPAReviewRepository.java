@@ -1,4 +1,4 @@
-package com.sshmarket.review.adapter.out.persistence;
+package com.sshmarket.review.adapter.out.persistence.review;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

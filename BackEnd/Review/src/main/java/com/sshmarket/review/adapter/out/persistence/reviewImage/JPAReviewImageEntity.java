@@ -1,20 +1,19 @@
-package com.sshmarket.review.adapter.out.persistence;
+package com.sshmarket.review.adapter.out.persistence.reviewImage;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "review")
+@Table(name = "review_image")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-class JPAReviewEntity {
+class JPAReviewImageEntity {
 
     @Id
     @GeneratedValue

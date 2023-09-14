@@ -13,13 +13,17 @@ public class ReviewImage {
 
     @Getter
     @NonNull
+    private final Long reviewId;
+
+    @Getter
+    @NonNull
     private final String imageUrl;
 
-    public static ReviewImage createReviewImageWithoutId(String imageUrl){
-        return new ReviewImage(null, imageUrl);
+    public static ReviewImage createReviewImageWithoutId(Long reviewId, String imageUrl) {
+        return new ReviewImage(null, reviewId, imageUrl);
     }
 
-    public static ReviewImage createReviewImageWithId(Long id, String imageUrl){
-        return new ReviewImage(id, imageUrl);
+    public static ReviewImage createReviewImageWithId(Long id, Long reviewId, String imageUrl) {
+        return new ReviewImage(id, reviewId, imageUrl);
     }
 }
