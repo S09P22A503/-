@@ -59,17 +59,19 @@ public class Article {
     private List<ArticleBookmark> articleBookmarks = new ArrayList<>();
 
     @Builder
-    private Article(Long memberId, Integer price, Integer amount, Integer mass, String title, String content, String mainImage) {
+    private Article(Long memberId, Product product, Integer price, Integer amount, Integer mass, String title, String content, String mainImage, Location location) {
         this.memberId = memberId;
+        this.product = product;
         this.price = price;
         this.amount = amount;
         this.mass = mass;
         this.title = title;
         this.content = content;
         this.mainImage = mainImage;
+        this.location = location;
     }
 
-    public static Article createArticle(Long memberId, Integer price, Integer amount, Integer mass, String title, String content, String mainImage, List<String> imageUrls) {
+    public static Article createArticle(Long memberId, Product product, Location location, Integer price, Integer amount, Integer mass, String title, String content, String mainImage, List<String> imageUrls) {
         Article article = Article.builder()
                 .memberId(memberId)
                 .price(price)
@@ -77,9 +79,13 @@ public class Article {
                 .mass(mass)
                 .title(title)
                 .content(content)
+                .location(location)
+                .product(product)
                 .mainImage(mainImage)
                 .build();
 
+        product.addArticle(article);
+        location.addArticle(article);
         article.addArticleImage(imageUrls, article);
         return article;
     }
@@ -89,4 +95,39 @@ public class Article {
             this.articleImages.add(ArticleImage.createArticleImage(url, article));
         }
     }
+
+    public void addArticleBookmark(ArticleBookmark articleBookmark) {
+        this.articleBookmarks.add(articleBookmark);
+    }
+
+    public void modifyArticle(Article modifiedArticle) {
+        Article originArticle = this;
+        this.price = modifiedArticle.price;
+        this.title = modifiedArticle.title;
+        this.content = modifiedArticle.content;
+        this.mainImage = modifiedArticle.mainImage; //메인 이미지 변경->원래 이미지 삭제하고 올리는 로직 추후에 추가
+
+        // 지역과 상품 정보가 변경되었으면 리스트에서 삭제하고 새로 추가
+        if(this.location != modifiedArticle.location) {
+            this.location.removeArticle(originArticle);
+            this.location = modifiedArticle.location;
+            this.location.addArticle(modifiedArticle);
+        }
+        if(this.product != modifiedArticle.product) {
+            this.product.removeArticle(originArticle);
+            this.product = modifiedArticle.product;
+            this.product.addArticle(modifiedArticle);
+        }
+    }
+
+    public void removeArticle(Article article) {
+        article.isDeleted = true;
+        this.product.removeArticle(article);
+        this.location.removeArticle(article);
+    }
+
+    public void removeArticleBookmark(ArticleBookmark target) {
+        this.articleBookmarks.removeIf(bookmark -> bookmark.equals(target));
+    }
+
 }

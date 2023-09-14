@@ -19,4 +19,12 @@ public class Location {
 
     @OneToMany(mappedBy = "location")
     private List<Article> articles;
+
+    public void addArticle(Article article){
+        this.articles.add(article);
+    }
+
+    public void removeArticle(Article target){
+        this.articles.removeIf(article -> article.equals(target));
+    }
 }
