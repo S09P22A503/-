@@ -41,7 +41,7 @@ public class TradeHistory extends BaseEntity {
     @Column(nullable = false, length = 2000)
     private String mainImage;
 
-    @Column(nullable = false, length = 2000)
+    @Column(nullable = false, length = 500)
     private String title;
 
     @Builder
