@@ -19,7 +19,6 @@ public class TradeController {
     @MessageMapping("/send")
     public void message(MessageDto message) {
         log.info(message.getMessage());
-        System.out.println("message = " + message);
         messageSendUseCase.sendMessage(message);
     }
 }
