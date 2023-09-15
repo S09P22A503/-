@@ -1,7 +1,7 @@
 package com.sshmarket.trade.application;
 
 import com.sshmarket.trade.application.repository.TradeRepository;
-import com.sshmarket.trade.controller.TradeCreateRequestDto;
+import com.sshmarket.trade.dto.TradeCreateRequestDto;
 import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
 import java.time.LocalDateTime;

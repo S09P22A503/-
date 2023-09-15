@@ -5,6 +5,7 @@ import com.sshmarket.trade.application.MessageSendUseCase;
 import com.sshmarket.trade.domain.Trade;
 import com.sshmarket.trade.dto.HttpResponse;
 import com.sshmarket.trade.dto.MessageDto;
+import com.sshmarket.trade.dto.TradeCreateRequestDto;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
