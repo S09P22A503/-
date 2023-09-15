@@ -10,9 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+
+@ToString
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,7 +30,7 @@ public class Trade extends BaseEntity {
     private LocalDateTime tradedAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 1)
+    @Column(nullable = false)
     private Status status;
 
     @Column(nullable = false)
@@ -36,6 +40,9 @@ public class Trade extends BaseEntity {
     private Long buyerId;
 
     @Column(nullable = false)
+    private Long sellerId;
+
+    @Column(nullable = false)
     private Long checkedMessageIdSeller;
 
     @Column(nullable = false)
@@ -43,24 +50,28 @@ public class Trade extends BaseEntity {
 
     @Builder
     private Trade(LocalDateTime tradedAt, Status status, Long articleId, Long buyerId,
+            Long sellerId,
             Long checkedMessageIdSeller, Long checkedMessageIdBuyer) {
         this.tradedAt = tradedAt;
         this.status = status;
         this.articleId = articleId;
         this.buyerId = buyerId;
+        this.sellerId = sellerId;
         this.checkedMessageIdSeller = checkedMessageIdSeller;
         this.checkedMessageIdBuyer = checkedMessageIdBuyer;
     }
 
-    public static Trade createTrade(LocalDateTime tradedAt, Status status, Long articleId, Long buyerId,
+    public static Trade createTrade(LocalDateTime tradedAt, Status status, Long articleId,
+            Long buyerId, Long sellerId,
             Long checkedMessageIdSeller, Long checkedMessageIdBuyer) {
         return Trade.builder()
-                      .tradedAt(tradedAt)
-                      .status(status)
-                      .articleId(articleId)
-                      .buyerId(buyerId)
-                .checkedMessageIdSeller(checkedMessageIdSeller)
-                .checkedMessageIdBuyer(checkedMessageIdBuyer)
-                      .build();
+                    .tradedAt(tradedAt)
+                    .status(status)
+                    .articleId(articleId)
+                    .buyerId(buyerId)
+                    .sellerId(sellerId)
+                    .checkedMessageIdSeller(checkedMessageIdSeller)
+                    .checkedMessageIdBuyer(checkedMessageIdBuyer)
+                    .build();
     }
 }
