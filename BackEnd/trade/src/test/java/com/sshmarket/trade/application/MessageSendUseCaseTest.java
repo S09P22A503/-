@@ -19,7 +19,6 @@ class MessageSendUseCaseTest {
     @Test
     void 메시지가_저장된다() {
         TradeMessage message = messageSendUseCase.sendMessage(new MessageDto("안녕", 1L, 2L));
-        System.out.println(message);
         assertNotNull(message);
     }
 
