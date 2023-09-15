@@ -21,10 +21,13 @@ public class PriceHistory {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(nullable = false)
     private LocalDateTime date;
 
+    @Column(nullable = false)
     private Integer wholesalePrice;
 
+    @Column(nullable = false)
     private Integer retailPrice;
 
     @Builder

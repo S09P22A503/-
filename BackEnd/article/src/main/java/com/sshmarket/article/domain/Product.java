@@ -18,18 +18,25 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String wholesaleUnit;
 
+    @Column(nullable = false)
     private Double wholesaleMass;
 
+    @Column(nullable = false)
     private String retailUnit;
 
+    @Column(nullable = false)
     private Double retailMass;
 
+    @Column(nullable = false)
     private Integer itemId;
 
+    @Column(nullable = false)
     private String itemName;
 
     @OneToMany(mappedBy = "product")
