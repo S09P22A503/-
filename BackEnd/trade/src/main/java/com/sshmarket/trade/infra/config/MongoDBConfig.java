@@ -1,4 +1,4 @@
-package com.sshmarket.trade.infra;
+package com.sshmarket.trade.infra.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
