@@ -3,7 +3,7 @@ package com.sshmarket.trade.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.sshmarket.trade.controller.TradeCreateRequestDto;
+import com.sshmarket.trade.dto.TradeCreateRequestDto;
 import com.sshmarket.trade.domain.Trade;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
