@@ -1,12 +1,14 @@
 package com.sshmarket.trade.controller;
 
-import com.sshmarket.trade.application.MessageSendUseCase;
-import com.sshmarket.trade.application.kafka.KafkaProducer;
+import com.sshmarket.trade.application.SendMessageUseCase;
 import com.sshmarket.trade.dto.MessageDto;
+import com.sshmarket.trade.dto.TradeCreateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -14,11 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TradeController {
 
-    private final MessageSendUseCase messageSendUseCase;
+    private final SendMessageUseCase sendMessageUseCase;
 
     @MessageMapping("/send")
-    public void message(MessageDto message) {
+    public void messageSend(MessageDto message) {
         log.info(message.getMessage());
-        messageSendUseCase.sendMessage(message);
+        sendMessageUseCase.sendMessage(message);
+    }
+
+    @PatchMapping("/trades/{tradeId}/sell")
+    public void tradeSell(@PathVariable("tradeId")Long tradeId) {
+
     }
 }
