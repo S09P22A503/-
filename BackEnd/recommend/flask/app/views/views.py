@@ -1,6 +1,7 @@
 from flask import Blueprint,request,jsonify
 from app.database.queries import increase_data
-
+from sparksession import CommonSparkSession
+from recommendation_model import RecommendationModel
 bp = Blueprint( 'main' , __name__ , url_prefix='/' )
 
 @bp.route('/',methods=['POST','GET'])
@@ -31,5 +32,12 @@ def collect_data():
   
   return jsonify({"message" : "update data completly"}),200
   
+@bp.route('/recommend/user',methods=['GET'])
+def recommend_item_by_userId():
+  userId = request.args.get('userId')
+
   
-  
+  # 추천리스트 받기
+  recommendList = RecommendationModel().get_recommendation_for_user(userId)
+
+  return jsonify(recommendList)

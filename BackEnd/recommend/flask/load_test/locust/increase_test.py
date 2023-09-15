@@ -8,8 +8,8 @@ class WebsiteUser(HttpUser):
     @task
     def post_data(self):
         dtype_list = ["viewcount","buycount","viewingtime"]
-        user_id = random.randint(1,1000)
-        article_id = random.randint(1,1000)
+        user_id = random.randint(1,100000)
+        article_id = random.randint(1,100000)
         dtype = dtype_list[random.randint(0,2)]
         created_data = {
             "user_id":user_id,
