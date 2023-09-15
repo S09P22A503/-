@@ -47,6 +47,7 @@ public class Article {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
     private String mainImage;
 
     @ColumnDefault("false")

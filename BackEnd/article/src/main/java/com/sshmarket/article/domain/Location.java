@@ -15,6 +15,7 @@ public class Location {
     @Column(name = "location_id")
     private Long id;
 
+    @Column(nullable = false)
     private String LocationName;
 
     @OneToMany(mappedBy = "location")
