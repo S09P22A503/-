@@ -4,6 +4,7 @@ import com.sshmarket.trade.application.repository.TradeRepository;
 import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,12 @@ public class TradeRepositoryImpl implements TradeRepository {
             List<Status> status) {
         return jpaTradeRepository.findByArticleIdAndBuyerIdAndStatusNotIn(articleId, buyerId,
                 status);
+    }
+
+    @Override
+    public Optional<Trade> findById(Long id) {
+        // Exception 수정 필요
+        return jpaTradeRepository.findById(id);
     }
 }
 
