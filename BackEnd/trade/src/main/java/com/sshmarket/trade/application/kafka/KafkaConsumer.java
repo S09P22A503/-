@@ -15,15 +15,14 @@ public class KafkaConsumer {
 
     private static final String TOPIC_NAME = "trade";
     private final SimpMessageSendingOperations simpMessageSendingOperations;
-
-    ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @KafkaListener(topics = TOPIC_NAME)
     public void listenMessage(String jsonMessage) {
         try {
             MessageDto message = objectMapper.readValue(jsonMessage, MessageDto.class);
-            log.info(">>>" + message.getName() + "," + message.getMessage());
-            simpMessageSendingOperations.convertAndSend("/subscribe/trade/" + message.getChatNumber(), message);
+            log.info(">>>" + message.getMemberId() + "," + message.getMessage());
+            simpMessageSendingOperations.convertAndSend("/subscribe/trade/" + message.getTradeId(), message);
         } catch (Exception e) {
             e.printStackTrace();
         }
