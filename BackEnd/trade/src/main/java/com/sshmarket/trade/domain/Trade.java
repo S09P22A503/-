@@ -70,4 +70,8 @@ public class Trade extends BaseEntity {
                     .checkedMessageIdBuyer(checkedMessageIdBuyer)
                     .build();
     }
+
+    public void sellTrade(){
+        this.status = Status.SELL;
+    }
 }
