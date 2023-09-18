@@ -1,4 +1,4 @@
-package com.sshmarket.trade.infra;
+package com.sshmarket.trade.infra.config;
 
 import com.sshmarket.trade.dto.MessageDto;
 import java.util.HashMap;

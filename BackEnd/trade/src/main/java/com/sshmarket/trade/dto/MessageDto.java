@@ -1,11 +1,12 @@
 package com.sshmarket.trade.dto;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Getter
@@ -15,7 +16,12 @@ import lombok.ToString;
 @ToString
 public class MessageDto implements Serializable {
 
-    private String name;
+    @NotBlank(message = "메시지를 입력하세요.")
     private String message;
-    private String chatNumber;
+
+    @NotNull
+    private Long tradeId;
+
+    @NotNull
+    private Long memberId;
 }
