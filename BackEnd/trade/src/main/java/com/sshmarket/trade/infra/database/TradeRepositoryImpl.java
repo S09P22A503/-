@@ -28,7 +28,6 @@ public class TradeRepositoryImpl implements TradeRepository {
 
     @Override
     public Optional<Trade> findById(Long id) {
-        // Exception 수정 필요
         return jpaTradeRepository.findById(id);
     }
 }
