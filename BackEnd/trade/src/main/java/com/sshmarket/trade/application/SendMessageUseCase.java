@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MessageSendUseCase {
+public class SendMessageUseCase {
 
     private final KafkaProducer kafkaProducer;
     private final TradeMessageRepository tradeMessageRepository;
