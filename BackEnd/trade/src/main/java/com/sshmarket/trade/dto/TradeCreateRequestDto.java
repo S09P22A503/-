@@ -1,4 +1,4 @@
-package com.sshmarket.trade.controller;
+package com.sshmarket.trade.dto;
 
 import javax.validation.constraints.NotNull;
 import lombok.Getter;

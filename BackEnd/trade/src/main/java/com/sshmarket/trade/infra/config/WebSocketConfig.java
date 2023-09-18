@@ -1,4 +1,4 @@
-package com.sshmarket.trade.infra;
+package com.sshmarket.trade.infra.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
