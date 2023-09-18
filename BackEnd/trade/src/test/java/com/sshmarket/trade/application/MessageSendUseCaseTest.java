@@ -14,11 +14,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 class MessageSendUseCaseTest {
 
     @Autowired
-    private MessageSendUseCase messageSendUseCase;
+    private SendMessageUseCase sendMessageUseCase;
 
     @Test
     void 메시지가_저장된다() {
-        TradeMessage message = messageSendUseCase.sendMessage(new MessageDto("안녕", 1L, 2L));
+        TradeMessage message = sendMessageUseCase.sendMessage(new MessageDto("안녕", 1L, 2L));
         assertNotNull(message);
     }
 

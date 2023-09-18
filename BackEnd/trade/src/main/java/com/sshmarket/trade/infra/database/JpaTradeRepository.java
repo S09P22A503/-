@@ -1,7 +1,7 @@
 package com.sshmarket.trade.infra.database;
 
-import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
+import com.sshmarket.trade.domain.Status;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
