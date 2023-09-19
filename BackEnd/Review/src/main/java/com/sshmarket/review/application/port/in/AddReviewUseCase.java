@@ -1,6 +1,6 @@
 package com.sshmarket.review.application.port.in;
 
-import java.util.List;
+import com.sshmarket.review.application.port.in.command.AddReviewCommand;
 
 public interface AddReviewUseCase {
 

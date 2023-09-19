@@ -1,9 +1,8 @@
 package com.sshmarket.review.adapter.in.web.request;
 
 import com.sshmarket.review.adapter.in.web.request.valid.AllowedContentType;
-import com.sshmarket.review.application.port.in.AddReviewCommand;
+import com.sshmarket.review.application.port.in.command.AddReviewCommand;
 import java.util.List;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;

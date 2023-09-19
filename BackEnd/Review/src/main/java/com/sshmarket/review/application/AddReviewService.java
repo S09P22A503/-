@@ -1,6 +1,6 @@
 package com.sshmarket.review.application;
 
-import com.sshmarket.review.application.port.in.AddReviewCommand;
+import com.sshmarket.review.application.port.in.command.AddReviewCommand;
 import com.sshmarket.review.application.port.in.AddReviewUseCase;
 import com.sshmarket.review.application.port.out.SaveReviewPort;
 import com.sshmarket.review.application.port.out.UploadReviewImagePort;
