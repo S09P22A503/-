@@ -19,7 +19,7 @@ public class Product {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String name;    //품종명
 
     @Column(nullable = false)
     private String wholesaleUnit;
@@ -34,10 +34,10 @@ public class Product {
     private Double retailMass;
 
     @Column(nullable = false)
-    private Integer itemId;
+    private Integer itemId;     //품목 코드
 
     @Column(nullable = false)
-    private String itemName;
+    private String itemName;    //품목명
 
     @OneToMany(mappedBy = "product")
     private List<Article> articles = new ArrayList<>();
