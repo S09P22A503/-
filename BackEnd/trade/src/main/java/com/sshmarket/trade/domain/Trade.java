@@ -81,4 +81,8 @@ public class Trade extends BaseEntity {
         }
         this.status = Status.BUY;
     }
+
+    public void cancelTrade() {
+        this.status = Status.CANCEL;
+    }
 }
