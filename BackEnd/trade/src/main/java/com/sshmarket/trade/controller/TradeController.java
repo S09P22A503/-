@@ -64,4 +64,10 @@ public class TradeController {
         return HttpResponse.ok(HttpStatus.OK, "구매 확정 처리되었습니다.");
     }
 
+    @PatchMapping("/trades/{tradeId}/cancel")
+    public ResponseEntity<?> tradeCancel(@PathVariable("tradeId") Long tradeId) {
+        modifyTradeUseCase.cancelTrade(tradeId);
+        return HttpResponse.ok(HttpStatus.OK, "구매 취소 처리되었습니다.");
+    }
+
 }
