@@ -32,22 +32,17 @@ public class AddArticleUseCase {
 
     public Long addArticle(ArticleAddRequestDto articleAddRequestDto){
 
-        Location location = locationRepository.findById(articleAddRequestDto.getLocationId())
+        Location location = locationRepository.findLocationById(articleAddRequestDto.getLocationId())
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 지역입니다."));
 
-        Product product = productRepository.findById(articleAddRequestDto.getProductId())
+        Product product = productRepository.findProductById(articleAddRequestDto.getProductId())
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 상품입니다."));;
 
         String directory = "article/image/";
         String mainUrl = makeFileName(directory, articleAddRequestDto.getMainImage());
         List<String> imageUrls = new ArrayList<>();
-        String url = "";
 
-        for (MultipartFile file : articleAddRequestDto.getImages()) {
-            url = makeFileName(directory, file);
-            imageUrls.add(url);
-            s3Uploader.upload(url, file);
-        }
+        uploadList(directory, articleAddRequestDto.getImages(), imageUrls);
 
         Article article = articleAddRequestDto.toEntity(mainUrl, imageUrls, location, product);
         Long id = articleRepository.save(article).getId();
@@ -55,6 +50,16 @@ public class AddArticleUseCase {
         s3Uploader.upload(mainUrl, articleAddRequestDto.getMainImage());
 
         return id;
+    }
+
+    private void uploadList(String directory, List<MultipartFile> images, List<String> imageUrls){
+        String url = "";
+
+        for (MultipartFile file : images) {
+            url = makeFileName(directory, file);
+            imageUrls.add(url);
+            s3Uploader.upload(url, file);
+        }
     }
 
     private String makeFileName(String directory, MultipartFile multipartFile) {
