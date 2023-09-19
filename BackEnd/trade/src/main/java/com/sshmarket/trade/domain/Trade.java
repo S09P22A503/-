@@ -83,6 +83,9 @@ public class Trade extends BaseEntity {
     }
 
     public void cancelTrade() {
+        if (this.status == Status.BUY) {
+            throw new RuntimeException("이미 구매 확정한 거래입니다.");
+        }
         this.status = Status.CANCEL;
     }
 }
