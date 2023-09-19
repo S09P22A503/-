@@ -1,8 +1,9 @@
 package com.sshmarket.trade.controller;
 
 import com.sshmarket.trade.application.AddTradeUseCase;
-import com.sshmarket.trade.application.MessageSendUseCase;
 import com.sshmarket.trade.application.FindTradeMessageUseCase;
+import com.sshmarket.trade.application.ModifyTradeUseCase;
+import com.sshmarket.trade.application.SendMessageUseCase;
 import com.sshmarket.trade.domain.Trade;
 import com.sshmarket.trade.domain.TradeMessage;
 import com.sshmarket.trade.dto.HttpResponse;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,14 +28,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TradeController {
 
-    private final MessageSendUseCase messageSendUseCase;
+    private final SendMessageUseCase sendMessageUseCase;
     private final AddTradeUseCase addTradeUseCase;
     private final FindTradeMessageUseCase findTradeMessageUseCase;
+    private final ModifyTradeUseCase modifyTradeUseCase;
 
     @MessageMapping("/send")
-    public void message(MessageDto message) {
+    public void messageSend(MessageDto message) {
         log.info(message.getMessage());
-        messageSendUseCase.sendMessage(message);
+        sendMessageUseCase.sendMessage(message);
     }
 
     @PostMapping("/trades")
@@ -47,5 +50,11 @@ public class TradeController {
     public ResponseEntity<?> tradeMessageList(@PathVariable("tradeId") Long tradeId) {
         List<TradeMessage> tradeMessages = findTradeMessageUseCase.listTradeMessage(tradeId);
         return HttpResponse.okWithData(HttpStatus.OK, "채팅방 메시지 조회에 성공했습니다.", tradeMessages);
+    }
+
+    @PatchMapping("/trades/{tradeId}/sell")
+    public ResponseEntity<?> tradeSell(@PathVariable("tradeId") Long tradeId) {
+        modifyTradeUseCase.sellTrade(tradeId);
+        return HttpResponse.ok(HttpStatus.OK, "거래가 완료 되었습니다.");
     }
 }
