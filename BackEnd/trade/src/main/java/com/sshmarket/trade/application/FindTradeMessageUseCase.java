@@ -12,7 +12,7 @@ public class FindTradeMessageUseCase {
 
     private final TradeMessageRepository tradeMessageRepository;
 
-    public List<TradeMessage> listTradeMessage(Long tradeId) {
+    public List<TradeMessage> findTradeMessages(Long tradeId) {
         return tradeMessageRepository.findByTradeId(tradeId);
     }
 }
