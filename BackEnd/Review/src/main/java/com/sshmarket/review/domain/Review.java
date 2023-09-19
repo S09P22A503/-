@@ -24,6 +24,7 @@ public class Review {
     @NonNull
     private final Long articleId;
 
+    @Getter
     @NonNull
     private final Long buyHistoryId;
 
@@ -51,6 +52,23 @@ public class Review {
                      .message(message)
                      .starRating(starRating)
                      .build();
+    }
+
+    public static Review createReviewWithId(Long id, Long memberId, Long articleId,
+            Long buyHistoryId,
+            String message, int starRating, List<ReviewImage> images) {
+        Review review = Review.builder()
+                              .id(id)
+                              .memberId(memberId)
+                              .articleId(articleId)
+                              .buyHistoryId(buyHistoryId)
+                              .message(message)
+                              .starRating(starRating)
+                              .build();
+
+        review.addReviewImages(images);
+
+        return review;
     }
 
     public void addReviewImages(List<ReviewImage> images) {

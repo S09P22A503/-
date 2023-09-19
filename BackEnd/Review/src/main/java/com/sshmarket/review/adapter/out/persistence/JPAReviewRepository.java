@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 interface JPAReviewRepository extends JpaRepository<JPAReviewEntity, Long> {
 
-    List<JPAReviewEntity> findAllByMemberId();
 }

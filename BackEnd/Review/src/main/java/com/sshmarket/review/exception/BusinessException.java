@@ -3,12 +3,12 @@ package com.sshmarket.review.exception;
 import lombok.Getter;
 
 @Getter
-public class BusinessException extends RuntimeException{
+public class BusinessException extends RuntimeException {
 
-    private int statusCode;
+    public BusinessException() {
+    }
 
-    public BusinessException(int statusCode,String message) {
+    public BusinessException(String message) {
         super(message);
-        this.statusCode = statusCode;
     }
 }

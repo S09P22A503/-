@@ -17,15 +17,14 @@ public class ReviewImage {
     private final Long id;
 
     @Getter
-    @NonNull
     private final Long reviewId;
 
     @Getter
     @NonNull
     private final String imageUrl;
 
-    public static ReviewImage createReviewImageWithoutId(Long reviewId, String imageUrl) {
-        return new ReviewImage(null, reviewId, imageUrl);
+    public static ReviewImage createReviewImageWithUrl(String imageUrl) {
+        return new ReviewImage(null, null, imageUrl);
     }
 
     public static ReviewImage createReviewImageWithId(Long id, Long reviewId, String imageUrl) {
@@ -36,7 +35,6 @@ public class ReviewImage {
         if (multipartFile == null || multipartFile.isEmpty()) {
             return null;
         }
-
         String extension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
         return imageDirectory + UUID.randomUUID() + "." + extension;
     }

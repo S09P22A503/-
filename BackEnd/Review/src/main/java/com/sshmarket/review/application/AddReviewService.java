@@ -32,25 +32,28 @@ class AddReviewService implements AddReviewUseCase {
                 addReviewCommand.getArticleId(), addReviewCommand.getBuyHistoryId(),
                 addReviewCommand.getMessage(), addReviewCommand.getStartRating());
 
-        Review savedReview = insertReviewPort.insertReview(newReview);
-        List<ReviewImage> images = createReviewImages(savedReview.getId(),
+        List<ReviewImage> images = addReviewImages(newReview.getId(),
                 addReviewCommand.getReviewImages());
-        savedReview.addReviewImages(images);
+
+        newReview.addReviewImages(images);
+        
+        Review savedReview = insertReviewPort.insertReview(newReview);
 
         if (savedReview != null) {
             return true;
         } else {
-            throw new BusinessException(HttpStatus.NOT_ACCEPTABLE.value(), "리뷰 생성에 실패했습니다.");
+            throw new BusinessException("리뷰 생성에 실패했습니다.");
         }
+
     }
 
-    private List<ReviewImage> createReviewImages(Long reviewId, List<MultipartFile> reviewImages) {
+    private List<ReviewImage> addReviewImages(Long reviewId, List<MultipartFile> reviewImages) {
         List<ReviewImage> images = new ArrayList<>();
 
         for (MultipartFile reviewImage : reviewImages) {
             String fileName = ReviewImage.createFileName(reviewImage);
-            String imageUrl = insertReviewImagePort.insertImage(fileName, reviewImage);
-            images.add(ReviewImage.createReviewImageWithoutId(reviewId, imageUrl));
+            String imageUrl = insertReviewImagePort.uploadReviewImage(fileName, reviewImage);
+            images.add(ReviewImage.createReviewImageWithUrl(imageUrl));
         }
 
         return images;
