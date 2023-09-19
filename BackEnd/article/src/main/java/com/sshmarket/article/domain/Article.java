@@ -47,6 +47,10 @@ public class Article {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TradeType tradeType;
+
     @Column(nullable = false)
     private String mainImage;
 
