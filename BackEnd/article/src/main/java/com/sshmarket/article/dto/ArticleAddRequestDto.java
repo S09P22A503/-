@@ -4,6 +4,7 @@ import com.sshmarket.article.domain.Article;
 import com.sshmarket.article.domain.Location;
 import com.sshmarket.article.domain.Product;
 import com.sshmarket.article.domain.TradeType;
+import com.sshmarket.article.dto.validate.AllowedContentType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,9 +42,13 @@ public class ArticleAddRequestDto {
     @NotBlank(message = "거래방식을 선택해주세요.")
     private TradeType tradeType;
 
+    @AllowedContentType(allowedTypes = {"image/jpg", "image/jpeg", "image/png"},
+            allowedExtensions = {"jpg", "jpeg", "png"})
     @NotBlank(message = "대표 이미지를 선택해주세요.")
     private MultipartFile mainImage;
 
+    @AllowedContentType(allowedTypes = {"image/jpg", "image/jpeg", "image/png"},
+            allowedExtensions = {"jpg", "jpeg", "png"})
     private List<MultipartFile> images;
 
     public Article toEntity(String mainImageUrl, List<String> imageUrls, Location location, Product product) {
