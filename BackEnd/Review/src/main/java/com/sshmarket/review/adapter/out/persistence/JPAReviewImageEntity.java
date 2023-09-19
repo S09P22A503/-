@@ -1,4 +1,4 @@
-package com.sshmarket.review.adapter.out.persistence.reviewImage;
+package com.sshmarket.review.adapter.out.persistence;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

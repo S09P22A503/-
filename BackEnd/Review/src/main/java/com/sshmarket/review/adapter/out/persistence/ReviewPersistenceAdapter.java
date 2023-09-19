@@ -1,4 +1,4 @@
-package com.sshmarket.review.adapter.out.persistence.review;
+package com.sshmarket.review.adapter.out.persistence;
 
 import com.sshmarket.review.application.port.out.InsertReviewPort;
 import com.sshmarket.review.application.port.out.LoadReviewPort;

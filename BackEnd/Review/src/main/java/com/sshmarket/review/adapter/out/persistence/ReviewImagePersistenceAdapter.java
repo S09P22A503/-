@@ -1,4 +1,4 @@
-package com.sshmarket.review.adapter.out.persistence.reviewImage;
+package com.sshmarket.review.adapter.out.persistence;
 
 import com.sshmarket.review.adapter.out.persistence.S3Uploader;
 import com.sshmarket.review.application.port.out.InsertReviewImagePort;
