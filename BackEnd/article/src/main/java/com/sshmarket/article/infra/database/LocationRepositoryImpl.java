@@ -13,7 +13,8 @@ public class LocationRepositoryImpl implements LocationRepository {
 
     private final JpaLocationRepository jpaLocationRepository;
 
-    public Optional<Location> findById(Long id){
+    @Override
+    public Optional<Location> findLocationById(Long id){
         return jpaLocationRepository.findById(id);
     }
 }

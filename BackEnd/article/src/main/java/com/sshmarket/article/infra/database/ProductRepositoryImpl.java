@@ -13,7 +13,8 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private final JpaProductRepository jpaProductRepository;
 
-    public Optional<Product> findById(Long id){
+    @Override
+    public Optional<Product> findProductById(Long id){
         return jpaProductRepository.findById(id);
     }
 }

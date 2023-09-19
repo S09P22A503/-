@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface LocationRepository {
 
-    Optional<Location> findById(Long id);
+    Optional<Location> findLocationById(Long id);
 
 }
