@@ -2,7 +2,7 @@ package com.sshmarket.review.application.port.out;
 
 import com.sshmarket.review.domain.Review;
 
-public interface InsertReviewPort {
+public interface SaveReviewPort {
 
-    Review insertReview(Review review);
+    Review saveReview(Review review);
 }

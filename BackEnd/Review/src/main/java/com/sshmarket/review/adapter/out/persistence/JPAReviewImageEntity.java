@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "review_image")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 class JPAReviewImageEntity {
 
     @Id
@@ -34,29 +35,18 @@ class JPAReviewImageEntity {
     @Column(nullable = false)
     private String imageUrl;
 
-
-    @Builder
-    private JPAReviewImageEntity(Long id,
-            JPAReviewEntity jpaReviewEntity, String imageUrl) {
-        this.id = id;
-        this.jpaReviewEntity = jpaReviewEntity;
-        this.imageUrl = imageUrl;
-    }
-
     protected static JPAReviewImageEntity from(ReviewImage reviewImage) {
         return JPAReviewImageEntity.builder()
                                    .imageUrl(reviewImage.getImageUrl())
                                    .build();
     }
 
-    protected static JPAReviewImageEntity createJPAJpaReviewImageEntity(
-            JPAReviewEntity jpaReviewEntity, String imageUrl) {
-
-        return JPAReviewImageEntity.builder()
-                                   .jpaReviewEntity(jpaReviewEntity)
-                                   .imageUrl(imageUrl)
-                                   .build();
+    protected ReviewImage convertToDomain() {
+        return ReviewImage.builder()
+                          .id(this.id)
+                          .reviewId(this.jpaReviewEntity.getId())
+                          .imageUrl(this.imageUrl)
+                          .build();
     }
-
 
 }

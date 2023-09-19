@@ -52,12 +52,12 @@ class JPAReviewEntity {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "review")
-    private List<JPAReviewImageEntity> images = new ArrayList<>();
+    private List<JPAReviewImageEntity> reviewImages = new ArrayList<>();
 
     @Builder
     private JPAReviewEntity(Long id, Long memberId, Long articleId, Long buyHistoryId,
             String message, int starRating, LocalDateTime createdAt,
-            List<JPAReviewImageEntity> images) {
+            List<JPAReviewImageEntity> reviewImages) {
         this.id = id;
         this.memberId = memberId;
         this.articleId = articleId;
@@ -65,7 +65,7 @@ class JPAReviewEntity {
         this.message = message;
         this.starRating = starRating;
         this.createdAt = createdAt;
-        this.images = images;
+        this.reviewImages = reviewImages;
     }
 
     protected static JPAReviewEntity from(Review review) {
@@ -81,16 +81,13 @@ class JPAReviewEntity {
     protected Review convertToDomain() {
         return Review.createReviewWithId(this.id, this.memberId, this.articleId,
                 this.buyHistoryId,
-                this.message, this.starRating, this.images.stream()
-                                                          .map((JPAReviewImageEntity) -> ReviewImage.createReviewImageWithId(
-                                                                  JPAReviewImageEntity.getId(),
-                                                                  this.id,
-                                                                  JPAReviewImageEntity.getImageUrl()))
-                                                          .collect(
-                                                                  Collectors.toList()));
+                this.message, this.starRating, this.reviewImages.stream()
+                                                                .map(JPAReviewImageEntity::convertToDomain)
+                                                                .collect(
+                                                                        Collectors.toList()));
     }
 
-    protected void addReviewImages(List<JPAReviewImageEntity> images) {
-        this.images.addAll(images);
+    protected void addReviewImages(List<JPAReviewImageEntity> reviewImages) {
+        this.reviewImages.addAll(reviewImages);
     }
 }

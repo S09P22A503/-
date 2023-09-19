@@ -41,7 +41,7 @@ public class Review {
     private final LocalDateTime createdAt;
 
     @Getter
-    private final List<ReviewImage> images = new ArrayList<>();
+    private final List<ReviewImage> reviewImages = new ArrayList<>();
 
     public static Review createReviewWithoutId(Long memberId, Long articleId, Long buyHistoryId,
             String message, int starRating) {
@@ -56,7 +56,8 @@ public class Review {
 
     public static Review createReviewWithId(Long id, Long memberId, Long articleId,
             Long buyHistoryId,
-            String message, int starRating, List<ReviewImage> images) {
+            String message, int starRating, List<ReviewImage> reviewImages) {
+
         Review review = Review.builder()
                               .id(id)
                               .memberId(memberId)
@@ -66,13 +67,13 @@ public class Review {
                               .starRating(starRating)
                               .build();
 
-        review.addReviewImages(images);
+        review.addReviewImages(reviewImages);
 
         return review;
     }
 
-    public void addReviewImages(List<ReviewImage> images) {
-        this.images.addAll(images);
+    public void addReviewImages(List<ReviewImage> reviewImages) {
+        this.reviewImages.addAll(reviewImages);
     }
 
 

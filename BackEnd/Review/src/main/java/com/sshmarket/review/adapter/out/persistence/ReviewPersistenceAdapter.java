@@ -1,7 +1,7 @@
 package com.sshmarket.review.adapter.out.persistence;
 
-import com.sshmarket.review.application.port.out.InsertReviewPort;
 import com.sshmarket.review.application.port.out.LoadReviewPort;
+import com.sshmarket.review.application.port.out.SaveReviewPort;
 import com.sshmarket.review.common.PersistenceAdapter;
 import com.sshmarket.review.domain.Review;
 import java.util.List;
@@ -10,17 +10,17 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @PersistenceAdapter
-class ReviewPersistenceAdapter implements LoadReviewPort, InsertReviewPort {
+class ReviewPersistenceAdapter implements LoadReviewPort, SaveReviewPort {
 
     private final JPAReviewRepository reviewRepository;
     private final JPAReviewImageRepository jpaReviewImageRepository;
 
     @Override
-    public Review insertReview(Review review) {
+    public Review saveReview(Review review) {
         JPAReviewEntity newReview = JPAReviewEntity.from(review);
 
         List<JPAReviewImageEntity> jpaReviewImageEntities = jpaReviewImageRepository.saveAll(
-                review.getImages()
+                review.getReviewImages()
                       .stream()
                       .map(JPAReviewImageEntity::from)
                       .collect(

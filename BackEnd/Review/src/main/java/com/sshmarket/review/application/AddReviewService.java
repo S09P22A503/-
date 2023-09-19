@@ -2,19 +2,16 @@ package com.sshmarket.review.application;
 
 import com.sshmarket.review.application.port.in.AddReviewCommand;
 import com.sshmarket.review.application.port.in.AddReviewUseCase;
-import com.sshmarket.review.application.port.out.InsertReviewImagePort;
-import com.sshmarket.review.application.port.out.InsertReviewPort;
+import com.sshmarket.review.application.port.out.SaveReviewPort;
+import com.sshmarket.review.application.port.out.UploadReviewImagePort;
 import com.sshmarket.review.common.UseCase;
 import com.sshmarket.review.domain.Review;
 import com.sshmarket.review.domain.ReviewImage;
 import com.sshmarket.review.exception.BusinessException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -22,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 class AddReviewService implements AddReviewUseCase {
 
-    private final InsertReviewPort insertReviewPort;
-    private final InsertReviewImagePort insertReviewImagePort;
+    private final SaveReviewPort saveReviewPort;
+    private final UploadReviewImagePort insertReviewImagePort;
 
     @Override
     public boolean addReview(AddReviewCommand addReviewCommand) {
@@ -32,12 +29,11 @@ class AddReviewService implements AddReviewUseCase {
                 addReviewCommand.getArticleId(), addReviewCommand.getBuyHistoryId(),
                 addReviewCommand.getMessage(), addReviewCommand.getStartRating());
 
-        List<ReviewImage> images = addReviewImages(newReview.getId(),
-                addReviewCommand.getReviewImages());
+        List<ReviewImage> images = addReviewImages(addReviewCommand.getReviewImages());
 
         newReview.addReviewImages(images);
-        
-        Review savedReview = insertReviewPort.insertReview(newReview);
+
+        Review savedReview = saveReviewPort.saveReview(newReview);
 
         if (savedReview != null) {
             return true;
@@ -47,16 +43,16 @@ class AddReviewService implements AddReviewUseCase {
 
     }
 
-    private List<ReviewImage> addReviewImages(Long reviewId, List<MultipartFile> reviewImages) {
-        List<ReviewImage> images = new ArrayList<>();
+    private List<ReviewImage> addReviewImages(List<MultipartFile> reviewImages) {
+        List<ReviewImage> reviewImageDomains = new ArrayList<>();
 
         for (MultipartFile reviewImage : reviewImages) {
             String fileName = ReviewImage.createFileName(reviewImage);
             String imageUrl = insertReviewImagePort.uploadReviewImage(fileName, reviewImage);
-            images.add(ReviewImage.createReviewImageWithUrl(imageUrl));
+            reviewImageDomains.add(ReviewImage.createReviewImageWithUrl(imageUrl));
         }
 
-        return images;
+        return reviewImageDomains;
     }
 
 }
