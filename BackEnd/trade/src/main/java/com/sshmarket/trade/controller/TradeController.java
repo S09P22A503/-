@@ -55,6 +55,13 @@ public class TradeController {
     @PatchMapping("/trades/{tradeId}/sell")
     public ResponseEntity<?> tradeSell(@PathVariable("tradeId") Long tradeId) {
         modifyTradeUseCase.sellTrade(tradeId);
-        return HttpResponse.ok(HttpStatus.OK, "거래가 완료 되었습니다.");
+        return HttpResponse.ok(HttpStatus.OK, "판매 완료 처리되었습니다.");
     }
+
+    @PatchMapping("/trades/{tradeId}/buy")
+    public ResponseEntity<?> tradeFinish(@PathVariable("tradeId") Long tradeId) {
+        modifyTradeUseCase.finishTrade(tradeId);
+        return HttpResponse.ok(HttpStatus.OK, "구매 확정 처리되었습니다.");
+    }
+
 }
