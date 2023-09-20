@@ -9,6 +9,8 @@ import com.sshmarket.trade.dto.MessageDto;
 import com.sshmarket.trade.dto.TradeCreateRequestDto;
 import java.util.List;
 import javax.validation.Valid;
+
+import com.sshmarket.trade.dto.TradesResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -47,7 +49,7 @@ public class TradeController {
 
     @GetMapping("/trades/{memberId}")
     public ResponseEntity<?> tradesFind(@PathVariable("memberId") Long memberId, Status status) {
-        List<Trade> trades = findTradeUseCase.findTrades(memberId, status);
+        List<TradesResponseDto> trades = findTradeUseCase.findTrades(memberId, status);
         return HttpResponse.okWithData(HttpStatus.OK, "채팅방 조회에 성공했습니다.", trades);
     }
 
