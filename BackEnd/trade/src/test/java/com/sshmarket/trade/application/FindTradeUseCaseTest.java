@@ -11,7 +11,7 @@ import com.sshmarket.trade.dto.TradeCreateRequestDto;
 import java.util.List;
 import javax.transaction.Transactional;
 
-import com.sshmarket.trade.dto.TradesResponseDto;
+import com.sshmarket.trade.dto.TradeResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,7 +37,7 @@ class FindTradeUseCaseTest {
         Trade trade2 = tradeUseCase.addTrade(new TradeCreateRequestDto(3L, 40L, 50L));
         TradeMessage message2 = sendMessageUseCase.sendMessage(new MessageDto("안녕하세요", trade2.getId(), trade2.getBuyerId()));
 
-        List<TradesResponseDto> trades =
+        List<TradeResponseDto> trades =
                 findTradeUseCase.findTrades(trade.getBuyerId(), Status.CHAT);
 
         assertThat(trades).hasSize(1);

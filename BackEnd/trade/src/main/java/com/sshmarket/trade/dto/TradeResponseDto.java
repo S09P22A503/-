@@ -11,15 +11,15 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TradesResponseDto {
+public class TradeResponseDto {
 
     private Long tradeId;
     private MemberResponseDto memberResponseDto;
     private String lastChatMessage;
     private LocalDateTime createdAt;
 
-    public static TradesResponseDto from(Trade trade, TradeMessage tradeMessage, MemberResponseDto memberResponseDto) {
-        return TradesResponseDto.builder()
+    public static TradeResponseDto from(Trade trade, TradeMessage tradeMessage, MemberResponseDto memberResponseDto) {
+        return TradeResponseDto.builder()
                 .tradeId(trade.getId())
                 .lastChatMessage(tradeMessage.getMessage())
                 .createdAt(tradeMessage.getCreatedAt())

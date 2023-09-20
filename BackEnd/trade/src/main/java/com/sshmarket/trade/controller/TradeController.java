@@ -47,7 +47,7 @@ public class TradeController {
 
     @GetMapping("/trades/{memberId}")
     public ResponseEntity<?> tradesFind(@PathVariable("memberId") Long memberId, Status status) {
-        List<TradesResponseDto> trades = findTradeUseCase.findTrades(memberId, status);
+        List<TradeResponseDto> trades = findTradeUseCase.findTrades(memberId, status);
         return HttpResponse.okWithData(HttpStatus.OK, "채팅방 조회에 성공했습니다.", trades);
     }
 

@@ -6,7 +6,7 @@ import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
 import com.sshmarket.trade.domain.TradeMessage;
 import com.sshmarket.trade.dto.MemberResponseDto;
-import com.sshmarket.trade.dto.TradesResponseDto;
+import com.sshmarket.trade.dto.TradeResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +21,8 @@ public class FindTradeUseCase {
     private final TradeMessageRepository tradeMessageRepository;
     private final MemberClient memberClient;
 
-    public List<TradesResponseDto> findTrades(Long memberId, Status status) {
-        List<TradesResponseDto> tradesResponseList = new ArrayList<>();
+    public List<TradeResponseDto> findTrades(Long memberId, Status status) {
+        List<TradeResponseDto> tradeResponseList = new ArrayList<>();
         List<Trade> trades = tradeRepository.findByMemberIdAndStatus(memberId, status);
         for (Trade trade : trades) {
             //상대방 정보 조회
@@ -32,9 +32,9 @@ public class FindTradeUseCase {
             //마지막 메시지 조회
             TradeMessage tradeMessage = tradeMessageRepository.findTopByTradeIdOrderByCreatedAtDesc(trade.getId());
 
-            tradesResponseList.add(TradesResponseDto.from(trade, tradeMessage, memberResponseDto));
+            tradeResponseList.add(TradeResponseDto.from(trade, tradeMessage, memberResponseDto));
         }
 
-        return tradesResponseList;
+        return tradeResponseList;
     }
 }
