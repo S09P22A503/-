@@ -1,0 +1,37 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
+      mapping:
+        always-use-unnamed-parameters: true
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: ssafy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: create
+
+jwt:
+  secret: wearesixbacknofronthere
+  expiration: 86400000
+server:
+  port: 8080
+
+oauth2:
+  google:
+    clientId: 780664099270-6fkn1r7iq6p9eihagmebg9do4j1mm4vd.apps.googleusercontent.com
+    clientSecret: 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
+    redirectUri: "http://localhost:3000/login/oauth2/code/google"
+    tokenUri: https://oauth2.googleapis.com/token
+    resourceUri: https://www.googleapis.com/oauth2/v2/userinfo
