@@ -1,16 +1,14 @@
 package com.sshmarket.trade.controller;
 
-import com.sshmarket.trade.application.AddTradeUseCase;
-import com.sshmarket.trade.application.FindTradeMessageUseCase;
-import com.sshmarket.trade.application.ModifyTradeUseCase;
-import com.sshmarket.trade.application.SendMessageUseCase;
+import com.sshmarket.trade.application.*;
+import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
 import com.sshmarket.trade.domain.TradeMessage;
-import com.sshmarket.trade.dto.HttpResponse;
-import com.sshmarket.trade.dto.MessageDto;
-import com.sshmarket.trade.dto.TradeCreateRequestDto;
+import com.sshmarket.trade.dto.*;
+
 import java.util.List;
 import javax.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,6 +29,7 @@ public class TradeController {
     private final SendMessageUseCase sendMessageUseCase;
     private final AddTradeUseCase addTradeUseCase;
     private final FindTradeMessageUseCase findTradeMessageUseCase;
+    private final FindTradeUseCase findTradeUseCase;
     private final ModifyTradeUseCase modifyTradeUseCase;
 
     @MessageMapping("/send")
@@ -44,6 +43,12 @@ public class TradeController {
             @RequestBody @Valid final TradeCreateRequestDto tradeCreateRequestDto) {
         Trade trade = addTradeUseCase.addTrade(tradeCreateRequestDto);
         return HttpResponse.okWithData(HttpStatus.OK, "채팅방 생성에 성공했습니다.", trade);
+    }
+
+    @GetMapping("/trades/{memberId}")
+    public ResponseEntity<?> tradesFind(@PathVariable("memberId") Long memberId, Status status) {
+        List<TradeResponseDto> trades = findTradeUseCase.findTrades(memberId, status);
+        return HttpResponse.okWithData(HttpStatus.OK, "채팅방 조회에 성공했습니다.", trades);
     }
 
     @GetMapping("/trades/{tradeId}/messages")

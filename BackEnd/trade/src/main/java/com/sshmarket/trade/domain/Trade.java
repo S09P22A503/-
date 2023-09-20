@@ -88,4 +88,11 @@ public class Trade extends BaseEntity {
         }
         this.status = Status.CANCEL;
     }
+
+    public Long findTrader(Long memberId) {
+        if (this.buyerId != memberId) {
+            return this.buyerId;
+        }
+        return this.sellerId;
+    }
 }
