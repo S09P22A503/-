@@ -22,7 +22,7 @@ public class FindTradeUseCase {
     private final MemberClient memberClient;
 
     public List<TradesResponseDto> findTrades(Long memberId, Status status) {
-        List<TradesResponseDto> tradesResponseDto = new ArrayList<>();
+        List<TradesResponseDto> tradesResponseList = new ArrayList<>();
         List<Trade> trades = tradeRepository.findByMemberIdAndStatus(memberId, status);
         for (Trade trade : trades) {
             //상대방 정보 조회
@@ -32,9 +32,9 @@ public class FindTradeUseCase {
             //마지막 메시지 조회
             TradeMessage tradeMessage = tradeMessageRepository.findTopByTradeIdOrderByCreatedAtDesc(trade.getId());
 
-            tradesResponseDto.add(TradesResponseDto.from(trade, tradeMessage, memberResponseDto));
+            tradesResponseList.add(TradesResponseDto.from(trade, tradeMessage, memberResponseDto));
         }
 
-        return tradesResponseDto;
+        return tradesResponseList;
     }
 }
