@@ -16,6 +16,6 @@ public class MockController {
 
     @GetMapping("/member")
     public ResponseEntity<?> memberFind(Long memberId) {
-        return HttpResponse.okWithData(HttpStatus.OK, "멤버 조회 성공", new MemberResponseDto(memberId, "수정", "안녕하세요"));
+        return HttpResponse.okWithData(HttpStatus.OK, "멤버 조회 성공", new MemberResponseDto(memberId, "수정", "profileImage"));
     }
 }

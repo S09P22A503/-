@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class MemberResponseDto {
     Long id;
     String nickname;
-    String profile;
+    String profileImage;
 }
