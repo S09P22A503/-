@@ -37,4 +37,12 @@ public class RdbMember {
         this.oauthId = oauthId;
         this.email = email;
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateProfile(String profile) {
+        this.profile = profile;
+    }
 }

@@ -8,4 +8,6 @@ public interface DocMemberRepository extends MongoRepository<DocMember, Long> {
 
     @Override
     Optional<DocMember> findById(Long id);
+
+
 }

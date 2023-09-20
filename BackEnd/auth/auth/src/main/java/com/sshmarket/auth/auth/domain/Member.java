@@ -36,4 +36,18 @@ public class Member {
         return member;
     }
 
+    public static Member createWithIdandNickname(Long id, String nickname) {
+        Member member = new Member();
+        member.id = id;
+        member.nickname = nickname;
+        return member;
+    }
+
+    public static Member createWithIdandProfile(Long id, String profile) {
+        Member member = new Member();
+        member.id = id;
+        member.profile = profile;
+        return member;
+    }
+
 }

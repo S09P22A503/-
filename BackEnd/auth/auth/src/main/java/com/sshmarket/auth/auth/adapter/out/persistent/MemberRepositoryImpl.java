@@ -46,6 +46,24 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public Member update(Member member) {
-        return null;
+        Optional<RdbMember> checkRdb = rdbMemberRepository.findById(member.getId());
+        Optional<DocMember> checkDoc = docMemberRepository.findById(member.getId());
+        if (checkRdb.isEmpty() || checkDoc.isEmpty()) {
+            return null;
+        }
+        RdbMember rdbMember = checkRdb.get();
+        DocMember docMember = checkDoc.get();
+        docMemberRepository.delete(checkDoc.get());
+        if (member.getNickname() != null) {
+            rdbMember.updateNickname(member.getNickname());
+            docMember.updateNickname(member.getNickname());
+
+        }
+        if (member.getProfile() != null) {
+            rdbMember.updateProfile(member.getProfile());
+            docMember.updateProfile(member.getProfile());
+        }
+        docMemberRepository.save(docMember);
+        return PersistMapper.RdbMemberToMember(rdbMember);
     }
 }

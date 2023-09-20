@@ -1,6 +1,7 @@
 package com.sshmarket.auth.auth.adapter.in.web;
 
 import com.sshmarket.auth.auth.adapter.in.web.request.valid.AllowedContentType;
+import com.sshmarket.auth.auth.adapter.in.web.response.HttpResponse;
 import com.sshmarket.auth.auth.application.port.in.LoginUseCase;
 import com.sshmarket.auth.auth.application.port.in.SignupUseCase;
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class OauthController {
             MultipartFile profile
     ) {
         String token = signupUseCase.signup(code, nickname, profile);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return HttpResponse.okWithData(HttpStatus.OK, "회원 가입이 완료되었습니다.", token);
     }
 
     @PostMapping("/members/login")
@@ -54,9 +55,9 @@ public class OauthController {
             throws IOException {
         String token = loginUseCase.login(code);
         if (token == null) {
-            return new ResponseEntity<>("회원가입 필요", HttpStatus.SEE_OTHER);
+            return HttpResponse.fail(HttpStatus.SEE_OTHER, "존재하지 않는 회원입니다. 회원가입이 필요합니다.");
         }
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return HttpResponse.okWithData(HttpStatus.OK, "로그인이 성공했습니다.", token);
     }
 
 

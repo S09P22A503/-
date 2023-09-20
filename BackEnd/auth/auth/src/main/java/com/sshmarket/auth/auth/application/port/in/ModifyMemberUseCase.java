@@ -5,9 +5,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ModifyMemberUseCase {
 
-    public String modifyMemberNickname(Member member);
+    public boolean existCheckMemberNickname(String nickname);
 
-    public String modifyMemberProfile(Member member, MultipartFile profile);
+    public String modifyMemberNickname(Long id, String nickname);
+
+    public String modifyMemberProfile(Long id, MultipartFile profile);
 
 
 }
