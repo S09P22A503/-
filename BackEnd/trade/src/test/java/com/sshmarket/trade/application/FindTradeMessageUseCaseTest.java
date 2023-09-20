@@ -18,12 +18,12 @@ class FindTradeMessageUseCaseTest {
     @Autowired
     private FindTradeMessageUseCase findTradeMessageUseCase;
     @Autowired
-    private MessageSendUseCase messageSendUseCase;
+    private SendMessageUseCase sendMessageUseCase;
 
     @Test
     void 메시지_리스트_조회() {
-        TradeMessage message = messageSendUseCase.sendMessage(new MessageDto("안녕", 10L, 2L));
-        TradeMessage message2 = messageSendUseCase.sendMessage(new MessageDto("안녕2", 100L, 2L));
+        TradeMessage message = sendMessageUseCase.sendMessage(new MessageDto("안녕", 10L, 2L));
+        TradeMessage message2 = sendMessageUseCase.sendMessage(new MessageDto("안녕2", 100L, 2L));
         List<TradeMessage> tradeMessages = findTradeMessageUseCase.findTradeMessages(10L);
         assertThat(tradeMessages).hasSize(1);
     }

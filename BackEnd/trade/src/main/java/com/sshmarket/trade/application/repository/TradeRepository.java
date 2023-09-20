@@ -12,5 +12,7 @@ public interface TradeRepository {
     Trade findByArticleIdAndBuyerIdAndStatusNotIn(Long articleId, Long buyerId, List<Status> status);
 
     Optional<Trade> findById(Long id);
+
+    List<Trade> findByMemberIdAndStatus(Long memberId, Status status);
 }
 
