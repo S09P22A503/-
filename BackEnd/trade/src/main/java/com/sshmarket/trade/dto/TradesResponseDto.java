@@ -14,15 +14,16 @@ import java.time.LocalDateTime;
 public class TradesResponseDto {
 
     private Long tradeId;
-//    private MemberResponseDto memberResponseDto;
+    private MemberResponseDto memberResponseDto;
     private String lastChatMessage;
     private LocalDateTime createdAt;
 
-    public static TradesResponseDto from(Trade trade, TradeMessage tradeMessage) {
+    public static TradesResponseDto from(Trade trade, TradeMessage tradeMessage, MemberResponseDto memberResponseDto) {
         return TradesResponseDto.builder()
-            .tradeId(trade.getId())
-            .lastChatMessage(tradeMessage.getMessage())
-            .createdAt(tradeMessage.getCreatedAt())
-            .build();
+                .tradeId(trade.getId())
+                .lastChatMessage(tradeMessage.getMessage())
+                .createdAt(tradeMessage.getCreatedAt())
+                .memberResponseDto(memberResponseDto)
+                .build();
     }
 }
