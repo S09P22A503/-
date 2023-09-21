@@ -20,11 +20,12 @@ public class ModifyTradeUseCase {
         trade.sellTrade();
     }
 
-    public void finishTrade(Long id) {
+    public Trade finishTrade(Long id) {
         Trade trade = tradeRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("해당 거래가 존재하지 않습니다.")
         );
         trade.finishTrade();
+        return trade;
     }
 
     public void cancelTrade(Long id) {
