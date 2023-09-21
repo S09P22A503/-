@@ -71,18 +71,18 @@ public class Trade extends BaseEntity {
     }
 
     public void sellTrade(){
-        this.status = Status.SELL;
+        this.status = Status.ACCEPT;
     }
 
     public void finishTrade() {
-        if(this.status != Status.SELL) {
+        if(this.status != Status.ACCEPT) {
             throw new RuntimeException("판매완료 상태가 아닙니다");
         }
-        this.status = Status.BUY;
+        this.status = Status.FINISH;
     }
 
     public void cancelTrade() {
-        if (this.status == Status.BUY) {
+        if (this.status == Status.FINISH) {
             throw new RuntimeException("이미 구매 확정한 거래입니다.");
         }
         this.status = Status.CANCEL;

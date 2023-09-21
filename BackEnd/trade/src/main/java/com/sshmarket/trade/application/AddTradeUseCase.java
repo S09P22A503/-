@@ -18,10 +18,10 @@ public class AddTradeUseCase {
 
     public Trade addTrade(TradeCreateRequestDto tradeCreateRequestDto) {
 
-        // 거래 채팅방 존재 - articleId, buyerId, status(SELL, CANCEL)이 아닌 경우
+        // 거래 채팅방 존재 - articleId, buyerId, status(FINISH, CANCEL)이 아닌 경우
         Trade trade = tradeRepository.findByArticleIdAndBuyerIdAndStatusNotIn(
                 tradeCreateRequestDto.getArticleId(), tradeCreateRequestDto.getBuyerId(),
-                Arrays.asList(Status.SELL, Status.CANCEL));
+                Arrays.asList(Status.FINISH, Status.CANCEL));
 
         // 거래 채팅방 없으면 생성
         if (Objects.isNull(trade)) {
