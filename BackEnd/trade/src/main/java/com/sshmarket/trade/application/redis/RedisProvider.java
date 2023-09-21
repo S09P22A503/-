@@ -17,9 +17,7 @@ public class RedisProvider {
     }
 
     public void deleteConnectionUser(Long tradeId, Long userId) {
-        redisTemplate.opsForSet().remove(keySet+tradeId, String.valueOf(userId));
+        redisTemplate.opsForSet().remove(keySet + tradeId, String.valueOf(userId));
     }
-
-
 
 }
