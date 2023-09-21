@@ -1,0 +1,10 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
+      mapping:
+        always-use-unnamed-parameters: true
+server:
+  port: 8081
