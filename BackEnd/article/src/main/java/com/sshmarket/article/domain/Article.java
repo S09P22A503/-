@@ -2,6 +2,7 @@ package com.sshmarket.article.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,7 +66,7 @@ public class Article {
     private List<ArticleBookmark> articleBookmarks = new ArrayList<>();
 
     @Builder
-    private Article(Long memberId, Product product, Integer price, Integer amount, Integer mass, String title, String content, String mainImage, Location location) {
+    private Article(Long memberId, Product product, Integer price, Integer amount, Integer mass, String title, String content, String mainImage, Location location, TradeType tradeType) {
         this.memberId = memberId;
         this.product = product;
         this.price = price;
@@ -74,9 +76,10 @@ public class Article {
         this.content = content;
         this.mainImage = mainImage;
         this.location = location;
+        this.tradeType = tradeType;
     }
 
-    public static Article createArticle(Long memberId, Product product, Location location, Integer price, Integer amount, Integer mass, String title, String content, String mainImage, List<String> imageUrls) {
+    public static Article createArticle(Long memberId, Product product, Location location, Integer price, Integer amount, Integer mass, TradeType tradeType, String title, String content, String mainImage, List<String> imageUrls) {
         Article article = Article.builder()
                 .memberId(memberId)
                 .price(price)
@@ -87,6 +90,7 @@ public class Article {
                 .location(location)
                 .product(product)
                 .mainImage(mainImage)
+                .tradeType(tradeType)
                 .build();
 
         product.addArticle(article);
@@ -129,6 +133,10 @@ public class Article {
         article.isDeleted = true;
         this.product.removeArticle(article);
         this.location.removeArticle(article);
+    }
+
+    public void removeArticleImage(ArticleImage target) {
+        this.articleImages.removeIf(image -> image.equals(target));
     }
 
     public void removeArticleBookmark(ArticleBookmark target) {
