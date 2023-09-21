@@ -2,10 +2,12 @@ package com.sshmarket.auth.auth.application.port;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sshmarket.auth.auth.application.port.in.SignupUseCase;
+import com.sshmarket.auth.auth.application.port.out.MemberProfileRepository;
 import com.sshmarket.auth.auth.application.port.out.MemberRepository;
 import com.sshmarket.auth.auth.application.port.util.JwtAdmin;
 import com.sshmarket.auth.auth.application.port.util.OauthConnector;
 import com.sshmarket.auth.auth.domain.Member;
+import com.sshmarket.auth.auth.domain.MemberProfile;
 import com.sshmarket.auth.auth.exception.BusinessException;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class SignupService implements SignupUseCase {
     private final JwtAdmin jwtAdmin;
     private final OauthConnector oauthConnector;
     private final MemberRepository memberRepository;
+    private final MemberProfileRepository memberProfileRepository;
 
     @Override
     public String signup(String code, String nickname, MultipartFile profileFile) {
@@ -33,10 +36,17 @@ public class SignupService implements SignupUseCase {
         if (memberRepository.existsByEmail(email)) {
             throw new BusinessException("이미 가입한 계정입니다.");
         }
-        // s3 upload 후에 url 가져오는 로직 추가 필요
-        String profile = profileFile.getOriginalFilename();
+        MemberProfile memberProfile = MemberProfile.createWithoutUrl(profileFile);
+        memberProfile = memberProfileRepository.saveMemberProfile(memberProfile);
+        String profile = null;
+        if (!profileFile.isEmpty()) {
+            if (memberProfile == null) {
+                throw new BusinessException("프로필 사진 업로드 중 문제가 발생했습니다.");
+            }
+            profile = memberProfile.getUrl();
+        }
         Member member = Member.createWithoutId(nickname, profile, oauthId, email);
-        member = memberRepository.save(member);
+        member = memberRepository.saveMember(member);
         return jwtAdmin.generateToken(member);
     }
 }

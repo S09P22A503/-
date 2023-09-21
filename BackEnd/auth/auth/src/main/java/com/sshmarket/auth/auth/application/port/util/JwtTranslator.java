@@ -1,18 +1,16 @@
 package com.sshmarket.auth.auth.application.port.util;
 
 import com.sshmarket.auth.auth.domain.Member;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import java.util.Date;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAdmin {
+public class JwtTranslator {
 
     private static String SECRET;
 
@@ -26,15 +24,13 @@ public class JwtAdmin {
         EXPIRATION = Long.parseLong(environment.getProperty("jwt.expiration"));
     }
 
-    public String generateToken(Member member) {
-        return Jwts.builder()
-                .setSubject(member.getId().toString())
-                .claim("id",member.getId())
-                .claim("nickname",member.getNickname())
-                .claim("profile",member.getProfile())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(SignatureAlgorithm.HS512, SECRET)
-                .compact();
+    public Member translate(String token) {
+        try {
+            Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+            return Member.createWithPublicInfo(claims.get("id", Long.class), claims.get("nickname", String.class), claims.get("profile", String.class));
+        } catch (Exception e) {
+            return null;
+        }
     }
+
 }

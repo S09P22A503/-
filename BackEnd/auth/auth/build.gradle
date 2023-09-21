@@ -30,8 +30,7 @@ dependencies {
     implementation 'commons-fileupload:commons-fileupload:1.4' // commons-fileupload 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
-    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.552'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 }
 

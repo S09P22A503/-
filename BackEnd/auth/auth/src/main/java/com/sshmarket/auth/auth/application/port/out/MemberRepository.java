@@ -1,7 +1,6 @@
 package com.sshmarket.auth.auth.application.port.out;
 
 import com.sshmarket.auth.auth.domain.Member;
-import java.util.Optional;
 
 public interface MemberRepository {
 
@@ -9,10 +8,14 @@ public interface MemberRepository {
 
     public boolean existsByNickname(String nickname);
 
-    public Member findByEmail(String email);
+    public Member findMemberById(Long id);
 
-    public Member save(Member member);
+    public Member findMemberByEmail(String email);
 
-    public Member update(Member member);
+    public Member saveMember(Member member);
+
+    public Member updateMemberNickname(Member member);
+
+    public Member updateMemberProfile(Member member);
 
 }

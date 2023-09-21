@@ -4,6 +4,8 @@ import com.sshmarket.auth.auth.adapter.in.web.request.valid.AllowedContentType;
 import com.sshmarket.auth.auth.adapter.in.web.response.HttpResponse;
 import com.sshmarket.auth.auth.application.port.in.ModifyMemberUseCase;
 import com.sshmarket.auth.auth.domain.Member;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -12,6 +14,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,7 +31,7 @@ public class MemberModifyController {
 
     private final ModifyMemberUseCase modifyMemberUseCase;
 
-    @GetMapping("/members/{nickname}")
+    @GetMapping("/members/check/{nickname}")
     public ResponseEntity<?> memberNicknameExistCheck(
             @NotBlank(message = "닉네임을 입력해주세요.")
             @Size(min = 4, max = 20, message = "닉네임은 4자 이상 20자 이하로 입력해주세요.")
@@ -44,31 +47,38 @@ public class MemberModifyController {
 
     @PatchMapping("/members/nickname")
     public ResponseEntity<?> memberNicknameModify(
-            @NotNull(message = "사용자 정보가 없습니다.")
-            Long id,
-
             @NotBlank(message = "닉네임을 입력해주세요.")
             @Size(min = 4, max = 20, message = "닉네임은 4자 이상 20자 이하로 입력해주세요.")
-            String nickname
+            String nickname,
+            @CookieValue(value = "jwt", required = true)
+            String token,
+            HttpServletResponse httpServletResponse
     ) {
-        String newToken = modifyMemberUseCase.modifyMemberNickname(id, nickname);
-        return HttpResponse.okWithData(HttpStatus.OK, "닉네임 수정이 완료되었습니다.", newToken);
+        String newToken = modifyMemberUseCase.modifyMemberNickname(token, nickname);
+        httpServletResponse.addCookie(bakeJwtCookie(newToken));
+        return HttpResponse.ok(HttpStatus.OK, "닉네임 수정이 완료되었습니다.");
     }
 
     @PatchMapping("/members/profile")
     public ResponseEntity<?> memberProfileModify(
-            @RequestParam
-            @NotNull(message = "사용자 정보가 없습니다.")
-            Long id,
-
             @AllowedContentType(allowedTypes = {"image/jpg", "image/jpeg", "image/png"},
                     allowedExtensions = {"jpg", "jpeg", "png"},
                     message = "jpg,jpeg,png 파일만 등록 가능합니다.")
             @RequestPart(value = "profile", required = true)
-            MultipartFile profile
+            MultipartFile profile,
+            @CookieValue(value = "jwt", required = true)
+            String token,
+            HttpServletResponse httpServletResponse
     ) {
-        String newToken = modifyMemberUseCase.modifyMemberProfile(id, profile);
-        return HttpResponse.okWithData(HttpStatus.OK, "프로필 사진 수정이 완료되었습니다.", newToken);
+        String newToken = modifyMemberUseCase.modifyMemberProfile(token, profile);
+        httpServletResponse.addCookie(bakeJwtCookie(newToken));
+        return HttpResponse.ok(HttpStatus.OK, "프로필 사진 수정이 완료되었습니다.");
+    }
+
+    private Cookie bakeJwtCookie(String token) {
+        Cookie cookie = new Cookie("jwt",token);
+        cookie.setMaxAge(864000);
+        return cookie;
     }
 
 }

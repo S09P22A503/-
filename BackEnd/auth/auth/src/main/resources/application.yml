@@ -35,3 +35,16 @@ oauth2:
     redirectUri: "http://localhost:3000/login/oauth2/code/google"
     tokenUri: https://oauth2.googleapis.com/token
     resourceUri: https://www.googleapis.com/oauth2/v2/userinfo
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAVBDPFAQOKFRIMRGE
+      secretKey: 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
+    s3:
+      bucket: a503
+      directory: memberProfile/
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

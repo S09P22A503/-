@@ -36,18 +36,20 @@ public class Member {
         return member;
     }
 
-    public static Member createWithIdandNickname(Long id, String nickname) {
+    public static Member createWithPublicInfo(Long id, String nickname, String profile) {
         Member member = new Member();
         member.id = id;
         member.nickname = nickname;
+        member.profile = profile;
         return member;
     }
 
-    public static Member createWithIdandProfile(Long id, String profile) {
-        Member member = new Member();
-        member.id = id;
-        member.profile = profile;
-        return member;
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void changeProfile(String profile) {
+        this.profile = profile;
     }
 
 }

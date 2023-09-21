@@ -5,6 +5,8 @@ import com.sshmarket.auth.auth.adapter.in.web.response.HttpResponse;
 import com.sshmarket.auth.auth.application.port.in.LoginUseCase;
 import com.sshmarket.auth.auth.application.port.in.SignupUseCase;
 import java.io.IOException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -30,7 +32,7 @@ public class OauthController {
 
     private final SignupUseCase signupUseCase;
 
-    @PostMapping("/members/register")
+    @PostMapping("/register")
     public ResponseEntity<?> register(
             @NotBlank(message = "계정 정보를 불러올 수 없습니다.") @RequestParam
             String code,
@@ -44,20 +46,33 @@ public class OauthController {
                     allowedExtensions = {"jpg", "jpeg", "png"},
                     message = "jpg,jpeg,png 파일만 등록 가능합니다.")
             @RequestPart(value = "profile", required = false)
-            MultipartFile profile
+            MultipartFile profile,
+            HttpServletResponse httpServletResponse
     ) {
         String token = signupUseCase.signup(code, nickname, profile);
-        return HttpResponse.okWithData(HttpStatus.OK, "회원 가입이 완료되었습니다.", token);
+        httpServletResponse.addCookie(bakeJwtCookie(token));
+        return HttpResponse.ok(HttpStatus.OK, "회원 가입이 완료되었습니다.");
     }
 
-    @PostMapping("/members/login")
-    public ResponseEntity<?> login(@NotBlank(message = "계정 정보를 불러올 수 없습니다.") String code)
+    @PostMapping("/login")
+    public ResponseEntity<?> login(
+            @NotBlank(message = "계정 정보를 불러올 수 없습니다.")
+            String code,
+            HttpServletResponse httpServletResponse
+            )
             throws IOException {
         String token = loginUseCase.login(code);
         if (token == null) {
             return HttpResponse.fail(HttpStatus.SEE_OTHER, "존재하지 않는 회원입니다. 회원가입이 필요합니다.");
         }
-        return HttpResponse.okWithData(HttpStatus.OK, "로그인이 성공했습니다.", token);
+        httpServletResponse.addCookie(bakeJwtCookie(token));
+        return HttpResponse.ok(HttpStatus.OK, "로그인이 성공했습니다.");
+    }
+
+    private Cookie bakeJwtCookie(String token) {
+        Cookie cookie = new Cookie("jwt",token);
+        cookie.setMaxAge(864000);
+        return cookie;
     }
 
 

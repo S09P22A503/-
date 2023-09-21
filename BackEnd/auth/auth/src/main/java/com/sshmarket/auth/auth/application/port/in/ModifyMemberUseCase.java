@@ -7,9 +7,9 @@ public interface ModifyMemberUseCase {
 
     public boolean existCheckMemberNickname(String nickname);
 
-    public String modifyMemberNickname(Long id, String nickname);
+    public String modifyMemberNickname(String token, String nickname);
 
-    public String modifyMemberProfile(Long id, MultipartFile profile);
+    public String modifyMemberProfile(String token, MultipartFile profile);
 
 
 }

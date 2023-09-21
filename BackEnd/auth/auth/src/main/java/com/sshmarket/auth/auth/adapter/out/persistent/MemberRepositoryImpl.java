@@ -29,14 +29,21 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Member findByEmail(String email) {
+    public Member findMemberById(Long id) {
+        Optional<RdbMember> rdbMember = rdbMemberRepository.findById(id);
+        if (rdbMember.isEmpty()) return null;
+        return PersistMapper.RdbMemberToMember(rdbMember.get());
+    }
+
+    @Override
+    public Member findMemberByEmail(String email) {
         Optional<RdbMember> rdbMember = rdbMemberRepository.findByEmail(email);
         if (rdbMember.isEmpty()) return null;
         return PersistMapper.RdbMemberToMember(rdbMember.get());
     }
 
     @Override
-    public Member save(Member member) {
+    public Member saveMember(Member member) {
         RdbMember rdbMember = PersistMapper.MemberToRdbMember(member);
         rdbMemberRepository.save(rdbMember);
         DocMember docMember = PersistMapper.RdbMemberToNoMember(rdbMember);
@@ -45,7 +52,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Member update(Member member) {
+    public Member updateMemberNickname(Member member) {
         Optional<RdbMember> checkRdb = rdbMemberRepository.findById(member.getId());
         Optional<DocMember> checkDoc = docMemberRepository.findById(member.getId());
         if (checkRdb.isEmpty() || checkDoc.isEmpty()) {
@@ -54,15 +61,24 @@ public class MemberRepositoryImpl implements MemberRepository {
         RdbMember rdbMember = checkRdb.get();
         DocMember docMember = checkDoc.get();
         docMemberRepository.delete(checkDoc.get());
-        if (member.getNickname() != null) {
-            rdbMember.updateNickname(member.getNickname());
-            docMember.updateNickname(member.getNickname());
+        rdbMember.updateNickname(member.getNickname());
+        docMember.updateNickname(member.getNickname());
+        docMemberRepository.save(docMember);
+        return PersistMapper.RdbMemberToMember(rdbMember);
+    }
 
+    @Override
+    public Member updateMemberProfile(Member member) {
+        Optional<RdbMember> checkRdb = rdbMemberRepository.findById(member.getId());
+        Optional<DocMember> checkDoc = docMemberRepository.findById(member.getId());
+        if (checkRdb.isEmpty() || checkDoc.isEmpty()) {
+            return null;
         }
-        if (member.getProfile() != null) {
-            rdbMember.updateProfile(member.getProfile());
-            docMember.updateProfile(member.getProfile());
-        }
+        RdbMember rdbMember = checkRdb.get();
+        DocMember docMember = checkDoc.get();
+        docMemberRepository.delete(checkDoc.get());
+        rdbMember.updateProfile(member.getProfile());
+        docMember.updateProfile(member.getProfile());
         docMemberRepository.save(docMember);
         return PersistMapper.RdbMemberToMember(rdbMember);
     }

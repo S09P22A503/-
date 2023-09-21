@@ -23,7 +23,7 @@ public class LoginService implements LoginUseCase {
     public String login(String code) {
         String accessToken = oauthConnector.getAccessToken(code);
         JsonNode memberResourceNode = oauthConnector.getMemberResource(accessToken);
-        Member member = memberRepository.findByEmail(memberResourceNode.get("email").asText());
+        Member member = memberRepository.findMemberByEmail(memberResourceNode.get("email").asText());
         if (member == null) return null;
         return jwtAdmin.generateToken(member);
     }
