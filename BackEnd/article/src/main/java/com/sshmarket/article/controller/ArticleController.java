@@ -3,6 +3,7 @@ package com.sshmarket.article.controller;
 
 import com.sshmarket.article.application.AddArticleUseCase;
 import com.sshmarket.article.application.ModifyArticleUseCase;
+import com.sshmarket.article.application.RemoveArticleUseCase;
 import com.sshmarket.article.dto.ArticleAddRequestDto;
 import com.sshmarket.article.dto.ArticleModifyRequestDto;
 import com.sshmarket.article.global.dto.HttpResponse;
@@ -20,6 +21,7 @@ public class ArticleController {
 
     private final AddArticleUseCase addArticleUseCase;
     private final ModifyArticleUseCase modifyArticleUseCase;
+    private final RemoveArticleUseCase removeArticleUseCase;
 
     @PostMapping
     public ResponseEntity<?> articleAdd(@ModelAttribute @Valid ArticleAddRequestDto articleAddRequestDto){
@@ -34,6 +36,13 @@ public class ArticleController {
         modifyArticleUseCase.modifyArticle(articleModifyRequestDto);
 
         return HttpResponse.okWithData(HttpStatus.OK, "글이 수정 완료되었습니다.", articleId);
+    }
+
+    @DeleteMapping("/{articleId}")
+    public ResponseEntity<?> articleRemove(@PathVariable Long articleId){
+        removeArticleUseCase.removeArticle(articleId);
+
+        return HttpResponse.ok(HttpStatus.OK, "글이 삭제 완료되었습니다.");
     }
 
 
