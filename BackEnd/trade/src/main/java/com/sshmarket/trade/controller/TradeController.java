@@ -56,17 +56,16 @@ public class TradeController {
         return HttpResponse.okWithData(HttpStatus.OK, "채팅방 메시지 조회에 성공했습니다.", tradeMessages);
     }
 
-    @PostMapping("/trades/{tradeId}/sell")
-    public ResponseEntity<?> tradeSell(@PathVariable("tradeId") Long tradeId,
-                                       @RequestBody @Valid TradeHistoryCreateRequestDto tradeHistoryCreateRequestDto) {
-        Trade trade = modifyTradeUseCase.sellTrade(tradeId);
-        addTradeHistoryUseCase.addTradeHistory(trade, tradeHistoryCreateRequestDto);
+    @PatchMapping("/trades/{tradeId}/sell")
+    public ResponseEntity<?> tradeSell(@PathVariable("tradeId") Long tradeId) {
+        modifyTradeUseCase.sellTrade(tradeId);
         return HttpResponse.ok(HttpStatus.OK, "판매 완료 처리되었습니다.");
     }
 
-    @PatchMapping("/trades/{tradeId}/buy")
-    public ResponseEntity<?> tradeFinish(@PathVariable("tradeId") Long tradeId) {
-        modifyTradeUseCase.finishTrade(tradeId);
+    @PostMapping("/trades/{tradeId}/buy")
+    public ResponseEntity<?> tradeFinish(@PathVariable("tradeId") Long tradeId,@RequestBody @Valid TradeHistoryCreateRequestDto tradeHistoryCreateRequestDto) {
+        Trade trade = modifyTradeUseCase.finishTrade(tradeId);
+        addTradeHistoryUseCase.addTradeHistory(trade, tradeHistoryCreateRequestDto);
         return HttpResponse.ok(HttpStatus.OK, "구매 확정 처리되었습니다.");
     }
 

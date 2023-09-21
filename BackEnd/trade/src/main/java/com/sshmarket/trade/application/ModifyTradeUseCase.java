@@ -12,20 +12,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class ModifyTradeUseCase {
 
     private final TradeRepository tradeRepository;
-    public Trade sellTrade(Long id) {
+    public void sellTrade(Long id) {
         // Exception 수정 필요
         Trade trade = tradeRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("해당 거래가 존재하지 않습니다.")
         );
         trade.sellTrade();
-        return trade;
     }
 
-    public void finishTrade(Long id) {
+    public Trade finishTrade(Long id) {
         Trade trade = tradeRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("해당 거래가 존재하지 않습니다.")
         );
         trade.finishTrade();
+        return trade;
     }
 
     public void cancelTrade(Long id) {
