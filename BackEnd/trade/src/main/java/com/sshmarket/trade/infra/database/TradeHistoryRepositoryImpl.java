@@ -17,5 +17,10 @@ public class TradeHistoryRepositoryImpl implements TradeHistoryRepository {
     public Page<TradeHistory> findByTradeBuyerId(Long buyerId, Pageable pageable) {
         return jpaTradeHistoryRepository.findByTradeBuyerId(buyerId, pageable);
     }
+
+    @Override
+    public TradeHistory saveTradeHistory(TradeHistory tradeHistory) {
+        return jpaTradeHistoryRepository.save(tradeHistory);
+    }
 }
 
