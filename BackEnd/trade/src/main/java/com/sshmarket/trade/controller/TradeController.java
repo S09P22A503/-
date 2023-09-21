@@ -5,10 +5,6 @@ import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
 import com.sshmarket.trade.domain.TradeMessage;
 import com.sshmarket.trade.dto.*;
-
-import java.util.List;
-import javax.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,12 +13,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -31,6 +25,7 @@ public class TradeController {
 
     private final SendMessageUseCase sendMessageUseCase;
     private final AddTradeUseCase addTradeUseCase;
+    private final AddTradeHistoryUseCase addTradeHistoryUseCase;
     private final FindTradeMessageUseCase findTradeMessageUseCase;
     private final FindTradeUseCase findTradeUseCase;
     private final FindTradeHistoryUseCase findTradeHistoryUseCase;
@@ -62,8 +57,10 @@ public class TradeController {
     }
 
     @PatchMapping("/trades/{tradeId}/sell")
-    public ResponseEntity<?> tradeSell(@PathVariable("tradeId") Long tradeId) {
-        modifyTradeUseCase.sellTrade(tradeId);
+    public ResponseEntity<?> tradeSell(@PathVariable("tradeId") Long tradeId,
+                                       @RequestBody @Valid TradeHistoryCreateRequestDto tradeHistoryCreateRequestDto) {
+        Trade trade = modifyTradeUseCase.sellTrade(tradeId);
+        addTradeHistoryUseCase.addTradeHistory(trade, tradeHistoryCreateRequestDto);
         return HttpResponse.ok(HttpStatus.OK, "판매 완료 처리되었습니다.");
     }
 

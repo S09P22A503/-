@@ -8,5 +8,6 @@ public interface TradeHistoryRepository {
 
     Page<TradeHistory> findByTradeBuyerId(Long buyerId, Pageable pageable);
 
+    TradeHistory saveTradeHistory(TradeHistory tradeHistory);
 }
 

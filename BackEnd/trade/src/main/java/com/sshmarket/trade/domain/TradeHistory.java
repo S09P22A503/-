@@ -1,9 +1,6 @@
 package com.sshmarket.trade.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -42,12 +39,11 @@ public class TradeHistory extends BaseEntity {
         this.title = title;
     }
 
-    public static TradeHistory createTradeHistory(Trade trade,
-                                                  boolean isReviewed, int price,
+    public static TradeHistory createTradeHistory(Trade trade, int price,
                                                   String mainImage, String title) {
         return TradeHistory.builder()
                 .trade(trade)
-                .isReviewed(isReviewed)
+                .isReviewed(false)
                 .price(price)
                 .mainImage(mainImage)
                 .title(title)
