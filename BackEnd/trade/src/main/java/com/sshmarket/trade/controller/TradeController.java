@@ -11,6 +11,9 @@ import javax.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -30,6 +33,7 @@ public class TradeController {
     private final AddTradeUseCase addTradeUseCase;
     private final FindTradeMessageUseCase findTradeMessageUseCase;
     private final FindTradeUseCase findTradeUseCase;
+    private final FindTradeHistoryUseCase findTradeHistoryUseCase;
     private final ModifyTradeUseCase modifyTradeUseCase;
 
     @MessageMapping("/send")
@@ -73,6 +77,12 @@ public class TradeController {
     public ResponseEntity<?> tradeCancel(@PathVariable("tradeId") Long tradeId) {
         modifyTradeUseCase.cancelTrade(tradeId);
         return HttpResponse.ok(HttpStatus.OK, "구매 취소 처리되었습니다.");
+    }
+
+    @GetMapping("/trades/history/{memberId}")
+    public ResponseEntity<?> tradeHistoryFind(@PathVariable("memberId") Long memberId, @PageableDefault(size = 10) Pageable pageable) {
+        Page<TradeHistoryResponseDto> tradeHistoryList = findTradeHistoryUseCase.findTradeHistory(memberId, pageable);
+        return HttpResponse.okWithData(HttpStatus.OK, "거래 내역 조회에 성공했습니다.", tradeHistoryList);
     }
 
 }
