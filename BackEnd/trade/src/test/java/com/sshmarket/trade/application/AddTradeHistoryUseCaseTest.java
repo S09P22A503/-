@@ -26,7 +26,6 @@ class AddTradeHistoryUseCaseTest {
         Trade trade = Trade.createTrade(LocalDateTime.now(), Status.CHAT, 10L, 10L, 20L, 0L, 0L);
 
         TradeHistory tradeHistory = addTradeHistoryUseCase.addTradeHistory(trade, new TradeHistoryCreateRequestDto(1000, "image", "감자팔아요"));
-        System.out.println(tradeHistory);
         assertNotNull(tradeHistory);
     }
 
