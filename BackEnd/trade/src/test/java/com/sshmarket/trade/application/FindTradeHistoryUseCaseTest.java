@@ -30,7 +30,7 @@ class FindTradeHistoryUseCaseTest {
     @Test
     void 거래_내역_조회() {
         Trade trade = Trade.createTrade(LocalDateTime.now(), Status.CHAT, 10L, 10L, 20L, 0L, 0L);
-        TradeHistory tradeHistory = TradeHistory.createTradeHistory(trade, false, 1000, "image", "감자팔아요");
+        TradeHistory tradeHistory = TradeHistory.createTradeHistory(trade, 1000, "image", "감자팔아요");
         jpaTradeHistoryRepository.save(tradeHistory);
         Pageable pageable = PageRequest.of(0, 10);
 
