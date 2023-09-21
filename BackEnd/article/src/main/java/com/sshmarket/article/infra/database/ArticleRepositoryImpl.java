@@ -11,12 +11,18 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class ArticleRepositoryImpl implements ArticleRepository{
+public class ArticleRepositoryImpl implements ArticleRepository {
 
     private final JpaArticleRepository jpaArticleRepository;
 
-    public Article save(Article article){
+    @Override
+    public Article saveArticle(Article article){
         return jpaArticleRepository.save(article);
+    }
+
+    @Override
+    public Optional<Article> findArticleById(Long id) {
+        return jpaArticleRepository.findById(id);
     }
 
 }

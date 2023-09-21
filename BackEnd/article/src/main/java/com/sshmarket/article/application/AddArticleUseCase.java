@@ -39,26 +39,26 @@ public class AddArticleUseCase {
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 상품입니다."));;
 
         String directory = "article/image/";
-        String mainUrl = makeFileName(directory, articleAddRequestDto.getMainImage());
-        List<String> imageUrls = new ArrayList<>();
+        String mainImageName = makeFileName(directory, articleAddRequestDto.getMainImage());
+        List<String> imageFileNames = new ArrayList<>();
 
-        uploadList(directory, articleAddRequestDto.getImages(), imageUrls);
+        uploadList(directory, articleAddRequestDto.getImages(), imageFileNames);
 
-        Article article = articleAddRequestDto.toEntity(mainUrl, imageUrls, location, product);
-        Long id = articleRepository.save(article).getId();
+        Article article = articleAddRequestDto.toEntity(mainImageName, imageFileNames, location, product);
+        Long id = articleRepository.saveArticle(article).getId();
 
-        s3Uploader.upload(mainUrl, articleAddRequestDto.getMainImage());
+        s3Uploader.upload(mainImageName, articleAddRequestDto.getMainImage());
 
         return id;
     }
 
-    private void uploadList(String directory, List<MultipartFile> images, List<String> imageUrls){
-        String url = "";
+    private void uploadList(String directory, List<MultipartFile> images, List<String> imageFileNames){
+        String fileName = "";
 
         for (MultipartFile file : images) {
-            url = makeFileName(directory, file);
-            imageUrls.add(url);
-            s3Uploader.upload(url, file);
+            fileName = makeFileName(directory, file);
+            imageFileNames.add(fileName);
+            s3Uploader.upload(fileName, file);
         }
     }
 
