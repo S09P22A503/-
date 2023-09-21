@@ -56,7 +56,7 @@ public class TradeController {
         return HttpResponse.okWithData(HttpStatus.OK, "채팅방 메시지 조회에 성공했습니다.", tradeMessages);
     }
 
-    @PatchMapping("/trades/{tradeId}/sell")
+    @PostMapping("/trades/{tradeId}/sell")
     public ResponseEntity<?> tradeSell(@PathVariable("tradeId") Long tradeId,
                                        @RequestBody @Valid TradeHistoryCreateRequestDto tradeHistoryCreateRequestDto) {
         Trade trade = modifyTradeUseCase.sellTrade(tradeId);
