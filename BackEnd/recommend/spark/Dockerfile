@@ -19,8 +19,8 @@ RUN wget https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VER
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 
 # PostgreSQL 사용을 위한 Driver 경로 환경변수 (Driver 추가시 이 경로로 슈루룩)
-ENV SPARK_DRIVER_CLASSPATH =  '/etc/spark/driver'
-ENV POSTGRESQL_VERSION = '42.6.0'
+ENV SPARK_DRIVER_CLASSPATH='/etc/spark/driver'
+ENV POSTGRESQL_VERSION='42.6.0'
 # PostgreSQL 사용을 위한 Driver 설치
 RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/${POSTGRESQL_VERSION}/postgresql-${POSTGRESQL_VERSION}.jar && \
     mv postgresql-${POSTGRESQL_VERSION}.jar ${SPARK_DRIVER_CLASSPATH} && \
