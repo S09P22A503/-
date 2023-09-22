@@ -24,9 +24,8 @@ RUN pwd
 RUN ls
 
 
-# flask
- 프로젝트 폴더로 작업영역 변경
-WORKDIR /BackEnd/recommend/flask
+# flask 프로젝트 폴더로 작업영역 변경
+WORKDIR BackEnd/recommend/flask
 
 # requirements.txt에 나열된 패키지들을 설치
 RUN pip install --no-cache-dir -r requirements.txt
