@@ -18,7 +18,7 @@ class RedisProviderTest {
 
     @Test
     public void Redis_값_저장_테스트(){
-        redisProvider.saveConnectionUser(1L, 1L);
+        redisProvider.saveConnectionUser(1L, 1L, "session1");
 
         for (String member : redisTemplate.opsForSet().members(String.valueOf("trade1"))) {
             Assertions.assertThat(member).isEqualTo("1");

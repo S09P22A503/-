@@ -1,5 +1,7 @@
 package com.sshmarket.trade.domain;
 
+import com.sshmarket.trade.exception.InvalidUserException;
+import com.sshmarket.trade.exception.NotFoundResourceException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +10,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @ToString
 @Entity
@@ -70,12 +75,12 @@ public class Trade extends BaseEntity {
                     .build();
     }
 
-    public void sellTrade(){
+    public void sellTrade() {
         this.status = Status.ACCEPT;
     }
 
     public void finishTrade() {
-        if(this.status != Status.ACCEPT) {
+        if (this.status != Status.ACCEPT) {
             throw new RuntimeException("판매완료 상태가 아닙니다");
         }
         this.status = Status.FINISH;
@@ -94,4 +99,17 @@ public class Trade extends BaseEntity {
         }
         return this.sellerId;
     }
+
+    public void modifyCheckedMessage(Long userId, Long messageId) {
+        if (this.buyerId.equals(userId)) {
+            this.checkedMessageIdBuyer = messageId;
+        }
+        else if(this.sellerId.equals(userId)){
+            this.checkedMessageIdSeller = messageId;
+        }
+        else {
+            throw new InvalidUserException("잘못된 유저입니다.");
+        }
+    }
+
 }
