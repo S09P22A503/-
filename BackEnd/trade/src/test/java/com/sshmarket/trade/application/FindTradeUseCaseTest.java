@@ -1,7 +1,6 @@
 package com.sshmarket.trade.application;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
@@ -32,16 +31,17 @@ class FindTradeUseCaseTest {
 
         Trade trade = tradeUseCase.addTrade(new TradeCreateRequestDto(1L, 10L, 20L));
         TradeMessage message = sendMessageUseCase.sendMessage(new MessageDto("안녕", trade.getId(), trade.getBuyerId()));
-        TradeMessage lastMessage = sendMessageUseCase.sendMessage(new MessageDto("마지막 메시지", trade.getId(), trade.getBuyerId()));
 
-        Trade trade2 = tradeUseCase.addTrade(new TradeCreateRequestDto(3L, 40L, 50L));
-        TradeMessage message2 = sendMessageUseCase.sendMessage(new MessageDto("안녕하세요", trade2.getId(), trade2.getBuyerId()));
+        Trade trade2 = tradeUseCase.addTrade(new TradeCreateRequestDto(3L, 40L, 10L));
+        TradeMessage lastMessage= sendMessageUseCase.sendMessage(new MessageDto("마지막 메시지", trade2.getId(), trade2.getBuyerId()));
+
+        Trade trade3 = tradeUseCase.addTrade(new TradeCreateRequestDto(2L, 10L, 30L));
 
         List<TradeResponseDto> trades =
-                findTradeUseCase.findTrades(trade.getBuyerId(), Status.CHAT);
+                findTradeUseCase.findTrades(10L, Status.CHAT);
 
-        assertThat(trades).hasSize(1);
-        assertThat(trades.get(0).getTradeId()).isEqualTo(trade.getId());
+        assertThat(trades).hasSize(2);
+        assertThat(trades.get(0).getTradeId()).isEqualTo(trade2.getId());
         assertThat(trades.get(0).getLastChatMessage()).isEqualTo(lastMessage.getMessage());
     }
 
