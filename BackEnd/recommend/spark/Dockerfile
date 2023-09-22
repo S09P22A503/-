@@ -7,13 +7,13 @@ RUN apt-get update && \
     apt-get clean
 
 # Spark 관련 환경변수 섫정
-ENV SPARK_VERSION = 3.4.1
-ENV SPARK_HOME = /opt/spark
+ENV SPARK_VERSION=3.4.1
+ENV SPARK_HOME=/opt/spark
 ENV HADOOP_VERSION=3
 
 # Spark 설치
 # Spark 다운로드 및 설치
-RUN wget -q https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+RUN wget https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
     tar xzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
     mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} ${SPARK_HOME} && \
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
@@ -22,7 +22,7 @@ RUN wget -q https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_
 ENV SPARK_DRIVER_CLASSPATH =  '/etc/spark/driver'
 ENV POSTGRESQL_VERSION = '42.6.0'
 # PostgreSQL 사용을 위한 Driver 설치
-RUN wget -q https://repo1.maven.org/maven2/org/postgresql/postgresql/${POSTGRESQL_VERSION}/postgresql-${POSTGRESQL_VERSION}.jar && \
+RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/${POSTGRESQL_VERSION}/postgresql-${POSTGRESQL_VERSION}.jar && \
     mv postgresql-${POSTGRESQL_VERSION}.jar ${SPARK_DRIVER_CLASSPATH} && \
     rm postgresql-${POSTGRESQL_VERSION}.jar 
 
