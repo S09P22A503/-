@@ -1,5 +1,5 @@
 # 빌드에 필요한 베이스 이미지를 파이썬 3.8로 지정
-FROM python:3.8-slim
+FROM python:3.8
 
 # Spark 관련 의존성 설치
 RUN apt-get update && \
