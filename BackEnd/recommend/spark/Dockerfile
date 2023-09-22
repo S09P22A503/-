@@ -24,8 +24,7 @@ ENV POSTGRESQL_VERSION='42.6.0'
 # PostgreSQL 사용을 위한 Driver 설치
 RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/${POSTGRESQL_VERSION}/postgresql-${POSTGRESQL_VERSION}.jar && \
     mkdir -p ${SPARK_DRIVER_CLASSPATH} && \
-    mv postgresql-${POSTGRESQL_VERSION}.jar ${SPARK_DRIVER_CLASSPATH} && \
-    rm postgresql-${POSTGRESQL_VERSION}.jar 
+    mv postgresql-${POSTGRESQL_VERSION}.jar ${SPARK_DRIVER_CLASSPATH}
 
 # requirements.txt에 나열된 패키지들을 설치
 RUN pip install --no-cache-dir -r requirements.txt
