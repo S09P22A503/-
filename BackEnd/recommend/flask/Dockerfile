@@ -19,16 +19,6 @@ RUN wget https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VER
     mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} ${SPARK_HOME} && \
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 
-# 디버깅 코드
-RUN pwd
-RUN ls
-
-
-# flask 프로젝트 폴더로 작업영역 변경
-WORKDIR BackEnd/recommend/flask
-
-RUN pwd
-RUN ls
 
 # requirements.txt에 나열된 패키지들을 설치
 RUN pip install --no-cache-dir -r requirements.txt
