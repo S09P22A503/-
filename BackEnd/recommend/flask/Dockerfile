@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y default-jdk-headless wget && \
     apt-get clean
 
-# Spark 관련 환경변수 섫정
+# Spark 관련 환경변수 설정
 ENV SPARK_VERSION=3.4.1
 ENV SPARK_HOME=/opt/spark
 ENV HADOOP_VERSION=3
