@@ -32,6 +32,10 @@ RUN ls
     
 WORKDIR BackEnd/recommend/spark
 
+
+RUN pwd
+RUN ls
+
 # requirements.txt에 나열된 패키지들을 설치
 RUN pip install --no-cache-dir -r requirements.txt
 
