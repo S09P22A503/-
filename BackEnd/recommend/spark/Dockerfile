@@ -26,7 +26,7 @@ RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/${POSTGRESQL_V
     mkdir -p ${SPARK_DRIVER_CLASSPATH} && \
     mv postgresql-${POSTGRESQL_VERSION}.jar ${SPARK_DRIVER_CLASSPATH}
 
-
+    
 WORKDIR /BackEnd/recommend/spark
 
 # requirements.txt에 나열된 패키지들을 설치
