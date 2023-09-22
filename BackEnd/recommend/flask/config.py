@@ -1,0 +1,1 @@
+DATABASE_URL='postgresql://postgres:ssafy@localhost:5432/mldataset'
