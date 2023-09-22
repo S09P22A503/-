@@ -10,6 +10,7 @@ def setup_db(app):
     global engine
 
     DATABASE_URL = app.config.get('DATABASE_URL')
+    DATABASE_PASSWORD = app.config.get('DATABASE_PASSWORD')
 
     if not DATABASE_URL:
         raise ValueError("No DATABASE URL found in the app configuration.")
