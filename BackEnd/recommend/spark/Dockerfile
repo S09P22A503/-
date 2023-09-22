@@ -1,5 +1,5 @@
 # 빌드에 필요한 베이스 이미지를 파이썬 3.8로 지정
-FROM python:3.8-slim
+FROM python:3.8
 
 # Spark 관련 의존성 설치
 RUN apt-get update && \
@@ -26,7 +26,7 @@ RUN wget https://repo1.maven.org/maven2/org/postgresql/postgresql/${POSTGRESQL_V
     mkdir -p ${SPARK_DRIVER_CLASSPATH} && \
     mv postgresql-${POSTGRESQL_VERSION}.jar ${SPARK_DRIVER_CLASSPATH}
 
-    
+
 WORKDIR /BackEnd/recommend/spark
 
 # requirements.txt에 나열된 패키지들을 설치
