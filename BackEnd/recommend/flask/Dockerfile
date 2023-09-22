@@ -6,14 +6,14 @@ RUN apt-get update && \
     apt-get install -y default-jdk-headless wget && \
     apt-get clean
 
-# Spark 관련 환경변수 섫정
-ENV SPARK_VERSION = 3.4.1
-ENV SPARK_HOME = /opt/spark
+# Spark 관련 환경변수 설정
+ENV SPARK_VERSION=3.4.1
+ENV SPARK_HOME=/opt/spark
 ENV HADOOP_VERSION=3
 
 # Spark 설치
 # Spark 다운로드 및 설치
-RUN wget -q https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+RUN wget https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
     tar xzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
     mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} ${SPARK_HOME} && \
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
