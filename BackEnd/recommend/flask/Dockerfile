@@ -20,7 +20,7 @@ RUN wget https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VER
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 
 # 파이썬 소스코드 복사
-COPY ./BackEnd/recommend/flask ./app
+COPY ./BackEnd/recommend/flask /app
 
 # 작업환경 변경
 WORKDIR /app
