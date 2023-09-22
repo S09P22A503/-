@@ -19,6 +19,11 @@ RUN wget https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VER
     mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} ${SPARK_HOME} && \
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 
+# 파이썬 소스코드 복사
+COPY ./BackEnd/recommend/flask ./app
+
+# 작업환경 변경
+WORKDIR /app
 
 # requirements.txt에 나열된 패키지들을 설치
 RUN pip install --no-cache-dir -r requirements.txt
