@@ -2,6 +2,7 @@ package com.sshmarket.auth.auth.adapter.in.web;
 
 import com.sshmarket.auth.auth.adapter.in.web.request.valid.AllowedContentType;
 import com.sshmarket.auth.auth.adapter.in.web.response.HttpResponse;
+import com.sshmarket.auth.auth.adapter.in.web.util.CookieBaker;
 import com.sshmarket.auth.auth.application.port.in.ModifyMemberUseCase;
 import com.sshmarket.auth.auth.domain.Member;
 import javax.servlet.http.Cookie;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberModifyController {
 
     private final ModifyMemberUseCase modifyMemberUseCase;
+    private final CookieBaker cookieBaker;
 
     @GetMapping("/members/check/{nickname}")
     public ResponseEntity<?> memberNicknameExistCheck(
@@ -55,7 +57,7 @@ public class MemberModifyController {
             HttpServletResponse httpServletResponse
     ) {
         String newToken = modifyMemberUseCase.modifyMemberNickname(token, nickname);
-        httpServletResponse.addCookie(bakeJwtCookie(newToken));
+        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(token));
         return HttpResponse.ok(HttpStatus.OK, "닉네임 수정이 완료되었습니다.");
     }
 
@@ -71,14 +73,8 @@ public class MemberModifyController {
             HttpServletResponse httpServletResponse
     ) {
         String newToken = modifyMemberUseCase.modifyMemberProfile(token, profile);
-        httpServletResponse.addCookie(bakeJwtCookie(newToken));
+        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(token));
         return HttpResponse.ok(HttpStatus.OK, "프로필 사진 수정이 완료되었습니다.");
-    }
-
-    private Cookie bakeJwtCookie(String token) {
-        Cookie cookie = new Cookie("jwt",token);
-        cookie.setMaxAge(864000);
-        return cookie;
     }
 
 }
