@@ -55,6 +55,8 @@ conf.set("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("spark.driver.extraClassPath",classPath)
 conf.set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
 
+
+
 # PySpark Session 초기화 및 생성
 spark = SparkSession.builder. \
 appName("Implicit ALS Recommender"). \
@@ -62,6 +64,7 @@ config(conf = conf). \
 master("local[*]"). \
 getOrCreate()
 
+print(conf.get("spark.driver.extraClassPath"))
 # Redis 연결정보 가져오기
 
 redisHost = os.environ.get('RECOMMEND_REDIS_HOST')
