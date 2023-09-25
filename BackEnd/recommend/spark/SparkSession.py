@@ -39,7 +39,10 @@ S3SecretKey = os.environ.get("S3_SECRET_KEY")
 S3BucketId = os.environ.get("S3_BUCKET_ID")
 
 # 데이터셋을 가져올 PostgreSQL DB Host 설정
-PostgreSQLHost = os.environ.get("DB_HOST")
+PostgreSQLHost = os.environ.get("RECOMMEND_DB_HOST")
+
+# 데이터셋을 가져올 PostgreSQL DB Password 설정
+PostgreSQLPassword = os.environ.get("RECOMMEND_DB_PASSWORD")
 
 if PostgreSQLHost is None:
    PostgreSQLHost = "localhost"
@@ -84,7 +87,7 @@ def train_als():
   # data 는 Spark DataFrame으로 지연연산을 하기때문에 데이터 처리에 관한 액션이 일어나지 않을경우 
   # SQL 쿼리를 보내지 않아 메모리에 데이터가 로드 되지 않음
   # show() count() collect() 시에 SQL 쿼리 발생
-  data = spark.read.jdbc("jdbc:postgresql:/"+PostgreSQLHost+":5432/mldataset", "implicit", properties={"user": "postgres", "password": "ssafy","driver":"org.postgresql.Driver"})
+  data = spark.read.jdbc("jdbc:postgresql:/"+PostgreSQLHost+":5432/mldataset", "implicit", properties={"user": "postgres", "password": PostgreSQLPassword,"driver":"org.postgresql.Driver"})
   #UDF 변환
   calculate_rating_udf = udf(calculate_implicit_rating,FloatType())
 
@@ -93,10 +96,6 @@ def train_als():
   # Implicit ALS 모델 학습
   als = ALS(maxIter=5, regParam=0.01, implicitPrefs=True, userCol="user_id", itemCol="article_id", ratingCol="score")
   model = als.fit(data)
-
-  # 모델을 로컬에 저장 
-  # model_path = r"C:\Users\SSAFY\Documents\spark_prac\model\model.zip"
-  # model.serializeToBundle(f"jar:file:{model_path}", model.transform(data))
 
   # 모델을 S3에 저장
   s3path = "s3a://"+S3BucketId+"/model"
