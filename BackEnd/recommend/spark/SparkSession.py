@@ -6,7 +6,6 @@ from pyspark import SparkConf
 import redis
 from apscheduler.schedulers.blocking import BlockingScheduler
 import os
-
 sched = BlockingScheduler()
 
 # import pika
@@ -26,8 +25,6 @@ conf = SparkConf()
 # 배포 환경
 # Spark Driver Path
 classPath = os.environ.get("SPARK_DRIVER_CLASSPATH")
-
-print(classPath)
 
 # S3 Accesskey
 S3AccessKey = os.environ.get("S3_ACCESS_KEY")
@@ -67,7 +64,6 @@ config(conf = conf). \
 master("local[*]"). \
 getOrCreate()
 
-print(conf.get("spark.driver.extraClassPath"))
 # Redis 연결정보 가져오기
 
 redisHost = os.environ.get('RECOMMEND_REDIS_HOST')
@@ -75,6 +71,8 @@ if redisHost is None:
    redisHost = 'localhost'
 redisPassword = os.environ.get('RECOMMEND_REDIS_PASSWORD')
 
+# Pgsql Driver 디버깅 코드
+print(os.path.exists(os.environ.get("SPARK_DRIVER_CLASSPATH") + "/postgresql-42.6.0.jar"))
 
 # Schedueling이 필요한 작업들
 
