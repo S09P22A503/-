@@ -31,6 +31,7 @@ public class RedisProvider {
     public void deleteConnectionUser(String sessionId) {
         String tradeId = String.valueOf(redisTemplate.opsForHash().get(sessionId, TRADE_ID));
         String userId = String.valueOf(redisTemplate.opsForHash().get(sessionId, USER_ID));
+        // DISCONNECT가 두번 호출됨
         if (tradeId.equals("null"))
             return;
         redisTemplate.opsForSet().remove(keySet + tradeId, userId);
