@@ -22,7 +22,7 @@ public class KafkaConsumer {
         try {
             MessageDto message = objectMapper.readValue(jsonMessage, MessageDto.class);
             log.info(">>>" + message.getMemberId() + "," + message.getMessage());
-            simpMessageSendingOperations.convertAndSend("/subscribe/trade/" + message.getTradeId(), message);
+            simpMessageSendingOperations.convertAndSend("/sub/trade/" + message.getTradeId(), message);
         } catch (Exception e) {
             e.printStackTrace();
         }
