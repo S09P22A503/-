@@ -27,6 +27,8 @@ conf = SparkConf()
 # Spark Driver Path
 classPath = os.environ.get("SPARK_DRIVER_CLASSPATH")
 
+print(classPath)
+
 # S3 Accesskey
 S3AccessKey = os.environ.get("S3_ACCESS_KEY")
 
