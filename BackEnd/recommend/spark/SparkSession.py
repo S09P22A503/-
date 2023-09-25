@@ -41,6 +41,9 @@ PostgreSQLHost = os.environ.get("RECOMMEND_DB_HOST")
 # 데이터셋을 가져올 PostgreSQL DB Password 설정
 PostgreSQLPassword = os.environ.get("RECOMMEND_DB_PASSWORD")
 
+# PostgreSQL DB jdbc 버전
+PostgreSQLVersion = os.environ.get("POSTGRESQL_VERSION")
+
 if PostgreSQLHost is None:
    PostgreSQLHost = "localhost"
 
@@ -52,7 +55,7 @@ if(classPath is None):
 conf.set("spark.hadoop.fs.s3a.access.key",S3AccessKey)
 conf.set("spark.hadoop.fs.s3a.secret.key",S3SecretKey)
 conf.set("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
-conf.set("spark.driver.extraClassPath",classPath)
+conf.set("spark.driver.extraClassPath",classPath+"/postgresql-"+PostgreSQLVersion+".jar")
 conf.set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
 
 
