@@ -39,6 +39,8 @@ def listen_train_model():
   
   redisPassword = os.environ.get('RECOMMEND_REDIS_PASSWORD')
 
+
+
   r = redis.Redis(host=redisHost,port = 6379, db = 0,password = redisPassword)
 
   p = r.pubsub()
@@ -46,6 +48,7 @@ def listen_train_model():
 
   for msg in p.listen():
     if msg['type'] == 'message':
+      print("Debug : subscribe 수신 완료")
       replace_train_model()
       print("replace train model")
 
