@@ -19,6 +19,16 @@ RUN wget https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VER
     mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} ${SPARK_HOME} && \
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 
+# Spark S3 사용에 필요한 라이브러리 버전
+ENV HADOOP_AWS_VERSION=3.2.4
+ENV AWS_JDK_VERSION=1.11.901
+
+# Spark S3사용에 필요한 의존성 설치
+RUN wget https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/${HADOOP_AWS_VERSION}/hadoop-aws-${HADOOP_AWS_VERSION}.jar && \
+    mv hadoop-aws-${HADOOP_AWS_VERSION}.jar ${SPARK_HOME}/jars && \
+    wget https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/${AWS_JDK_VERSION}/aws-java-sdk-bundle-${AWS_JDK_VERSION}.jar && \
+    mv aws-java-sdk-bundle-${AWS_JDK_VERSION}.jar ${SPARK_HOME}/jars
+
 # 파이썬 소스코드 복사
 COPY ./BackEnd/recommend/flask /app
 
