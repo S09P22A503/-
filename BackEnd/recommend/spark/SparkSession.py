@@ -36,6 +36,11 @@ S3SecretKey = os.environ.get("S3_SECRET_KEY")
 # S3 버킷 ID
 S3BucketId = os.environ.get("S3_BUCKET_ID")
 
+# 데이터셋을 가져올 PostgreSQL DB Host 설정
+PostgreSQLHost = os.environ.get("DB_HOST")
+
+if PostgreSQLHost is None:
+   PostgreSQLHost = "localhost"
 
 # 개발 환경
 if(classPath is None):
@@ -62,11 +67,6 @@ if redisHost is None:
    redisHost = 'localhost'
 redisPassword = os.environ.get('RECOMMEND_REDIS_PASSWORD')
 
-# Redis 연결
-
-# 개발환경에서는 redisPassword에 None이 들어가게 된다.
-r = redis.Redis(host=redisHost,port = 6379, db = 0,password = redisPassword)
-
 
 # Schedueling이 필요한 작업들
 
@@ -79,7 +79,7 @@ def train_als():
   # data 는 Spark DataFrame으로 지연연산을 하기때문에 데이터 처리에 관한 액션이 일어나지 않을경우 
   # SQL 쿼리를 보내지 않아 메모리에 데이터가 로드 되지 않음
   # show() count() collect() 시에 SQL 쿼리 발생
-  data = spark.read.jdbc("jdbc:postgresql://localhost:5432/mldataset", "implicit", properties={"user": "postgres", "password": "ssafy","driver":"org.postgresql.Driver"})
+  data = spark.read.jdbc("jdbc:postgresql:/"+PostgreSQLHost+":5432/mldataset", "implicit", properties={"user": "postgres", "password": "ssafy","driver":"org.postgresql.Driver"})
   #UDF 변환
   calculate_rating_udf = udf(calculate_implicit_rating,FloatType())
 
@@ -99,7 +99,7 @@ def train_als():
 
   # Redis에 저장
 
-  r = redis.Redis(host='localhost', port=6379, db=0)
+  r = redis.Redis(host=redisHost, port=6379, db=0,password=redisPassword)
 
   # model_key = "recommend_model"
 
