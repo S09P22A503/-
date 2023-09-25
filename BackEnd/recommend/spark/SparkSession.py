@@ -88,7 +88,7 @@ def train_als():
   # data 는 Spark DataFrame으로 지연연산을 하기때문에 데이터 처리에 관한 액션이 일어나지 않을경우 
   # SQL 쿼리를 보내지 않아 메모리에 데이터가 로드 되지 않음
   # show() count() collect() 시에 SQL 쿼리 발생
-  data = spark.read.jdbc("jdbc:postgresql:/"+PostgreSQLHost+":5432/mldataset", "implicit", properties={"user": "postgres", "password": PostgreSQLPassword,"driver":"org.postgresql.Driver"})
+  data = spark.read.jdbc("jdbc:postgresql://"+PostgreSQLHost+":5432/mldataset", "implicit", properties={"user": "postgres", "password": PostgreSQLPassword,"driver":"org.postgresql.Driver"})
   #UDF 변환
   calculate_rating_udf = udf(calculate_implicit_rating,FloatType())
 
