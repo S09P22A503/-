@@ -1,6 +1,5 @@
 package com.sshmarket.trade.interceptor;
 
-import com.sshmarket.trade.application.ModifyLastMessageUseCase;
 import com.sshmarket.trade.application.redis.RedisProvider;
 import com.sshmarket.trade.infra.jwt.JwtTranslator;
 import java.util.Objects;
@@ -55,6 +54,5 @@ public class StompHandler implements ChannelInterceptor {
     private Long getChatNumber(StompHeaderAccessor accessor) {
         return Long.valueOf(Objects.requireNonNull(accessor.getFirstNativeHeader("chatNumber")));
     }
-
 
 }
