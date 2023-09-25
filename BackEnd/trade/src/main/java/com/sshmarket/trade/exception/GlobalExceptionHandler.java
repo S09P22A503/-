@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<?> handleBindException(BindException e){
+    public ResponseEntity<?> handleBindException(BindException e) {
         String errorMessage = getBindingResultErrorMessage(e.getBindingResult());
         return HttpResponse.fail(HttpStatus.BAD_REQUEST, errorMessage);
     }

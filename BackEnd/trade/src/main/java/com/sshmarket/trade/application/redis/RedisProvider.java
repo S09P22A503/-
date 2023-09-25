@@ -32,8 +32,9 @@ public class RedisProvider {
         String tradeId = String.valueOf(redisTemplate.opsForHash().get(sessionId, TRADE_ID));
         String userId = String.valueOf(redisTemplate.opsForHash().get(sessionId, USER_ID));
         // DISCONNECT가 두번 호출됨
-        if (tradeId.equals("null"))
+        if (tradeId.equals("null")) {
             return;
+        }
         redisTemplate.opsForSet().remove(keySet + tradeId, userId);
         redisTemplate.delete(sessionId);
         modifyLastMessageUseCase.modifyLastMessage(Long.valueOf(tradeId), Long.valueOf(userId));
