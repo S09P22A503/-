@@ -39,4 +39,4 @@ WORKDIR /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 플라스크 서버 실행
-CMD ["python","-m","flask","run"]
+CMD ["python","-m","flask","run","--host","0.0.0.0"]
