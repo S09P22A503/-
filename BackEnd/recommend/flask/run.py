@@ -1,5 +1,6 @@
 from flask import  Flask
 import redis
+import os
 import threading
 from pyspark.ml.recommendation import ALSModel
 from sparksession import CommonSparkSession
@@ -22,22 +23,31 @@ def get_recommendation_model():
 
 def replace_train_model():
   model = get_recommendation_model()
+
   if model is None:
     raise ValueError("Redis에 학습된 모델이 없습니다.")
+  
   RecommendationModel().set_recommendation_model(model)
 
 
 def listen_train_model():
-  r = redis.Redis()
+
+  redisHost = os.environ.get('RECOMMEND_REDIS_HOST')
+
+  if redisHost is None:
+    redisHost = 'localhost'
+  
+  redisPassword = os.environ.get('RECOMMEND_REDIS_PASSWORD')
+
+  r = redis.Redis(host=redisHost,port = 6379, db = 0,password = redisPassword)
+
   p = r.pubsub()
   p.subscribe('recommend-model-train')
-
-  print('is thread run twice?')
 
   for msg in p.listen():
     if msg['type'] == 'message':
       replace_train_model()
-      print("sdadas")
+      print("replace train model")
 
 
 def create_app():
