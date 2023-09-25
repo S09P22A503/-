@@ -44,6 +44,8 @@ PostgreSQLPassword = os.environ.get("RECOMMEND_DB_PASSWORD")
 # PostgreSQL DB jdbc 버전
 PostgreSQLVersion = os.environ.get("POSTGRESQL_VERSION")
 
+print(PostgreSQLHost+" "+PostgreSQLPassword)
+
 if PostgreSQLHost is None:
    PostgreSQLHost = "localhost"
 
