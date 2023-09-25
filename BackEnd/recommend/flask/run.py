@@ -13,7 +13,9 @@ def get_recommendation_model():
   s3_path = "s3a://a503/model/"
 
   model = ALSModel.load(s3_path)
-  
+
+  print("추천 시스템 모델을 불러오는중입니다.")
+
   if model is None:
     raise ValueError("S3에 모델이 존재하지 않습니다")
 
@@ -28,6 +30,7 @@ def replace_train_model():
     raise ValueError("Redis에 학습된 모델이 없습니다.")
   
   RecommendationModel().set_recommendation_model(model)
+  print("Debug: 추천시스템 모델 교체 완료")
 
 
 def listen_train_model():
