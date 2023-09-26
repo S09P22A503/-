@@ -1,6 +1,6 @@
 package com.sshmarket.trade.application.kafka;
 
-import com.sshmarket.trade.dto.MessageDto;
+import com.sshmarket.trade.dto.KafkaMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -14,19 +14,19 @@ public class KafkaProducer {
 
     private static final String TOPIC_NAME = "trade";
 
-    private final KafkaTemplate<String, MessageDto> kafkaTemplate;
+    private final KafkaTemplate<String, KafkaMessageDto> kafkaTemplate;
 
-    public void sendWithCallback(MessageDto message) {
-        ListenableFuture<SendResult<String, MessageDto>> future = kafkaTemplate.send(TOPIC_NAME,
+    public void sendWithCallback(KafkaMessageDto message) {
+        ListenableFuture<SendResult<String, KafkaMessageDto>> future = kafkaTemplate.send(TOPIC_NAME,
                 message);
 
-        future.addCallback(new ListenableFutureCallback<SendResult<String, MessageDto>>() {
+        future.addCallback(new ListenableFutureCallback<SendResult<String, KafkaMessageDto>>() {
             @Override
             public void onFailure(Throwable ex) {
             }
 
             @Override
-            public void onSuccess(SendResult<String, MessageDto> result) {
+            public void onSuccess(SendResult<String, KafkaMessageDto> result) {
             }
         });
     }

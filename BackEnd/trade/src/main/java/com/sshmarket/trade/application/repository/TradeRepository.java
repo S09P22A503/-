@@ -14,5 +14,7 @@ public interface TradeRepository {
     Optional<Trade> findById(Long id);
 
     List<Trade> findByMemberIdAndStatus(Long memberId, Status status);
+
+    List<Trade> findByMemberId(Long memberId);
 }
 
