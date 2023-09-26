@@ -3,30 +3,64 @@ import styled from "styled-components";
 function TradeHistory() {
   return (
     <TradeHistoryContainer>
-      <ProductBox>
-        <ProductImage src="https://health.chosun.com/site/data/img_dir/2020/05/07/2020050702573_0.jpg" />
-        <ProductInfoBox>
-          <ProductTitleWrapper>
-            [자연맛남] 제주직송 포슬포슬 노지감자 5KG (대)
-          </ProductTitleWrapper>
-          <ProductPriceWrapper>32,000원</ProductPriceWrapper>
-          <TradeDateWrapper>2023.09.26</TradeDateWrapper>
-        </ProductInfoBox>
-      </ProductBox>
-      <ReviewButton>
-        <ReviewWrapper>리뷰쓰기</ReviewWrapper>
-      </ReviewButton>
+      <TradeHistoryListBox>
+        <ProductBox>
+          <ProductImage src="https://health.chosun.com/site/data/img_dir/2020/05/07/2020050702573_0.jpg" />
+          <ProductInfoBox>
+            <ProductTitleWrapper>
+              [자연맛남] 제주직송 포슬포슬 노지감자 5KG (대)
+            </ProductTitleWrapper>
+            <ProductPriceWrapper>32,000원</ProductPriceWrapper>
+            <TradeDateWrapper>2023.09.26</TradeDateWrapper>
+          </ProductInfoBox>
+        </ProductBox>
+        <ReviewButton>
+          <ReviewWrapper>리뷰쓰기</ReviewWrapper>
+        </ReviewButton>
+      </TradeHistoryListBox>
+      <TradeHistoryListBox>
+        <ProductBox>
+          <ProductImage src="https://health.chosun.com/site/data/img_dir/2020/05/07/2020050702573_0.jpg" />
+          <ProductInfoBox>
+            <ProductTitleWrapper>
+              [자연맛남] 제주직송 포슬포슬 노지감자 5KG (대)
+            </ProductTitleWrapper>
+            <ProductPriceWrapper>32,000원</ProductPriceWrapper>
+            <TradeDateWrapper>2023.09.26</TradeDateWrapper>
+          </ProductInfoBox>
+        </ProductBox>
+        <ReviewButton>
+          <ReviewWrapper>리뷰쓰기</ReviewWrapper>
+        </ReviewButton>
+      </TradeHistoryListBox>
+      <TradeHistoryListBox>
+        <ProductBox>
+          <ProductImage src="https://health.chosun.com/site/data/img_dir/2020/05/07/2020050702573_0.jpg" />
+          <ProductInfoBox>
+            <ProductTitleWrapper>
+              [자연맛남] 제주직송 포슬포슬 노지감자 5KG (대)
+            </ProductTitleWrapper>
+            <ProductPriceWrapper>32,000원</ProductPriceWrapper>
+            <TradeDateWrapper>2023.09.26</TradeDateWrapper>
+          </ProductInfoBox>
+        </ProductBox>
+        <ReviewButton>
+          <ReviewWrapper>리뷰쓰기</ReviewWrapper>
+        </ReviewButton>
+      </TradeHistoryListBox>
     </TradeHistoryContainer>
   );
 }
 
-const TradeHistoryContainer = styled.div`
+const TradeHistoryContainer = styled.div``;
+
+const TradeHistoryListBox = styled.div`
   display: flex;
   width: 900px;
-  height: 150px;
+  height: 120px;
   justify-content: center;
   align-items: center;
-  gap: 120px;
+  gap: 100px;
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   margin-top: 20px;
