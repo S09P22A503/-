@@ -14,6 +14,7 @@ public class TradeHistoryResponseDto {
     private Long id;
     private Long tradeId;
     private Long articleId;
+    private int price;
     private String title;
     private String mainImage;
     private boolean isReviewed;
@@ -28,6 +29,7 @@ public class TradeHistoryResponseDto {
                 .mainImage(tradeHistory.getMainImage())
                 .isReviewed(tradeHistory.isReviewed())
                 .boughtAt(tradeHistory.getCreatedAt())
+                .price(tradeHistory.getPrice())
                 .build();
     }
 }

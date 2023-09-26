@@ -1,10 +1,23 @@
 package com.sshmarket.trade.controller;
 
-import com.sshmarket.trade.application.*;
+import com.sshmarket.trade.application.AddTradeHistoryUseCase;
+import com.sshmarket.trade.application.AddTradeUseCase;
+import com.sshmarket.trade.application.FindTradeHistoryUseCase;
+import com.sshmarket.trade.application.FindTradeMessageUseCase;
+import com.sshmarket.trade.application.FindTradeUseCase;
+import com.sshmarket.trade.application.ModifyTradeUseCase;
+import com.sshmarket.trade.application.SendMessageUseCase;
 import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
-import com.sshmarket.trade.domain.TradeMessage;
-import com.sshmarket.trade.dto.*;
+import com.sshmarket.trade.dto.HttpResponse;
+import com.sshmarket.trade.dto.KafkaMessageDto;
+import com.sshmarket.trade.dto.TradeCreateRequestDto;
+import com.sshmarket.trade.dto.TradeHistoryCreateRequestDto;
+import com.sshmarket.trade.dto.TradeHistoryResponseDto;
+import com.sshmarket.trade.dto.TradeResponseDto;
+import com.sshmarket.trade.dto.TradeSearchResponseDto;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,10 +26,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -32,7 +49,7 @@ public class TradeController {
     private final ModifyTradeUseCase modifyTradeUseCase;
 
     @MessageMapping("/send")
-    public void messageSend(MessageDto message) {
+    public void messageSend(KafkaMessageDto message) {
         log.info(message.getMessage());
         sendMessageUseCase.sendMessage(message);
     }
@@ -41,7 +58,7 @@ public class TradeController {
     public ResponseEntity<?> tradeAdd(
             @RequestBody @Valid final TradeCreateRequestDto tradeCreateRequestDto) {
         Trade trade = addTradeUseCase.addTrade(tradeCreateRequestDto);
-        return HttpResponse.okWithData(HttpStatus.OK, "채팅방 생성에 성공했습니다.", trade);
+        return HttpResponse.okWithData(HttpStatus.OK, "채팅방 생성에 성공했습니다.", trade.getId());
     }
 
     @GetMapping("/trades/{memberId}")
@@ -52,8 +69,8 @@ public class TradeController {
 
     @GetMapping("/trades/{tradeId}/messages")
     public ResponseEntity<?> tradeMessageList(@PathVariable("tradeId") Long tradeId) {
-        List<TradeMessage> tradeMessages = findTradeMessageUseCase.findTradeMessages(tradeId);
-        return HttpResponse.okWithData(HttpStatus.OK, "채팅방 메시지 조회에 성공했습니다.", tradeMessages);
+        return HttpResponse.okWithData(HttpStatus.OK, "채팅방 메시지 조회에 성공했습니다.",
+                findTradeMessageUseCase.findTradeMessages(tradeId));
     }
 
     @PatchMapping("/trades/{tradeId}/sell")
@@ -63,7 +80,8 @@ public class TradeController {
     }
 
     @PostMapping("/trades/{tradeId}/buy")
-    public ResponseEntity<?> tradeFinish(@PathVariable("tradeId") Long tradeId,@RequestBody @Valid TradeHistoryCreateRequestDto tradeHistoryCreateRequestDto) {
+    public ResponseEntity<?> tradeFinish(@PathVariable("tradeId") Long tradeId,
+            @RequestBody @Valid TradeHistoryCreateRequestDto tradeHistoryCreateRequestDto) {
         Trade trade = modifyTradeUseCase.finishTrade(tradeId);
         addTradeHistoryUseCase.addTradeHistory(trade, tradeHistoryCreateRequestDto);
         return HttpResponse.ok(HttpStatus.OK, "구매 확정 처리되었습니다.");
@@ -76,9 +94,20 @@ public class TradeController {
     }
 
     @GetMapping("/trades/history/{memberId}")
-    public ResponseEntity<?> tradeHistoryFind(@PathVariable("memberId") Long memberId, @PageableDefault(size = 10) Pageable pageable) {
-        Page<TradeHistoryResponseDto> tradeHistoryList = findTradeHistoryUseCase.findTradeHistory(memberId, pageable);
+    public ResponseEntity<?> tradeHistoryFind(@PathVariable("memberId") Long memberId,
+            @PageableDefault(size = 10) Pageable pageable) {
+        Page<TradeHistoryResponseDto> tradeHistoryList = findTradeHistoryUseCase.findTradeHistory(
+                memberId, pageable);
         return HttpResponse.okWithData(HttpStatus.OK, "거래 내역 조회에 성공했습니다.", tradeHistoryList);
+    }
+
+    @GetMapping("/trades/search/{keyword}")
+    public ResponseEntity<?> tradeFindByMessage(@PathVariable("keyword") String keyword,
+            @RequestParam("status")
+            String status, @CookieValue(value = "jwt", required = true) String token) {
+        List<TradeSearchResponseDto> trades = findTradeMessageUseCase.findTradesByKeyword(
+                keyword, token, status);
+        return HttpResponse.okWithData(HttpStatus.OK, "채팅방 검색 성공했습니다.", trades);
     }
 
 }

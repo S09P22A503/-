@@ -35,5 +35,10 @@ public class TradeRepositoryImpl implements TradeRepository {
     public List<Trade> findByMemberIdAndStatus(Long memberId, Status status) {
         return jpaTradeRepository.findByMemberIdAndStatus(memberId, status.toString());
     }
+
+    @Override
+    public List<Trade> findByMemberId(Long memberId) {
+        return jpaTradeRepository.findByMemberId(memberId);
+    }
 }
 
