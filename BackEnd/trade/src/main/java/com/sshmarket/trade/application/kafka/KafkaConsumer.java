@@ -1,7 +1,7 @@
 package com.sshmarket.trade.application.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sshmarket.trade.dto.MessageDto;
+import com.sshmarket.trade.dto.KafkaMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -20,7 +20,7 @@ public class KafkaConsumer {
     @KafkaListener(topics = TOPIC_NAME)
     public void listenMessage(String jsonMessage) {
         try {
-            MessageDto message = objectMapper.readValue(jsonMessage, MessageDto.class);
+            KafkaMessageDto message = objectMapper.readValue(jsonMessage, KafkaMessageDto.class);
             log.info(">>>" + message.getMemberId() + "," + message.getMessage());
             simpMessageSendingOperations.convertAndSend("/sub/trade/" + message.getTradeId(), message);
         } catch (Exception e) {
