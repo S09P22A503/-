@@ -6,7 +6,7 @@ import { ReactComponent as Close } from "../../assets/icons/close-icon.svg";
 
 function Chat() {
     return (
-        <>
+        <TradeContainer>
             <TradeTitleContainer>
                 <TradeTitleBox>
                     <ProfileBox>
@@ -47,13 +47,16 @@ function Chat() {
                     <Send />
                 </SendIconWrapper>
             </TypingBox>
-        </>
+        </TradeContainer>
     );
 }
 
+const TradeContainer = styled.div`
+`;
+
 const TradeTitleContainer = styled.div`
     width: 656px;
-    height: 88px;
+    height: 95px;
     border: 0.1px solid rgba(0, 0, 0, 0.1);
     background: #fff;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.02);
@@ -116,6 +119,7 @@ const TradeWrapper = styled.div`
     flex-direction: column;
     width: 176px;
     height: 63px;
+    margin-top: 10px;
 `;
 
 const PriceWrapper = styled.div`
@@ -245,6 +249,7 @@ const SendIconWrapper = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
+    margin-top: 5px;
     cursor: pointer;
 `;
 
