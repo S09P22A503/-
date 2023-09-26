@@ -14,7 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MessageDto implements Serializable {
+public class KafkaMessageDto implements Serializable {
 
     @NotBlank(message = "메시지를 입력하세요.")
     private String message;
