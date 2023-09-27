@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import HeaderBox from "./headerBox";
 
+const Container = styled.div``;
+
+const StyleBar = styled.div`
+  width: auto;
+  height: 2em;
+  background-color: var(--primary);
+`;
+
 const LayoutContainer = styled.div`
   width: 100%;
   max-width: 100vw;
@@ -20,9 +28,14 @@ const LayoutBody = styled.div`
 
 export default function Layout({ children }) {
   return (
-    <LayoutContainer>
-      <HeaderBox />
-      <LayoutBody>{children}</LayoutBody>
-    </LayoutContainer>
+    <Container>
+      <StyleBar></StyleBar>
+      <LayoutContainer>
+        <LayoutBody>
+          <HeaderBox />
+          {children}
+        </LayoutBody>
+      </LayoutContainer>
+    </Container>
   );
 }

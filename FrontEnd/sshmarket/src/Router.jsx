@@ -21,10 +21,6 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        path: "login",
-        element: <Login />,
-      },
-      {
         path: "signup",
         element: <Signup />,
       },
@@ -55,6 +51,10 @@ const router = createBrowserRouter([
         element: <Mypage />,
       },
     ],
+  },
+  {
+    path: "login/oauth2/code/google",
+    element: <Login />
   },
   {
     path: "*",
