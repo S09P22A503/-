@@ -29,7 +29,7 @@ public class FindTradeUseCase {
 
     public List<TradeResponseDto> findTrades(Long memberId, Status status) {
         List<TradeResponseDto> tradeResponseList = new ArrayList<>();
-        List<Trade> trades = tradeRepository.findByMemberIdAndStatus(memberId, status);
+        List<Trade> trades = getTrades(memberId, status);
         for (Trade trade : trades) {
             //상대방 정보 조회
             Long traderId = trade.findTrader(memberId);
@@ -51,5 +51,14 @@ public class FindTradeUseCase {
         return tradeResponseList.stream()
                 .sorted(Comparator.comparing(TradeResponseDto::getCreatedAt).reversed())
                 .collect(Collectors.toList());
+    }
+
+    private List<Trade> getTrades(Long memberId, Status status) {
+        List<Trade> trades = new ArrayList<>();
+        if (status.equals(Status.ALL)) {
+            trades = tradeRepository.findByMemberId(memberId);
+        }
+        trades = tradeRepository.findByMemberIdAndStatus(memberId, status);
+        return trades;
     }
 }
