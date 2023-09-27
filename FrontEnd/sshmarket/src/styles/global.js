@@ -1,9 +1,10 @@
 import { createGlobalStyle } from "styled-components";
+import "../fonts/font.css"
 
 const GlobalVariableStyle = createGlobalStyle`
 :root {
   // color
-  --primary: #453CF8;
+  --primary: #5F0080;
   --secondary: #E2E0F9;
   --background: #F8F8F8;
   --red: red;
