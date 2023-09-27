@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {getTradeHistory} from "../../api/trade.js";
 
 function TradeHistory() {
   const [tradeHistory, setTradeHistory] = useState([]);
@@ -8,21 +7,24 @@ function TradeHistory() {
 
   useEffect(() => {
     // API 엔드포인트 URL을 정의합니다.
-    getTradeHistory({
-      responseFunc: handleApiResponse,
-      data: { memberId },
-    });
-  }, [memberId]);
+    const apiUrl = `/trades/history/${memberId}`;
 
-  const handleApiResponse = (response) => {
-    if (response.status === 200) {
-      // API 호출이 성공하면 데이터를 설정합니다.
-      setTradeHistory(response.data);
-    } else {
-      // API 호출이 실패하면 오류를 처리합니다.
-      console.error("API 호출에 실패했습니다.", response);
-    }
-  };
+    // fetch 함수를 사용하여 API 호출을 수행합니다.
+    fetch(apiUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("네트워크 응답이 올바르지 않습니다");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // 상태에서 거래 내역 데이터를 설정합니다.
+        setTradeHistory(data); // API 응답이 TradeHistoryResponseDto 배열로 가정합니다
+      })
+      .catch((error) => {
+        console.error("fetch 작업에 문제가 있습니다:", error);
+      });
+  }, [memberId]);
 
   return (
     <TradeHistoryContainer>
