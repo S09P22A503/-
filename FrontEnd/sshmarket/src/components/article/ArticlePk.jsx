@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import SubButton from "../Button/SubButton";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import StyledButton from "../Button/StyledButton";
-import { Carousel } from "react-responsive-carousel";
 import { useState } from "react";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import styled from "styled-components";
+import StyledButton from "../Button/StyledButton";
+import RecommendArticle from "./organism/RecommendArticle";
 
 const Container = styled.div``;
 
@@ -55,7 +55,7 @@ const ContentContainer = styled.div`
 const TextContainer = styled.div`
   font-size: x-large;
   font-weight: bold;
-  margin: 40px 0px 20px;
+  margin: 70px 0px 20px;
 `;
 
 export default function ArticlePk() {
@@ -71,15 +71,16 @@ export default function ArticlePk() {
     amount: 10,
     price: 10000,
     images: [
-      "https://i.namu.wiki/i/WGsJjdq_YZ55OqLwDcVy03tPUDeuy2bFGjbv7hGdqeTxhugt9oQVd9skQTplZArzk64Id35mmLbkbcMwWEo2-g.webp",
-      "https://www.kocis.go.kr/CONTENTS/editImage/usr_1691028337236.jpg",
-      "https://file2.nocutnews.co.kr/newsroom/image/2023/08/03/202308030957294431_0.jpg",
+      "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
+      "https://health.chosun.com/site/data/img_dir/2023/06/27/2023062702164_0.jpg",
+      "https://cdn.travie.com/news/photo/202104/21806_10684_4721.jpg",
+      "https://www.sisajournal.com/news/photo/202105/217322_125317_3126.jpg",
     ],
   };
 
   const renderSlides = data.images.map((image, index) => (
     <div>
-      <img src={image} key={index} />
+      <img src={image} key={index} alt={index} />
     </div>
   ));
   const [currentIndex, setCurrentIndex] = useState();
@@ -91,7 +92,7 @@ export default function ArticlePk() {
     <Container>
       <ImageContainer>
         <Carousel
-          showArrows={true}
+          showArrows={false}
           autoPlay={true}
           infiniteLoop={true}
           showThumbs={false}
@@ -119,7 +120,7 @@ export default function ArticlePk() {
         </ComponentContainer>
         <ContentContainer>{data.content}</ContentContainer>
         <TextContainer>유사한 상품 추천</TextContainer>
-        <ComponentContainer>상품 컴포넌트가 들어갈 예정</ComponentContainer>
+        <RecommendArticle></RecommendArticle>
       </ContentsContainer>
     </Container>
   );
