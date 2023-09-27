@@ -1,6 +1,7 @@
 package com.sshmarket.trade.dto;
 
 import com.sshmarket.trade.domain.TradeHistory;
+import java.time.format.DateTimeFormatter;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class TradeHistoryResponseDto {
     private String title;
     private String mainImage;
     private boolean isReviewed;
-    private LocalDateTime boughtAt;
+    private String boughtAt;
 
     public static TradeHistoryResponseDto from(TradeHistory tradeHistory) {
         return TradeHistoryResponseDto.builder()
@@ -28,7 +29,8 @@ public class TradeHistoryResponseDto {
                 .title(tradeHistory.getTitle())
                 .mainImage(tradeHistory.getMainImage())
                 .isReviewed(tradeHistory.isReviewed())
-                .boughtAt(tradeHistory.getCreatedAt())
+                .boughtAt(
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(tradeHistory.getCreatedAt()))
                 .price(tradeHistory.getPrice())
                 .build();
     }

@@ -1,5 +1,6 @@
 package com.sshmarket.trade.dto;
 
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,8 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class TradeHistoryCreateRequestDto {
 
-    @NotBlank
-    private int price;
+    @NotNull
+    private Integer price;
 
     @NotBlank
     private String mainImage;
