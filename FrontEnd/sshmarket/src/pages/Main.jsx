@@ -12,12 +12,15 @@ const MainImage = styled.video`
 
 const CategoryBoxContainer = styled.div`
   margin-top: 3em;
-  border: 1px solid black;
   height: 150px;
+  display: flex;
+  justify-content: space-between;
 `
 
-const CartegoryBox = styled.div`
-  
+const CartegoryBox = styled.img`
+  border: 5px solid var(--secondary);
+  border-radius: 15px;
+  cursor: pointer;
 `
 
 const MainArticleContainer = styled.div`
@@ -28,13 +31,24 @@ const MainArticleContainer = styled.div`
 `
 
 export default function Main() {
+
+  const categoryArray = ["없음","쌀/잡곡", "채소", "견과/건과", "축산/계란", "수산물/건어물", "과일"]
+  const categoryIndexArray = [1,2,3,4,5,6];
+
+  const clickCategory = (i) => {
+    alert(`카테고리 ${categoryArray[i]} 클릭`)
+  }
+
   return (
     <Container>
       <MainImage autoPlay muted loop>
         <source src="mainimage.mp4"></source>
       </MainImage>
       <CategoryBoxContainer>
-
+        {categoryIndexArray.map((i) => {
+          let source = "categoryImage/" + i + ".jpg";
+          return <CartegoryBox key={i} src={source} onClick={() => clickCategory(i)}></CartegoryBox>
+        })}
       </CategoryBoxContainer>
       <MainArticleContainer>
         <ArticleCard></ArticleCard>
