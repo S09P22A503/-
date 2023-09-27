@@ -19,6 +19,7 @@ const LogoTitleContainer = styled.div`
   font-family: "HSSummer";
   font-size: xx-large;
   color: var(--primary);
+  cursor: pointer;
 `;
 
 const SearchContainer = styled.div`
@@ -72,7 +73,7 @@ const LoginSignup = styled.a`
 export default function Header() {
   return (
     <Container>
-      <LogoTitleContainer>{"생소한 마켓"}</LogoTitleContainer>
+      <LogoTitleContainer onClick={() => {window.location.replace("/")}}>{"생소한 마켓"}</LogoTitleContainer>
       <SearchContainer>
         <SearchBar>
           <SearchInput placeholder=" 검색어를 입력해주세요."></SearchInput>
