@@ -6,5 +6,4 @@ WORKDIR /myapp
 
 COPY ${JAR_FILE} member-application.jar
 
-ENTRYPOINT ["java","-Duser.timezone=Asia/Seoul", "-Dspring.profiles.active=${PROFILE}", "-jar","member-application.jar"]
- 
+ENTRYPOINT ["java","-Duser.timezone=Asia/Seoul", "-jar","member-application.jar"]
