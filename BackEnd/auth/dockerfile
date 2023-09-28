@@ -2,7 +2,7 @@ FROM openjdk:17-jdk-alpine
 
 ARG JAR_FILE=build/libs/*.jar
 
-WORKDIR /myapp
+WORKDIR /my-app
 
 COPY ${JAR_FILE} member-application.jar
 
