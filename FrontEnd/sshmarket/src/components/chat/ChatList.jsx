@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as Search } from "../../assets/icons/search.svg";
 import { ReactComponent as Profile } from "../../assets/icons/profile.svg";
 import Dropdown from "./Dropdown";
-import { getTradeList } from "../../api/trade.js";
+import { getTradeList, getTradeListByKeyword } from "../../api/trade.js";
 
 function formatDateTime(inputDateString) {
   const inputDate = new Date(inputDateString);
@@ -30,6 +30,9 @@ function formatDateTime(inputDateString) {
 }
 
 function ChatList() {
+  const keywordInputRef = useRef(null);
+  const [keyword, setKeyword] = useState("");
+
   const states = [
     { id: 1, label: "전체대화", status: "ALL" },
     { id: 2, label: "대화중", status: "CHAT" },
@@ -51,7 +54,6 @@ function ChatList() {
           200: (response) => {
             console.log("trade", response.data.data);
             setTrades(response.data.data);
-            console.log(trades);
           },
         },
         data: { memberId: memberId, status: selectedState.status },
@@ -59,6 +61,28 @@ function ChatList() {
     }
     fetchData();
   }, [selectedState]);
+
+  // 키워드 조회
+  const handleKeywordChange = (event) => {
+    setKeyword(event.target.value.trim());
+  };
+
+  const handleKeywordSubmit = async () => {
+    async function fetchData() {
+      await getTradeListByKeyword({
+        responseFunc: {
+          200: (response) => {
+            setTrades(response.data.data);
+          },
+        },
+        data: {
+          status: selectedState.status,
+          keyword: keyword,
+        },
+      });
+    }
+    fetchData();
+  };
 
   return (
     <TradeContainer>
@@ -73,8 +97,20 @@ function ChatList() {
             onChange={setSelectedState}
           />
           <TradeSearchBox>
-            <TradeSearchWrapper>대화방 검색</TradeSearchWrapper>
-            <SearchIconWrapper>
+            <TradeSearchWrapper
+              placeholder="대화방 검색"
+              ref={keywordInputRef}
+              value={keyword}
+              onChange={handleKeywordChange}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  keywordInputRef.current.blur();
+                  handleKeywordSubmit(event);
+                }
+              }}
+            />
+            <SearchIconWrapper onClick={handleKeywordSubmit}>
               <Search />
             </SearchIconWrapper>
           </TradeSearchBox>
@@ -146,28 +182,34 @@ const TradeSearchBox = styled.div`
   height: 44px;
   justify-content: center;
   align-items: center;
-  gap: 200px;
+  gap: 10px;
   flex-shrink: 0;
   background: #fff;
 `;
 
-const TradeSearchWrapper = styled.div`
+const TradeSearchWrapper = styled.input`
   color: rgba(0, 0, 0, 0.4);
-  text-align: center;
-  font-size: 14px;
+  border: none;
+  outline: none;
+  text-align: start;
+  width: 300px;
+  height: 40px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  margin-left: 15px;
 `;
 
 const SearchIconWrapper = styled.div`
   cursor: pointer;
+  margin-right: 15px;
 `;
 
 const TradeListBox = styled.div`
   cursor: pointer;
   display: flex;
-  width: 360px;
+  width: 350px;
   padding: 15px 0px;
   justify-content: center;
   align-items: flex-end;
