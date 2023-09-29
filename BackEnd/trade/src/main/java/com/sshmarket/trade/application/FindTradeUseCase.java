@@ -54,11 +54,9 @@ public class FindTradeUseCase {
     }
 
     private List<Trade> getTrades(Long memberId, Status status) {
-        List<Trade> trades = new ArrayList<>();
         if (status.equals(Status.ALL)) {
-            trades = tradeRepository.findByMemberId(memberId);
+            return tradeRepository.findByMemberId(memberId);
         }
-        trades = tradeRepository.findByMemberIdAndStatus(memberId, status);
-        return trades;
+        return tradeRepository.findByMemberIdAndStatus(memberId, status);
     }
 }
