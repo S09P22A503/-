@@ -14,4 +14,19 @@ const getTradeList = async ({ responseFunc, data }) => {
   }
 };
 
-export { getTradeList };
+const getTradeListByKeyword = async ({ responseFunc, data }) => {
+  const { keyword, status } = data;
+
+  try {
+    const response = await instance.get(
+      `/trades/search/${keyword}?status=${status}`
+    );
+    console.log(response);
+    processApiResponse({ responseFunc, response });
+    return response;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export { getTradeList, getTradeListByKeyword };
