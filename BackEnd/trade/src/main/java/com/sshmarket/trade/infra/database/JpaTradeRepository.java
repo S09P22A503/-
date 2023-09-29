@@ -13,8 +13,8 @@ public interface JpaTradeRepository extends JpaRepository<Trade, Long> {
             List<Status> status);
 
     @Query(value = "SELECT * FROM trade "
-            + "WHERE seller_id = :memberId "
-            + "OR buyer_id = :memberId "
+            + "WHERE (seller_id = :memberId "
+            + "OR buyer_id = :memberId) "
             + "AND status = :status", nativeQuery = true)
     List<Trade> findByMemberIdAndStatus(@Param("memberId") Long memberId,
             @Param("status") String status);
