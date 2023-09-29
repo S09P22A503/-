@@ -29,8 +29,7 @@ public class SignupService implements SignupUseCase {
         if (memberRepository.existsByNickname(nickname)) {
             throw new BusinessException("이미 존재하는 닉네임입니다.");
         }
-        String accessToken = oauthConnector.getAccessToken(code);
-        JsonNode memberResourceNode = oauthConnector.getMemberResource(accessToken);
+        JsonNode memberResourceNode = oauthConnector.getMemberResource(code);
         String oauthId = memberResourceNode.get("id").asText();
         String email = memberResourceNode.get("email").asText();
         if (memberRepository.existsByEmail(email)) {

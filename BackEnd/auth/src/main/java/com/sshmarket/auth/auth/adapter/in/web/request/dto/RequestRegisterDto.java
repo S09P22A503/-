@@ -3,10 +3,12 @@ package com.sshmarket.auth.auth.adapter.in.web.request.dto;
 import com.sshmarket.auth.auth.adapter.in.web.request.valid.AllowedContentType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
-@Getter
+@Data
 public class RequestRegisterDto {
 
     @NotBlank(message = "계정 정보를 불러올 수 없습니다.")

@@ -53,8 +53,8 @@ public class OauthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid RequestLoginDto requestLoginDto, HttpServletResponse httpServletResponse) throws IOException {
         String token = loginUseCase.login(requestLoginDto.getCode());
-        if (token == null) {
-            return HttpResponse.fail(HttpStatus.SEE_OTHER, "존재하지 않는 회원입니다. 회원가입이 필요합니다.");
+        if (token.substring(0,6).equals("access")) {
+            return HttpResponse.fail(HttpStatus.SEE_OTHER, token.substring(6));
         }
         httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(token));
         return HttpResponse.ok(HttpStatus.OK, "로그인이 성공했습니다.");

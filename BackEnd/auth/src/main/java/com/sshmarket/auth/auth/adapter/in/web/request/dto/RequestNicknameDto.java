@@ -2,9 +2,11 @@ package com.sshmarket.auth.auth.adapter.in.web.request.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class RequestNicknameDto {
 
     @NotBlank(message = "닉네임을 입력해주세요.")

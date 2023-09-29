@@ -54,14 +54,14 @@ public class MemberModifyController {
     public ResponseEntity<?> memberNicknameModify(@Valid RequestNicknameDto requestNicknameDto, @CookieValue(value = "jwt", required = true) String token, HttpServletResponse httpServletResponse) {
         String newToken = modifyMemberUseCase.modifyMemberNickname(token,
                 requestNicknameDto.getNickname());
-        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(token));
+        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(newToken));
         return HttpResponse.ok(HttpStatus.OK, "닉네임 수정이 완료되었습니다.");
     }
 
     @PatchMapping("/members/profile")
     public ResponseEntity<?> memberProfileModify(@Valid RequestProfileDto requestProfileDto, @CookieValue(value = "jwt", required = true) String token, HttpServletResponse httpServletResponse) {
         String newToken = modifyMemberUseCase.modifyMemberProfile(token, requestProfileDto.getProfile());
-        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(token));
+        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(newToken));
         return HttpResponse.ok(HttpStatus.OK, "프로필 사진 수정이 완료되었습니다.");
     }
 
