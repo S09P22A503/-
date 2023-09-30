@@ -29,7 +29,7 @@ function formatDateTime(inputDateString) {
   }
 }
 
-function ChatList() {
+function ChatList({ setSelectedTradeId }) {
   const keywordInputRef = useRef(null);
   const [keyword, setKeyword] = useState("");
 
@@ -84,6 +84,10 @@ function ChatList() {
     fetchData();
   };
 
+  const handleTradeClick = (tradeId) => {
+    setSelectedTradeId(tradeId); // 선택한 거래 ID 업데이트
+  };
+
   return (
     <TradeContainer>
       <TradeStateContainer>
@@ -119,7 +123,10 @@ function ChatList() {
       <TradeListContainer>
         {trades &&
           trades.map((trade) => (
-            <TradeListBox key={trade.id}>
+            <TradeListBox
+              key={trade.tradeId}
+              onClick={() => handleTradeClick(trade.tradeId)}
+            >
               <ProfileImageWrapper>
                 <Profile />
               </ProfileImageWrapper>
@@ -248,6 +255,7 @@ const LastMessageWrapper = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 16px;
+  overflow: hidden;
 `;
 
 const DateWrapper = styled.div`
