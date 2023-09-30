@@ -29,4 +29,17 @@ const getTradeListByKeyword = async ({ responseFunc, data }) => {
   }
 };
 
-export { getTradeList, getTradeListByKeyword };
+const getTradeMessage = async ({ responseFunc, data }) => {
+  const { tradeId } = data;
+
+  try {
+    const response = await instance.get(`/trades/${tradeId}/messages`);
+    console.log(response);
+    processApiResponse({ responseFunc, response });
+    return response;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export { getTradeList, getTradeListByKeyword, getTradeMessage };
