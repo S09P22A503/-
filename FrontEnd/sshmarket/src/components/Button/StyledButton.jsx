@@ -29,6 +29,8 @@ const Container = styled.button`
     transform: translate(0.05em, 0.05em);
     box-shadow: 0.05em 0.05em;
   }
+
+  cursor: pointer;
 `;
 
 const Span = styled.span`

@@ -105,22 +105,22 @@ export default function Header() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const goMyPage = () => {
+  const goMyPage = (e) => {
     navigate("/mypage");
-    closeMenu();
+    toggleMenu(e);
   };
 
-  const goTrade = () => {
+  const goTrade = (e) => {
     navigate("/trade");
-    closeMenu();
+    toggleMenu(e);
   };
 
-  const goWrite = () => {
+  const goWrite = (e) => {
     navigate("article/write");
-    closeMenu();
+    toggleMenu(e);
   };
 
-  const logout = () => {
+  const logout = (e) => {
     axios({
       baseURL: SERVER_URL,
       url: SERVER_URL + "auth/logout",
@@ -130,14 +130,12 @@ export default function Header() {
       alert(res.data.message);
       navigate("/");
     });
+    toggleMenu(e);
   };
 
-  const toggleMenu = () => {
+  const toggleMenu = (e) => {
     setIsMenuOpen((prev) => !prev);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
+    e.stopPropagation();
   };
 
   const menuNameList = ["마이페이지", "생소 Talk", "판매글 등록", "로그아웃"];
@@ -165,21 +163,17 @@ export default function Header() {
         </BeforeLoginContainer>
       ) : (
         <AfterLoginContainer>
-          <ProfileContainer
-            onClick={() => {
-              toggleMenu();
-            }}
-          >
+          <ProfileContainer onClick={toggleMenu}>
             <MemberProfile member={member}></MemberProfile>
             <MenuList hidden={!isMenuOpen}>
-            {menuNameList.map((name, i) => {
-              return (
-                <MenuItem key={i} onClick={() => menuEventList[i]()}>
-                  {name}
-                </MenuItem>
-              );
-            })}
-          </MenuList>
+              {menuNameList.map((name, i) => {
+                return (
+                  <MenuItem key={i} onClick={menuEventList[i]}>
+                    {name}
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
           </ProfileContainer>
         </AfterLoginContainer>
       )}
