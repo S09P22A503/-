@@ -29,7 +29,7 @@ public class ModifyMemberService implements ModifyMemberUseCase {
     }
 
     @Override
-    public String modifyMemberNickname(String token, String nickname) {
+    public Member modifyMemberNickname(String token, String nickname) {
         Member member = jwtTranslator.translate(token);
         if (memberRepository.existsByNickname(nickname)) {
             throw new BusinessException("이미 존재하는 닉네임입니다.");
@@ -39,11 +39,12 @@ public class ModifyMemberService implements ModifyMemberUseCase {
         }
         member.changeNickname(nickname);
         memberRepository.updateMemberNickname(member);
-        return jwtAdmin.generateToken(member);
+        member.fillToken(jwtAdmin.generateToken(member));
+        return member;
     }
 
     @Override
-    public String modifyMemberProfile(String token, MultipartFile profileFile) {
+    public Member modifyMemberProfile(String token, MultipartFile profileFile) {
         if (profileFile.isEmpty()) {
             throw new BusinessException("파일이 정상적으로 업로드되지 않았습니다.");
         }
@@ -67,6 +68,8 @@ public class ModifyMemberService implements ModifyMemberUseCase {
 
         memberProfileRepository.removeMemberProfile(beforeProfile);
 
-        return jwtAdmin.generateToken(member);
+        member.fillToken(jwtAdmin.generateToken(member));
+
+        return member;
     }
 }

@@ -1,8 +1,7 @@
-package com.sshmarket.auth.auth.adapter.in.web.request.dto;
+package com.sshmarket.auth.auth.adapter.in.web.dto;
 
 import com.sshmarket.auth.auth.adapter.in.web.request.valid.AllowedContentType;
 import lombok.Data;
-import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data

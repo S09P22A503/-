@@ -1,8 +1,8 @@
 package com.sshmarket.auth.auth.adapter.in.web;
 
-import com.sshmarket.auth.auth.adapter.in.web.request.dto.RequestLoginDto;
-import com.sshmarket.auth.auth.adapter.in.web.request.dto.RequestRegisterDto;
-import com.sshmarket.auth.auth.adapter.in.web.request.valid.AllowedContentType;
+import com.sshmarket.auth.auth.adapter.in.web.dto.RequestLoginDto;
+import com.sshmarket.auth.auth.adapter.in.web.dto.RequestRegisterDto;
+import com.sshmarket.auth.auth.adapter.in.web.dto.ResponseDto;
 import com.sshmarket.auth.auth.adapter.in.web.response.HttpResponse;
 import com.sshmarket.auth.auth.adapter.in.web.util.CookieBaker;
 import com.sshmarket.auth.auth.application.port.in.LoginUseCase;
@@ -11,25 +11,19 @@ import java.io.IOException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
 public class OauthController {
 
     private final LoginUseCase loginUseCase;
@@ -41,23 +35,28 @@ public class OauthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid RequestRegisterDto requestRegisterDto, HttpServletResponse httpServletResponse) {
-        String token = signupUseCase.signup(
+        ResponseDto responseDto = ResponseDto.getMemberInfo(signupUseCase.signup(
                 requestRegisterDto.getCode(),
                 requestRegisterDto.getNickname(),
                 requestRegisterDto.getProfile()
-                );
-        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(token));
-        return HttpResponse.ok(HttpStatus.OK, "회원 가입이 완료되었습니다.");
+                ));
+        Cookie cookie = cookieBaker.bakeJwtCookie(responseDto.popToken());
+        httpServletResponse.addCookie(cookie);
+        responseDto.pushToken(String.valueOf(cookie.getMaxAge()));
+        return HttpResponse.okWithData(HttpStatus.OK, "회원 가입이 완료되었습니다.", responseDto);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid RequestLoginDto requestLoginDto, HttpServletResponse httpServletResponse) throws IOException {
-        String token = loginUseCase.login(requestLoginDto.getCode());
-        if (token.substring(0,6).equals("access")) {
-            return HttpResponse.fail(HttpStatus.SEE_OTHER, token.substring(6));
+        ResponseDto responseDto = ResponseDto.getMemberInfo(
+        loginUseCase.login(requestLoginDto.getCode()));
+        if (responseDto.getId() == 0) {
+            return HttpResponse.fail(HttpStatus.SEE_OTHER, responseDto.popToken());
         }
-        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(token));
-        return HttpResponse.ok(HttpStatus.OK, "로그인이 성공했습니다.");
+        Cookie cookie = cookieBaker.bakeJwtCookie(responseDto.popToken());
+        httpServletResponse.addCookie(cookie);
+        responseDto.pushToken(String.valueOf(cookie.getMaxAge()));
+        return HttpResponse.okWithData(HttpStatus.OK, "로그인이 성공했습니다.", responseDto);
     }
 
 

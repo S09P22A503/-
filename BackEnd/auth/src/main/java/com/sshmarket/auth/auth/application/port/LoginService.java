@@ -20,11 +20,16 @@ public class LoginService implements LoginUseCase {
     private final MemberRepository memberRepository;
 
     @Override
-    public String login(String code) {
+    public Member login(String code) {
         String accessToken = oauthConnector.getAccessToken(code);
         JsonNode memberResourceNode = oauthConnector.getMemberResource(accessToken);
         Member member = memberRepository.findMemberByEmail(memberResourceNode.get("email").asText());
-        if (member == null) return "access"+accessToken;
-        return jwtAdmin.generateToken(member);
+        if (member == null) {
+            Member dummyMember = Member.createWithPublicInfo(0L,"","");
+            dummyMember.fillToken(accessToken);
+            return dummyMember;
+        }
+        member.fillToken(jwtAdmin.generateToken(member));
+        return member;
     }
 }

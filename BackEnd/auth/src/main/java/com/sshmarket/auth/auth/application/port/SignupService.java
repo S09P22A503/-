@@ -25,7 +25,7 @@ public class SignupService implements SignupUseCase {
     private final MemberProfileRepository memberProfileRepository;
 
     @Override
-    public String signup(String code, String nickname, MultipartFile profileFile) {
+    public Member signup(String code, String nickname, MultipartFile profileFile) {
         if (memberRepository.existsByNickname(nickname)) {
             throw new BusinessException("이미 존재하는 닉네임입니다.");
         }
@@ -46,6 +46,7 @@ public class SignupService implements SignupUseCase {
         }
         Member member = Member.createWithoutId(nickname, profile, oauthId, email);
         member = memberRepository.saveMember(member);
-        return jwtAdmin.generateToken(member);
+        member.fillToken(jwtAdmin.generateToken(member));
+        return member;
     }
 }

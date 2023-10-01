@@ -15,6 +15,8 @@ public class Member {
 
     private String email;
 
+    private String token;
+
     private Member () {}
 
     public static Member createWithoutId(String nickname, String profile, String oauthId, String email) {
@@ -50,6 +52,10 @@ public class Member {
 
     public void changeProfile(String profile) {
         this.profile = profile;
+    }
+
+    public void fillToken(String token) {
+        this.token = token;
     }
 
 }

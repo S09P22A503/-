@@ -1,9 +1,8 @@
-package com.sshmarket.auth.auth.adapter.in.web.request.dto;
+package com.sshmarket.auth.auth.adapter.in.web.dto;
 
 import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class RequestLoginDto {

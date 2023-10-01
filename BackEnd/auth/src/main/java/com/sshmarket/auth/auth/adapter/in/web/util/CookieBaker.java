@@ -21,6 +21,7 @@ public class CookieBaker {
     public Cookie bakeJwtCookie(String token) {
         Cookie cookie = new Cookie("jwt",token);
         cookie.setMaxAge(EXPIRATION);
+        cookie.setPath("/");
         return cookie;
     }
 

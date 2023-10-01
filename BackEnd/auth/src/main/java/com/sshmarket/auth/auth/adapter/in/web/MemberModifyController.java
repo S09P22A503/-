@@ -1,32 +1,26 @@
 package com.sshmarket.auth.auth.adapter.in.web;
 
-import com.sshmarket.auth.auth.adapter.in.web.request.dto.RequestNicknameDto;
-import com.sshmarket.auth.auth.adapter.in.web.request.dto.RequestProfileDto;
-import com.sshmarket.auth.auth.adapter.in.web.request.valid.AllowedContentType;
+import com.sshmarket.auth.auth.adapter.in.web.dto.RequestNicknameDto;
+import com.sshmarket.auth.auth.adapter.in.web.dto.RequestProfileDto;
+import com.sshmarket.auth.auth.adapter.in.web.dto.ResponseDto;
 import com.sshmarket.auth.auth.adapter.in.web.response.HttpResponse;
 import com.sshmarket.auth.auth.adapter.in.web.util.CookieBaker;
 import com.sshmarket.auth.auth.application.port.in.ModifyMemberUseCase;
-import com.sshmarket.auth.auth.domain.Member;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @RestController
@@ -52,17 +46,21 @@ public class MemberModifyController {
 
     @PatchMapping("/members/nickname")
     public ResponseEntity<?> memberNicknameModify(@Valid RequestNicknameDto requestNicknameDto, @CookieValue(value = "jwt", required = true) String token, HttpServletResponse httpServletResponse) {
-        String newToken = modifyMemberUseCase.modifyMemberNickname(token,
-                requestNicknameDto.getNickname());
-        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(newToken));
-        return HttpResponse.ok(HttpStatus.OK, "닉네임 수정이 완료되었습니다.");
+        ResponseDto responseDto = ResponseDto.getMemberInfo(modifyMemberUseCase.modifyMemberNickname(token,
+                requestNicknameDto.getNickname()));
+        Cookie cookie = cookieBaker.bakeJwtCookie(responseDto.popToken());
+        httpServletResponse.addCookie(cookie);
+        responseDto.pushToken(String.valueOf(cookie.getMaxAge()));
+        return HttpResponse.okWithData(HttpStatus.OK, "닉네임 수정이 완료되었습니다.", responseDto);
     }
 
     @PatchMapping("/members/profile")
     public ResponseEntity<?> memberProfileModify(@Valid RequestProfileDto requestProfileDto, @CookieValue(value = "jwt", required = true) String token, HttpServletResponse httpServletResponse) {
-        String newToken = modifyMemberUseCase.modifyMemberProfile(token, requestProfileDto.getProfile());
-        httpServletResponse.addCookie(cookieBaker.bakeJwtCookie(newToken));
-        return HttpResponse.ok(HttpStatus.OK, "프로필 사진 수정이 완료되었습니다.");
+        ResponseDto responseDto = ResponseDto.getMemberInfo(modifyMemberUseCase.modifyMemberProfile(token, requestProfileDto.getProfile()));
+        Cookie cookie = cookieBaker.bakeJwtCookie(responseDto.popToken());
+        httpServletResponse.addCookie(cookie);
+        responseDto.pushToken(String.valueOf(cookie.getMaxAge()));
+        return HttpResponse.okWithData(HttpStatus.OK, "프로필 사진 수정이 완료되었습니다.", responseDto);
     }
 
 }

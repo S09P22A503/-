@@ -1,10 +1,9 @@
-package com.sshmarket.auth.auth.adapter.in.web.request.dto;
+package com.sshmarket.auth.auth.adapter.in.web.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class RequestNicknameDto {
