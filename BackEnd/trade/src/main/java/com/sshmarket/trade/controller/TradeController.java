@@ -48,6 +48,7 @@ public class TradeController {
     private final FindTradeHistoryUseCase findTradeHistoryUseCase;
     private final ModifyTradeUseCase modifyTradeUseCase;
 
+    //trade/pub/send로 요청한거 처리
     @MessageMapping("/send")
     public void messageSend(KafkaMessageDto message) {
         log.info(message.getMessage());
