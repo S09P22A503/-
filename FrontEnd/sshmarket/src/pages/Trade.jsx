@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Chat from "../components/chat/Chat";
+import NoChat from "../components/chat/NoChat";
+
 import ChatList from "../components/chat/ChatList";
 
 const Container = styled.div``;
@@ -14,11 +16,22 @@ const ChatBox = styled.div`
 
 export default function Trade() {
   const [selectedTradeId, setSelectedTradeId] = useState(null);
+  const [messageFlag, setMessageFlag] = useState(null);
   return (
     <Container>
       <ChatBox>
-        <ChatList setSelectedTradeId={setSelectedTradeId}></ChatList>
-        <Chat tradeId={selectedTradeId}></Chat>
+        <ChatList
+          setSelectedTradeId={setSelectedTradeId}
+          messageFlag={messageFlag}
+        ></ChatList>
+        {selectedTradeId === null ? ( // tradeId가 null인 경우 NoDataContainer 출력
+          <NoChat />
+        ) : (
+          <Chat
+            tradeId={selectedTradeId}
+            setMessageFlag={setMessageFlag}
+          ></Chat>
+        )}
       </ChatBox>
     </Container>
   );

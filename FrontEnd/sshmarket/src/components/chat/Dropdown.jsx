@@ -54,7 +54,7 @@ function Dropdown({
         ) : (
           <div>{placeholder}</div>
         )}
-        <DropdownIconWrapper iconRotation={iconRotation}>
+        <DropdownIconWrapper iconrotation={iconRotation}>
           <DropdownIcon width="25" height="25" />
         </DropdownIconWrapper>
       </DropdownButton>
@@ -163,7 +163,7 @@ const DropdownIconWrapper = styled.div`
   display: block;
   width: 25px;
   height: 25px;
-  transform: rotate(${({ iconRotation }) => iconRotation}deg);
+  transform: rotate(${({ iconrotation }) => iconrotation}deg);
   transition: all 0.2s ease-in-out;
   svg path {
     stroke: rgba(0, 0, 0, 0.5);
