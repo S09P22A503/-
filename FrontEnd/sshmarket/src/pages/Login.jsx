@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { Login } from "../modules/memberReducer/action";
 
 const Container = styled.div`
   height: 100%;
@@ -9,12 +11,14 @@ const Container = styled.div`
   text-align: center;
 `;
 
-export default function Login() {
+export default function LoginPage() {
   const [params] = useSearchParams();
   const authCode = params.get("code");
 
-  const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios({
@@ -29,14 +33,16 @@ export default function Login() {
       }
     })
       .then((res) => {
+        dispatch(Login({data: {...res.data.data}}))
         alert(res.data.message);
-        window.location.replace(CLIENT_URL);
+        navigate("/");
       })
       .catch((e) => {
+        console.log(e);
         if (e.response.status === 303) {
           alert("회원가입 화면으로 이동합니다.")
           localStorage.setItem("accessToken", e.response.data.message)
-          window.location.replace(`${CLIENT_URL}signup`)
+          navigate("/signup")
           return;
         }
         alert(e.response.data.message);
