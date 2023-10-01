@@ -19,7 +19,7 @@ const LayoutContainer = styled.div`
 `;
 
 const LayoutBody = styled.div`
-  width: 1200px;
+  width: 1220px;
   background-color: #ffffff;
   height: 100%;
   margin: 0 auto;
