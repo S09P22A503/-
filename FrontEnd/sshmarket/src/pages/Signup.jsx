@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Login } from "../modules/memberReducer/action";
 
 const Container = styled.div`
   
@@ -26,12 +29,14 @@ const RegisterButton = styled.button`
 
 export default function Signup() {
 
-  const CLIENT_URL = process.env.REACT_APP_CLIENT_URL
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   const [inputNickname, setInputNickname] = useState();
   const [inputProfile, setInputProfile] = useState(new File([],"tmp"));
   const [previewProfile, setPreviewProfile] = useState();
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const changeNickname = (e) => {
     setInputNickname(e.target.value.toString().trim());
@@ -60,10 +65,9 @@ export default function Signup() {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
       alert("잘못된 접근입니다.");
-      window.location.replace(CLIENT_URL);
+      navigate("/");
     }
-    localStorage.removeItem("accessToken");
-
+    
     const formData = new FormData();
     formData.append("code", accessToken);
     formData.append("nickname", inputNickname);
@@ -78,11 +82,14 @@ export default function Signup() {
       },
       data: formData,
     })
-    .then(() => {
+    .then((res) => {
+      dispatch(Login({data: {...res.data.data}}))
       alert("회원 가입이 완료되었습니다.");
-      window.location.replace(CLIENT_URL);
+      localStorage.removeItem("accessToken");
+      navigate("/")
     })
     .catch((e) => {
+      console.log(e);
       alert(e.response.data.message);
     })
   }

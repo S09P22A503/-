@@ -1,3 +1,7 @@
+import { useSelector } from "react-redux";
+import { json, useNavigate } from "react-router-dom";
+import MemberProfile from "../common/MemberProfile";
+
 const { default: styled } = require("styled-components");
 
 const Container = styled.div`
@@ -71,22 +75,28 @@ const LoginSignup = styled.a`
 `;
 
 export default function Header() {
+  
+  const navigate = useNavigate();
+  const member = useSelector((state) => state.MemberReducer.data)
+
   return (
     <Container>
-      <LogoTitleContainer onClick={() => {window.location.replace("/")}}>{"생소한 마켓"}</LogoTitleContainer>
+      <LogoTitleContainer onClick={() => {navigate("/")}}>{"생소한 마켓"}</LogoTitleContainer>
       <SearchContainer>
         <SearchBar>
           <SearchInput placeholder=" 검색어를 입력해주세요."></SearchInput>
         </SearchBar>
       </SearchContainer>
-      {true ? (
+      {!member ? (
         <BeforeLoginContainer>
           <LoginSignup href="https://accounts.google.com/o/oauth2/auth?client_id=780664099270-6fkn1r7iq6p9eihagmebg9do4j1mm4vd.apps.googleusercontent.com&redirect_uri=http://localhost:3000/login/oauth2/code/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email">
             {"로그인/회원가입"}
           </LoginSignup>
         </BeforeLoginContainer>
       ) : (
-        <AfterLoginContainer>{"로그인됨"}</AfterLoginContainer>
+        <AfterLoginContainer>
+          <MemberProfile member={member}></MemberProfile>
+        </AfterLoginContainer>
       )}
     </Container>
   );
