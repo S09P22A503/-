@@ -47,11 +47,11 @@ public class AddArticleUseCase {
         uploadList(directory, articleAddRequestDto.getImages(), imageFileNames);
 
         Article article = articleAddRequestDto.toEntity(mainImageName, imageFileNames, location, product);
-        Long id = articleRepository.saveArticle(article).getId();
+        Article savedArticle = articleRepository.saveArticle(article);
 
         s3Uploader.upload(mainImageName, articleAddRequestDto.getMainImage());
 
-        return id;
+        return savedArticle.getId();
     }
 
     private void uploadList(String directory, List<MultipartFile> images, List<String> imageFileNames){

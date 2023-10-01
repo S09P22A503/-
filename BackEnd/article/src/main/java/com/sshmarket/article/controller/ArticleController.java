@@ -3,17 +3,18 @@ package com.sshmarket.article.controller;
 
 import com.sshmarket.article.application.*;
 import com.sshmarket.article.application.jwttranslator.JwtTranslator;
+import com.sshmarket.article.domain.TradeType;
 import com.sshmarket.article.dto.ArticleAddRequestDto;
 import com.sshmarket.article.dto.ArticleModifyRequestDto;
 import com.sshmarket.article.dto.Member;
 import com.sshmarket.article.global.dto.HttpResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.awt.print.Pageable;
 
 @RestController
 @RequestMapping("/articles")
@@ -90,7 +91,7 @@ public class ArticleController {
     // 글 상세조회
     @GetMapping("/{articleId}")
     public ResponseEntity<?> articleDetail(@PathVariable Long articleId,
-                                           @CookieValue(value = "jwt", required = true) String token){
+                                           @CookieValue(value = "jwt", required = false) String token){
 
         Member member = jwtTranslator.translate(token);
 
@@ -99,10 +100,16 @@ public class ArticleController {
     }
 
     // 글 리스트 조회
-//    @GetMapping
-//    public ResponseEntity<?> articleList(@RequestParam(value = "category", required = false) Integer category,
-//                                         @RequestParam(value = "keyword", required = false) String keyword,
-//                                         Pageable pageable){
-//
-//    }
+    @GetMapping
+    public ResponseEntity<?> articleList(@RequestParam(value = "itemId", required = false) Integer itemId,
+                                         @RequestParam(value = "locationId", required = false) Long locationId,
+                                         @RequestParam(value = "tradeType", required = false) TradeType tradeType,
+                                         @RequestParam(value = "keyword", required = false) String keyword,
+                                         Pageable pageable) {
+
+        return  HttpResponse.okWithData(HttpStatus.OK, "판매글 리스트 조회 성공",
+                findArticleUseCase.findArticleList(itemId, locationId, tradeType, keyword, pageable));
+    }
+
+
 }
