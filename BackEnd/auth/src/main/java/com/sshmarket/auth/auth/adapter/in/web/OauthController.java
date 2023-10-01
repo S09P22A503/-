@@ -18,11 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Component
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 public class OauthController {
 
     private final LoginUseCase loginUseCase;

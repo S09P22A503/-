@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Component
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 public class MemberModifyController {
 
     private final ModifyMemberUseCase modifyMemberUseCase;
