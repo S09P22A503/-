@@ -1,122 +1,121 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styled from "styled-components";
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, useRef } from "react";
 import { ReactComponent as Profile } from "../../assets/icons/profile.svg";
 import { ReactComponent as Send } from "../../assets/icons/send.svg";
 import { ReactComponent as Close } from "../../assets/icons/close-icon.svg";
-import { ReactComponent as NoData } from "../../assets/icons/no-data.svg";
-
+import { useChat } from "../../hooks";
 import { getTradeMessage } from "../../api/trade.js";
 
-function Chat({ tradeId }) {
+function Chat({ tradeId, setMessageFlag }) {
+  const { message, sendMessage, newMessages, ChangeMessages } = useChat({
+    tradeId,
+  });
   const [messages, setMessages] = useState();
   const memberId = 10;
 
+  // TradeBox를 참조하기 위한 useRef 생성
+  const tradeBoxRef = useRef(null);
+
   useEffect(() => {
     async function fetchData() {
-      await getTradeMessage({
-        responseFunc: {
-          200: (response) => {
-            setMessages(response.data.data);
-            console.log("response", response.data.data);
-            console.log("message", messages);
+      if (tradeId !== null) {
+        await getTradeMessage({
+          responseFunc: {
+            200: (response) => {
+              setMessages(response.data.data);
+            },
           },
-        },
-        data: { tradeId },
-      });
+          data: { tradeId },
+        });
+      }
     }
     fetchData();
   }, [tradeId]);
 
+  useEffect(() => {
+    // messages나 newMessages가 업데이트될 때마다 스크롤을 맨 아래로 이동
+    const tradeBox = tradeBoxRef.current;
+    tradeBox.scrollTop = tradeBox.scrollHeight;
+    setMessageFlag(newMessages);
+  }, [messages, newMessages]);
+
   return (
     <TradeContainer>
-      {tradeId === null ? ( // tradeId가 null인 경우 NoDataContainer 출력
-        <NoDataContainer>
-          <NoData />
-          <NoDataWrapper>대화 기록이 없어요!</NoDataWrapper>
-        </NoDataContainer>
-      ) : (
-        <>
-          <TradeTitleContainer>
-            <TradeTitleBox>
-              <ProfileBox>
+      <TradeTitleContainer>
+        <TradeTitleBox>
+          <ProfileBox>
+            <ProfileImageWrapper>
+              <Profile />
+            </ProfileImageWrapper>
+            <ProfileWrapper>
+              <NameWrapper>생소한 마켓</NameWrapper>
+              <TitleWrapper>23년산 햇감자 3KG (중) 단품</TitleWrapper>
+            </ProfileWrapper>
+          </ProfileBox>
+          <TradeWrapper>
+            <PriceWrapper>20000원</PriceWrapper>
+            <TradeButtonBox>
+              <TradeFinishButton>
+                <TradeFinishWrapper>거래완료</TradeFinishWrapper>
+              </TradeFinishButton>
+              <TradeCancelButton>
+                <TradeCancelWrapper>거래취소</TradeCancelWrapper>
+              </TradeCancelButton>
+            </TradeButtonBox>
+          </TradeWrapper>
+        </TradeTitleBox>
+        <CloseWrapper>
+          <Close />
+        </CloseWrapper>
+      </TradeTitleContainer>
+      <TradeBox ref={tradeBoxRef}>
+        {messages &&
+          messages.map((message) =>
+            message.memberId === memberId ? (
+              <RightMessageBox key={message.id}>
+                {message.message}
+              </RightMessageBox>
+            ) : (
+              <MessageBox key={message.id}>
                 <ProfileImageWrapper>
                   <Profile />
                 </ProfileImageWrapper>
-                <ProfileWrapper>
-                  <NameWrapper>생소한 마켓</NameWrapper>
-                  <TitleWrapper>23년산 햇감자 3KG (중) 단품</TitleWrapper>
-                </ProfileWrapper>
-              </ProfileBox>
-              <TradeWrapper>
-                <PriceWrapper>20000원</PriceWrapper>
-                <TradeButtonBox>
-                  <TradeFinishButton>
-                    <TradeFinishWrapper>거래완료</TradeFinishWrapper>
-                  </TradeFinishButton>
-                  <TradeCancelButton>
-                    <TradeCancelWrapper>거래취소</TradeCancelWrapper>
-                  </TradeCancelButton>
-                </TradeButtonBox>
-              </TradeWrapper>
-            </TradeTitleBox>
-            <CloseWrapper>
-              <Close />
-            </CloseWrapper>
-          </TradeTitleContainer>
-          <TradeBox>
-            {messages &&
-              messages.map((message) =>
-                message.memberId === memberId ? (
-                  <RightMessageBox key={message.id}>
-                    {message.message}
-                  </RightMessageBox>
-                ) : (
-                  <MessageBox key={message.id}>
-                    <ProfileImageWrapper>
-                      <Profile />
-                    </ProfileImageWrapper>
-                    <LeftMessageBox>{message.message}</LeftMessageBox>
-                  </MessageBox>
-                )
-              )}
-          </TradeBox>
-          <TypingBox>
-            <TypingMessageWrapper>메세지를 입력하세요</TypingMessageWrapper>
-            <SendIconWrapper>
-              <Send />
-            </SendIconWrapper>
-          </TypingBox>
-        </>
-      )}
+                <LeftMessageBox>{message.message}</LeftMessageBox>
+              </MessageBox>
+            )
+          )}
+        {newMessages &&
+          newMessages.map((newMessage, index) =>
+            newMessage.memberId === memberId ? (
+              <RightMessageBox key={index}>
+                {newMessage.message}
+              </RightMessageBox>
+            ) : (
+              <MessageBox key={index}>
+                <ProfileImageWrapper>
+                  <Profile />
+                </ProfileImageWrapper>
+                <LeftMessageBox>{newMessage.message}</LeftMessageBox>
+              </MessageBox>
+            )
+          )}
+      </TradeBox>
+      <TypingBox onSubmit={sendMessage}>
+        <TypingMessageWrapper
+          value={message}
+          onChange={ChangeMessages}
+          placeholder="메세지를 입력하세요"
+        />
+        <SendIconWrapper type="submit">
+          <Send />
+        </SendIconWrapper>
+      </TypingBox>
     </TradeContainer>
   );
 }
 
 const TradeContainer = styled.div``;
-
-const NoDataContainer = styled.div`
-  width: 656px;
-  height: 600px;
-  border: 0.1px solid rgba(0, 0, 0, 0.1);
-  background: rgba(0, 0, 0, 0.02);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.02);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const NoDataWrapper = styled.div`
-  color: #000;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin-top: 20px;
-  opacity: 0.25;
-`;
 
 const TradeTitleContainer = styled.div`
   width: 656px;
@@ -285,11 +284,11 @@ const RightMessageBox = styled.div`
   padding: 10px;
 `;
 
-const TypingBox = styled.div`
+const TypingBox = styled.form`
   justify-content: center;
   align-items: center;
-  gap: 488px;
-
+  text-align: start;
+  gap: 50px;
   width: 656px;
   height: 40px;
   border: 0.1px solid rgba(0, 0, 0, 0.1);
@@ -298,23 +297,27 @@ const TypingBox = styled.div`
   display: inline-flex;
 `;
 
-const TypingMessageWrapper = styled.div`
-  color: rgba(0, 0, 0, 0.4);
-  font-family: Pretendard;
+const TypingMessageWrapper = styled.input`
+  color: rgba(0, 0, 0, 0.5);
   font-size: 14px;
   font-style: normal;
+  width: 650px;
   font-weight: 400;
   line-height: 20px;
+  padding-left: 20px;
+  border: none;
+  outline: none;
 `;
 
-const SendIconWrapper = styled.div`
-  color: rgba(0, 0, 0, 0.4);
-  font-family: Pretendard;
+const SendIconWrapper = styled.button`
+  border: none;
+  outline: none;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
   margin-top: 5px;
+  background: #fff;
   cursor: pointer;
 `;
 
