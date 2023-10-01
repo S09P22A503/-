@@ -19,6 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 public class ArticleModifyRequestDto {
 
+    private final String IMAGE_DIRECTORY = "https://a503.s3.ap-northeast-2.amazonaws.com/";
+
     private Long id;
 
     private Long memberId;
@@ -62,4 +64,7 @@ public class ArticleModifyRequestDto {
                 amount, mass, tradeType, title, content, mainImageUrl, imageUrls);
     }
 
+    public String makeImageUrl(String savedImageUrl) {
+        return IMAGE_DIRECTORY + savedImageUrl;
+    }
 }
