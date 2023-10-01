@@ -8,6 +8,7 @@ const MainImage = styled.video`
   width: 100%;
   height: auto;
   background-color: black;
+  pointer-events: none;
 `
 
 const CategoryBoxContainer = styled.div`
