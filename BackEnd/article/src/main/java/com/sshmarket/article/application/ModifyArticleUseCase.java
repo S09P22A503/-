@@ -53,7 +53,7 @@ public class ModifyArticleUseCase {
         if(articleModifyRequestDto.getMainImageChanged()) {
             // 메인 이미지가 바꼈으면 다시 저장
             s3Uploader.delete(originalArticle.getMainImage());
-            mainImageName = makeFileName(directory, articleModifyRequestDto.getMainImage());
+            mainImageName = imageDir + makeFileName(directory, articleModifyRequestDto.getMainImage());
         }
         else{
             mainImageName = originalArticle.getMainImage();
@@ -74,16 +74,13 @@ public class ModifyArticleUseCase {
 
     // 지워진 파일들의 url 리스트를 받아서 삭제
     private void removeImages(Article article, List<String> deletedImages, List<ArticleImage> imageFileNames) {
-        String originFileName = "";
 
         for (String imageUrl : deletedImages) {
-            originFileName = imageUrl.replaceFirst(imageDir, "");
-
             article.removeArticleImage(articleImageRepository.findImageByUrl(imageUrl)
                     .orElseThrow(() -> new NotFoundResourceException("존재하지 않는 이미지입니다.")));
 
-            articleImageRepository.removeImageByImageUrl(originFileName);
-            s3Uploader.delete(originFileName);
+            articleImageRepository.removeImageByImageUrl(imageUrl);
+            s3Uploader.delete(imageUrl);
         }
     }
 
@@ -94,7 +91,7 @@ public class ModifyArticleUseCase {
 
         for (MultipartFile file : images) {
             url = makeFileName(directory, file);
-            imageUrls.add(url);
+            imageUrls.add(imageDir+url);
             s3Uploader.upload(url, file);
         }
     }
@@ -107,7 +104,7 @@ public class ModifyArticleUseCase {
         return directory + UUID.randomUUID() + "." + extension;
     }
 
-    private void validateAuthor(long originAuthor, long author){
+    private void validateAuthor(Long originAuthor, Long author){
         if(originAuthor != author){
             throw new PermissionDeniedException("원글 작성자가 아닙니다.");
         }

@@ -59,6 +59,9 @@ public class Article {
     @ColumnDefault("false")
     private Boolean isDeleted;
 
+    @ColumnDefault("0")
+    private Integer viewCount;
+
     @OneToMany(mappedBy = "article")
     private List<ArticleImage> articleImages = new ArrayList<>();
 
@@ -141,6 +144,10 @@ public class Article {
 
     public void removeArticleBookmark(ArticleBookmark target) {
         this.articleBookmarks.removeIf(bookmark -> bookmark.equals(target));
+    }
+
+    public void addViewCount(){
+        this.viewCount++;
     }
 
 }
