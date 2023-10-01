@@ -32,10 +32,8 @@ public class StompHandler implements ChannelInterceptor {
     }
 
     private String getAccessToken(StompHeaderAccessor accessor) {
-
         return accessor.getFirstNativeHeader("Authorization");
     }
-
 
     private void handleMessage(StompCommand stompCommand, StompHeaderAccessor accessor) {
         switch (stompCommand) {
