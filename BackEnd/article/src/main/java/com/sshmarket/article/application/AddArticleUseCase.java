@@ -25,6 +25,8 @@ import java.util.UUID;
 @Transactional
 public class AddArticleUseCase {
 
+    private String imageDir = "https://a503.s3.ap-northeast-2.amazonaws.com/";
+
     private final ArticleRepository articleRepository;
     private final LocationRepository locationRepository;
     private final ProductRepository productRepository;
@@ -39,7 +41,7 @@ public class AddArticleUseCase {
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 상품입니다."));;
 
         String directory = "article/image/";
-        String mainImageName = makeFileName(directory, articleAddRequestDto.getMainImage());
+        String mainImageName = imageDir + makeFileName(directory, articleAddRequestDto.getMainImage());
         List<String> imageFileNames = new ArrayList<>();
 
         uploadList(directory, articleAddRequestDto.getImages(), imageFileNames);
@@ -57,8 +59,8 @@ public class AddArticleUseCase {
 
         for (MultipartFile file : images) {
             fileName = makeFileName(directory, file);
-            imageFileNames.add(fileName);
             s3Uploader.upload(fileName, file);
+            imageFileNames.add(imageDir + fileName);
         }
     }
 
