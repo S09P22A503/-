@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Component
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("http://localhost:3000")
 public class OauthController {
 
     private final LoginUseCase loginUseCase;
