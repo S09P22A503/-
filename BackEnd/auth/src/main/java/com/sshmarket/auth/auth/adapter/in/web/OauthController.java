@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@CrossOrigin("*")
 public class OauthController {
 
     private final LoginUseCase loginUseCase;
@@ -58,6 +59,13 @@ public class OauthController {
         httpServletResponse.addCookie(cookie);
         responseDto.pushToken(String.valueOf(cookie.getMaxAge()));
         return HttpResponse.okWithData(HttpStatus.OK, "로그인이 성공했습니다.", responseDto);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse httpServletResponse) {
+        Cookie cookie = cookieBaker.burnJwtCookie();
+        httpServletResponse.addCookie(cookie);
+        return HttpResponse.ok(HttpStatus.OK, "로그아웃이 완료되었습니다.");
     }
 
 

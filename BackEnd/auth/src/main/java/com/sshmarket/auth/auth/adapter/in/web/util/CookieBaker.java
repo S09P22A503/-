@@ -25,4 +25,11 @@ public class CookieBaker {
         return cookie;
     }
 
+    public Cookie burnJwtCookie() {
+        Cookie cookie = new Cookie("jwt", "");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        return cookie;
+    }
+
 }
