@@ -29,7 +29,7 @@ function formatDateTime(inputDateString) {
   }
 }
 
-function ChatList({ setSelectedTradeId }) {
+function ChatList({ setSelectedTradeId, messageFlag }) {
   const keywordInputRef = useRef(null);
   const [keyword, setKeyword] = useState("");
 
@@ -60,7 +60,7 @@ function ChatList({ setSelectedTradeId }) {
       });
     }
     fetchData();
-  }, [selectedState]);
+  }, [selectedState, messageFlag]);
 
   // 키워드 조회
   const handleKeywordChange = (event) => {
