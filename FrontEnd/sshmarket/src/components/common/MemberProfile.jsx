@@ -5,7 +5,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 10em;
+  width: 13em;
 `;
 
 const Proflie = styled.img`
@@ -24,14 +24,14 @@ const Nickname = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 5em;
+  max-width: 8em;
 `;
 
 export default function MemberProfile({ member }) {
   return (
     <Container>
       <Proflie
-        src={member.profile ? member.profile : "defaultProfile"}
+        src={member.profile ? member.profile : "defaultProfile.png"}
       ></Proflie>
       <Nickname>{member.nickname}</Nickname>
     </Container>

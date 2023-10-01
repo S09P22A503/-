@@ -75,7 +75,7 @@ export default function Signup() {
 
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "register",
+      url: SERVER_URL + "auth/register",
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",
@@ -89,7 +89,6 @@ export default function Signup() {
       navigate("/")
     })
     .catch((e) => {
-      console.log(e);
       alert(e.response.data.message);
     })
   }

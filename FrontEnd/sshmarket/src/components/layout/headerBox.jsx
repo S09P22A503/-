@@ -1,6 +1,9 @@
-import { useSelector } from "react-redux";
-import { json, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import MemberProfile from "../common/MemberProfile";
+import { useState } from "react";
+import { Logout } from "../../modules/memberReducer/action";
+import axios from "axios";
 
 const { default: styled } = require("styled-components");
 
@@ -34,7 +37,7 @@ const SearchContainer = styled.div`
 `;
 
 const SearchBar = styled.div`
-  width: 35em;
+  width: 30em;
   height: 3em;
   margin: 1em;
   border: 3px solid var(--primary);
@@ -45,11 +48,11 @@ const SearchBar = styled.div`
 `;
 
 const SearchInput = styled.input`
-  width: 40em;
+  width: 33em;
   height: 3em;
   border: 1px solid transparent;
   outline: none;
-`
+`;
 
 const BeforeLoginContainer = styled.div`
   padding: 3em;
@@ -69,19 +72,86 @@ const LoginSignup = styled.a`
   text-decoration: none;
   color: inherit;
 
-  &:active{
+  &:active {
     color: inherit;
   }
 `;
 
+const ProfileContainer = styled.div`
+  position: relative;
+  cursor: pointer;
+`;
+
+const MenuList = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
+
+const MenuItem = styled.div`
+  border: 1px solid grey;
+  padding: 10px;
+  cursor: pointer;
+`;
+
 export default function Header() {
-  
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
   const navigate = useNavigate();
-  const member = useSelector((state) => state.MemberReducer.data)
+  const dispatch = useDispatch();
+  const member = useSelector((state) => state.MemberReducer.data);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const goMyPage = () => {
+    navigate("/mypage");
+    closeMenu();
+  };
+
+  const goTrade = () => {
+    navigate("/trade");
+    closeMenu();
+  };
+
+  const goWrite = () => {
+    navigate("article/write");
+    closeMenu();
+  };
+
+  const logout = () => {
+    axios({
+      baseURL: SERVER_URL,
+      url: SERVER_URL + "auth/logout",
+      method: "POST",
+    }).then((res) => {
+      dispatch(Logout());
+      alert(res.data.message);
+      navigate("/");
+    });
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  const menuNameList = ["마이페이지", "생소 Talk", "판매글 등록", "로그아웃"];
+  const menuEventList = [goMyPage, goTrade, goWrite, logout];
 
   return (
     <Container>
-      <LogoTitleContainer onClick={() => {navigate("/")}}>{"생소한 마켓"}</LogoTitleContainer>
+      <LogoTitleContainer
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        {"생소한 마켓"}
+      </LogoTitleContainer>
       <SearchContainer>
         <SearchBar>
           <SearchInput placeholder=" 검색어를 입력해주세요."></SearchInput>
@@ -95,7 +165,22 @@ export default function Header() {
         </BeforeLoginContainer>
       ) : (
         <AfterLoginContainer>
-          <MemberProfile member={member}></MemberProfile>
+          <ProfileContainer
+            onClick={() => {
+              toggleMenu();
+            }}
+          >
+            <MemberProfile member={member}></MemberProfile>
+            <MenuList hidden={!isMenuOpen}>
+            {menuNameList.map((name, i) => {
+              return (
+                <MenuItem key={i} onClick={() => menuEventList[i]()}>
+                  {name}
+                </MenuItem>
+              );
+            })}
+          </MenuList>
+          </ProfileContainer>
         </AfterLoginContainer>
       )}
     </Container>
