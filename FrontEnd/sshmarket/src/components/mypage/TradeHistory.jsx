@@ -17,8 +17,6 @@ function TradeHistory() {
     }, [memberId]);
 
     const handleApiResponse = (response) => {
-        console.log('asdasdasfasf');
-        console.log(response);
         if (response.status === 200) {
             // API 호출이 성공하면 데이터를 설정합니다.
             setTradeHistory(response.data.data.content);
