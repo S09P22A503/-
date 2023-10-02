@@ -125,7 +125,7 @@ export default function Header() {
   const logout = (e) => {
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "auth/logout",
+      url: "/auth/logout",
       method: "POST",
     }).then((res) => {
       dispatch(Logout());
