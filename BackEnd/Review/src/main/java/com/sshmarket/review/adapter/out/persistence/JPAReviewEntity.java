@@ -33,6 +33,8 @@ class JPAReviewEntity {
     @Column(name = "review_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private Long memberId;
 
     @Column(nullable = false)
@@ -48,7 +50,7 @@ class JPAReviewEntity {
     private int starRating;
 
     @Column(nullable = false)
-    @CreatedDate
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "review")

@@ -23,7 +23,7 @@ class AddReviewService implements AddReviewUseCase {
     private final UploadReviewImagePort insertReviewImagePort;
 
     @Override
-    public boolean addReview(AddReviewCommand addReviewCommand) {
+    public void addReview(AddReviewCommand addReviewCommand) {
 
         Review newReview = Review.createReviewWithoutId(addReviewCommand.getMemberId(),
                 addReviewCommand.getArticleId(), addReviewCommand.getBuyHistoryId(),
@@ -35,9 +35,7 @@ class AddReviewService implements AddReviewUseCase {
 
         Review savedReview = saveReviewPort.saveReview(newReview);
 
-        if (savedReview != null) {
-            return true;
-        } else {
+        if (savedReview == null) {
             throw new BusinessException("리뷰 생성에 실패했습니다.");
         }
 

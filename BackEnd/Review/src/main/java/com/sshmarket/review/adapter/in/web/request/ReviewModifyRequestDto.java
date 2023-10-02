@@ -1,10 +1,14 @@
 package com.sshmarket.review.adapter.in.web.request;
 
 import com.sshmarket.review.adapter.in.web.request.valid.AllowedContentType;
+import com.sshmarket.review.application.port.in.command.AddReviewCommand;
+import com.sshmarket.review.application.port.in.command.ModifyReviewCommand;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
+@Getter
 public class ReviewModifyRequestDto {
 
     @NotBlank
@@ -20,4 +24,12 @@ public class ReviewModifyRequestDto {
             allowedExtensions = {"jpg", "jpeg", "png"})
     private List<MultipartFile> reviewImages;
 
+    public ModifyReviewCommand covertToCommand() {
+        return ModifyReviewCommand.builder()
+                                  .id(id)
+                                  .message(message)
+                                  .startRating(starRating)
+                                  .reviewImages(reviewImages)
+                                  .build();
+    }
 }

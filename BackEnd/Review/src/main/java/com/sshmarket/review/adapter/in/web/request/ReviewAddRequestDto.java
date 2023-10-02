@@ -4,6 +4,7 @@ import com.sshmarket.review.adapter.in.web.request.valid.AllowedContentType;
 import com.sshmarket.review.application.port.in.command.AddReviewCommand;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,7 @@ public class ReviewAddRequestDto {
 
     @AllowedContentType(allowedTypes = {"image/jpg", "image/jpeg", "image/png"},
             allowedExtensions = {"jpg", "jpeg", "png"})
+    @Size(max = 3)
     private List<MultipartFile> reviewImages;
 
     public AddReviewCommand covertToCommand() {
