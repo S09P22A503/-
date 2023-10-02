@@ -11,8 +11,8 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -25,10 +25,10 @@ public class ArticleModifyRequestDto {
 
     private Long memberId;
 
-    @NotBlank(message = "상품 id가 비었습니다.")
+    @NotNull(message = "상품 id가 비었습니다.")
     private Long productId;
 
-    @NotBlank(message = "가격을 입력해주세요.")
+    @NotNull(message = "가격을 입력해주세요.")
     private Integer price;
 
     private Integer amount;
@@ -43,20 +43,18 @@ public class ArticleModifyRequestDto {
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 
-    @NotBlank(message = "거래방식을 선택해주세요.")
+    @NotNull(message = "거래방식을 선택해주세요.")
     private TradeType tradeType;
 
     @AllowedContentType(allowedTypes = {"image/jpg", "image/jpeg", "image/png"},
             allowedExtensions = {"jpg", "jpeg", "png"})
-    @NotBlank(message = "대표 이미지를 선택해주세요.")
+    @NotNull(message = "대표 이미지를 선택해주세요.")
     private MultipartFile mainImage;
 
     private Boolean mainImageChanged;
 
     private List<String> deletedUrls;
 
-    @AllowedContentType(allowedTypes = {"image/jpg", "image/jpeg", "image/png"},
-            allowedExtensions = {"jpg", "jpeg", "png"})
     private List<MultipartFile> images;
 
     public Article toEntity(String mainImageUrl, List<String> imageUrls, Location location, Product product) {

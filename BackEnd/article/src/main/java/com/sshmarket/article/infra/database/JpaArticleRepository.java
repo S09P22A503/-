@@ -11,7 +11,7 @@ public interface JpaArticleRepository extends JpaRepository<Article, Long> {
 
     Optional<Article> findById(Long id);
 
-    @Query("select distinct a from Article a join fetch a.articleImages join fetch a.location where a.id = :id")
+    @Query("select a from Article a left join a.articleImages left join a.location where a.id = :id")
     Article findArticleDetailById(Long id);
 
 }
