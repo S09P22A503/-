@@ -2,17 +2,31 @@ import styled from "styled-components";
 import {useState,useEffect} from 'react'
 import ImageUpload from "../components/article/ImageUpload";
 import MultipleImageUpload from "../components/article/MultipleImageUpload";
+import PriceChart from "../components/common/PriceChart"
 
+const commonStyles = {
+  border: '1px solid #B388EB',
+  borderRadius: '4px',
+  backgroundColor: '#f1f1f1',
+  hoverBorderColor: '#5F0080'
+};
 
 const Container = styled.div`
   width: 1000px;
   margin: 0 auto;
   font-family: 'Arial', sans-serif;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
 `;
+
 
 const Title = styled.h2`
   font-size: 24px;
   margin-bottom: 20px;
+  border-bottom: 2px solid #B388EB;
+  padding-bottom: 10px;
 `;
 
 
@@ -25,20 +39,21 @@ const DropdownContainer = styled.div`
 const Dropdown = styled.select`
   width: 24%;
   padding: 8px;
-  border: 1px solid #B388EB;  // 하늘색 테두리
-  border-radius: 4px;         // 둥근 모서리
-  background-color: #f1f1f1; // 안쪽 회색
+  border: ${commonStyles.border};
+  border-radius: ${commonStyles.borderRadius};
+  background-color: ${commonStyles.backgroundColor};
   font-size: 16px;
+  transition: border 0.3s;
 
   &:hover {
-    border-color: #5F0080;       // 마우스를 올리면 파란색으로 변경
+    border-color: ${commonStyles.hoverBorderColor};
     border-width: 2px;
   }
 `;
 
 const Section = styled.div`
   margin-bottom: 20px;
-  margin-top: 40px;  /* 이 부분 추가 */
+  margin-top: 40px; 
 `;
 
 const SectionTitle = styled.div`
@@ -67,7 +82,7 @@ const TextArea = styled.textarea`
   background-color: #f1f1f1;
 
   &:hover {
-    border-color: #5F0080;       // 마우스를 올리면 파란색으로 변경
+    border-color: #5F0080;  
     border-width: 2px;
 `;
 
@@ -101,7 +116,7 @@ const StyledInput = styled.input`
   background-color: #f1f1f1;
 
   &:hover {
-    border-color: #5F0080;       // 마우스를 올리면 파란색으로 변경
+    border-color: #5F0080;   
     border-width: 2px;
   }
 `;
@@ -117,7 +132,7 @@ const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
   &:not(:last-child) {
-    margin-right: 100px;  // 마지막 InputGroup을 제외한 모든 InputGroup에 오른쪽 간격 설정
+    margin-right: 100px;  
   }
 `;
 
@@ -137,7 +152,7 @@ const GroupInput = styled.input`
   background-color: #f1f1f1;
 
   &:hover {
-    border-color: #5F0080;       // 마우스를 올리면 파란색으로 변경
+    border-color: #5F0080;    
     border-width: 2px;
   }
 `;
@@ -154,11 +169,12 @@ const UnitSelect = styled.select`
   background-color: #f1f1f1;
 
   &:hover {
-    border-color: #5F0080;       // 마우스를 올리면 파란색으로 변경
+    border-color: #5F0080;    
     border-width: 2px;
   }
 `;
 const ToggleButton = styled.button`
+  margin-top: 30px;
   margin-bottom: 20px;
   padding: 10px 20px;
   border: none;
@@ -167,16 +183,20 @@ const ToggleButton = styled.button`
   color: #fff;
   font-size: 16px;
   border-radius: 4px;
+  transition: background-color 0.3s;
+
   &:hover {
     background-color: #5F0080;
   }
 `;
 
-const ImageUploadSection = styled(Section)`
-  border: 2px dashed #000000;
+const ImageUploadSection = styled.section`
+  border: 2px dashed #B388EB;
   padding: 20px;
   borderRadius: 10px;
+  margin-top: 20px;
 `;
+
 
 export default function ArticleWrite() {
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -212,8 +232,10 @@ export default function ArticleWrite() {
     ]);
     };
 
+
     loadOptions();
   }, []);
+
 
   const handleOptionChange = (index, value) => {
     setSelectedOptions(prevState => ({ ...prevState, [index]: value }));
@@ -224,7 +246,7 @@ export default function ArticleWrite() {
       <Title>상품 등록</Title>
       <DropdownContainer>
         {[
-          { label: '카테고리', options: categoryOptions },
+          { label: '품목', options: categoryOptions },
           { label: '거래방식', options: transactionOptions },
           { label: '지역', options: regionOptions }
         ].map(({ label, options }, index) => (
@@ -256,9 +278,12 @@ export default function ArticleWrite() {
         <SectionTitle>게시글 이미지등록</SectionTitle>
         <MultipleImageUpload />
       </ImageUploadSection>
-
-
             
+
+      <PriceChart 
+        itemId = '111'
+        nameId = '01'
+      ></PriceChart>
       <ToggleButton onClick={() => setShowWeight(!showWeight)}>
         {showWeight ? '수량 및 가격 입력창 보기' : '무게 및 가격 입력창 보기'}
       </ToggleButton>
