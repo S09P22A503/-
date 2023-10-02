@@ -92,7 +92,7 @@ const ButtonContainer = styled.div`
 const CloseCheck = styled.div``;
 
 export default function ReviewWriteModal({ articleId, closeModal }) {
-  const member = useSelector((state) => state.MemberReducer.data);
+  const member = useSelector((state) => state.MemberReducer);
 
   const [rating, setRating] = useState([true, true, true, true, true]);
   const [content, setContent] = useState("");

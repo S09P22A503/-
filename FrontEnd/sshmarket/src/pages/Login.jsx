@@ -33,6 +33,7 @@ export default function LoginPage() {
   const authCode = params.get("code");
 
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+  const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -42,15 +43,19 @@ export default function LoginPage() {
       baseURL: SERVER_URL,
       url: "/auth/login",
       method: "POST",
+      timeout: 10000,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": CLIENT_URL,
+        "Access-Control-Allow-Credentials": true,
       },
+      withCredentials: true,
       params: {
         code: authCode,
       },
     })
       .then((res) => {
-        dispatch(Login({ data: { ...res.data.data } }));
+        dispatch(Login({...res.data.data}));
         alert(res.data.message);
         navigate("/");
       })
@@ -62,7 +67,7 @@ export default function LoginPage() {
           return;
         }
         alert(e.response.data.message);
-        navigate("/")
+        navigate("/");
       });
   }, []);
 
