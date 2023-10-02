@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SubButton from "../Button/SubButton";
 import StyledButton from "../Button/StyledButton";
@@ -84,7 +83,6 @@ export default function MyProfile() {
   const [isValidNickname, setIsValidNickname] = useState(false);
   const [isDuplicateNickname, setIsDuplicateNickname] = useState(false);
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const changeNickname = (e) => {
