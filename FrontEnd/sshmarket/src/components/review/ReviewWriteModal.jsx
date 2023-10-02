@@ -89,6 +89,8 @@ const ButtonContainer = styled.div`
   align-items: center;
 `;
 
+const CloseCheck = styled.div``;
+
 export default function ReviewWriteModal({ articleId, closeModal }) {
   const member = useSelector((state) => state.MemberReducer.data);
 
@@ -125,10 +127,10 @@ export default function ReviewWriteModal({ articleId, closeModal }) {
       return;
     }
     setFileList((prev) => {
-        let newFileList = [...prev];
-        newFileList[fileIndex] = file;
-        return newFileList;
-    })
+      let newFileList = [...prev];
+      newFileList[fileIndex] = file;
+      return newFileList;
+    });
     const reader = new FileReader();
     reader.onload = () => {
       setPreviewList((prev) => {
@@ -155,6 +157,19 @@ export default function ReviewWriteModal({ articleId, closeModal }) {
     setFileIndex((prev) => prev - 1);
   };
 
+  const resetState = () => {
+    setRating([true, true, true, true, true]);
+    setContent("");
+    setFileList([
+      new File([], "tmp"),
+      new File([], "tmp"),
+      new File([], "tmp"),
+    ]);
+    setPreviewList(["", "", ""]);
+    setFileIndex(0);
+    document.getElementById("contentinput").value = "";
+  };
+
   return (
     <Container>
       <MessageContainer>{"이 상품을 추천하시겠어요?"}</MessageContainer>
@@ -174,6 +189,7 @@ export default function ReviewWriteModal({ articleId, closeModal }) {
             "사진과 함께 리뷰 작성해주시면 더욱 좋아요! \n(200자 이내)"
           }
           onChange={changeContent}
+          id="contentinput"
         ></ContentInput>
       </ContentContainer>
       <FileInputContainer>
@@ -201,7 +217,9 @@ export default function ReviewWriteModal({ articleId, closeModal }) {
         ></FileInput>
       </FileInputContainer>
       <ButtonContainer>
-        <StyledButton content={"취소"} onClick={closeModal}></StyledButton>
+        <CloseCheck onClick={resetState}>
+          <StyledButton content={"취소"} onClick={closeModal}></StyledButton>
+        </CloseCheck>
         <StyledButton content={"등록"}></StyledButton>
       </ButtonContainer>
     </Container>

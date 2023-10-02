@@ -108,7 +108,7 @@ export default function Signup() {
 
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "auth/members/check/" + inputNickname.trim(),
+      url: "/auth/members/check/" + inputNickname.trim(),
       method: "GET",
     })
       .then((res) => {
@@ -147,7 +147,7 @@ export default function Signup() {
 
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "auth/register",
+      url: "/auth/register",
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",
