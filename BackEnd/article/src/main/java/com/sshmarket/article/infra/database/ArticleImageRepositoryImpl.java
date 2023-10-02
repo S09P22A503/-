@@ -6,6 +6,7 @@ import com.sshmarket.article.domain.ArticleImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -13,6 +14,11 @@ import java.util.Optional;
 public class ArticleImageRepositoryImpl implements ArticleImageRepository {
 
     private final JpaArticleImageRepository jpaArticleImageRepository;
+
+    @Override
+    public void saveImages(List<ArticleImage> images){
+        jpaArticleImageRepository.saveAll(images);
+    }
 
     @Override
     public void removeImagesById(Article article){

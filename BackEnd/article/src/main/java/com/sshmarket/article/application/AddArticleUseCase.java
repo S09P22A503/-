@@ -1,9 +1,11 @@
 package com.sshmarket.article.application;
 
+import com.sshmarket.article.application.repository.ArticleImageRepository;
 import com.sshmarket.article.application.repository.ArticleRepository;
 import com.sshmarket.article.application.repository.LocationRepository;
 import com.sshmarket.article.application.repository.ProductRepository;
 import com.sshmarket.article.domain.Article;
+import com.sshmarket.article.domain.ArticleImage;
 import com.sshmarket.article.domain.Location;
 import com.sshmarket.article.domain.Product;
 import com.sshmarket.article.dto.ArticleAddRequestDto;
@@ -30,6 +32,7 @@ public class AddArticleUseCase {
     private final ArticleRepository articleRepository;
     private final LocationRepository locationRepository;
     private final ProductRepository productRepository;
+    private final ArticleImageRepository articleImageRepository;
     private final S3Uploader s3Uploader;
 
     public Long addArticle(ArticleAddRequestDto articleAddRequestDto){
@@ -43,18 +46,22 @@ public class AddArticleUseCase {
         String directory = "article/image/";
         String mainImageName = imageDir + makeFileName(directory, articleAddRequestDto.getMainImage());
         List<String> imageFileNames = new ArrayList<>();
+        List<ArticleImage> images = new ArrayList<>();
 
-        uploadList(directory, articleAddRequestDto.getImages(), imageFileNames);
+        uploadList(directory, articleAddRequestDto.getImages(), imageFileNames, images);
 
         Article article = articleAddRequestDto.toEntity(mainImageName, imageFileNames, location, product);
         Long id = articleRepository.saveArticle(article).getId();
+
+        articleImageRepository.saveImages(article.getArticleImages());
+
 
         s3Uploader.upload(mainImageName, articleAddRequestDto.getMainImage());
 
         return id;
     }
 
-    private void uploadList(String directory, List<MultipartFile> images, List<String> imageFileNames){
+    private void uploadList(String directory, List<MultipartFile> images, List<String> imageFileNames, List<ArticleImage> imageList){
         String fileName = "";
 
         for (MultipartFile file : images) {
