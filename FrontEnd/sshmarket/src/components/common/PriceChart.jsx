@@ -127,6 +127,7 @@ function PriceChart({itemId,chartHeight="400px",orientation = "horizontal"}) {
             setRetailNameDropdownOptions(
               response.data
             )
+            if(response.data[0]) setSelectedRetailDropdownOption(response.data[0].nameId)
           },
         },
         itemId
@@ -144,6 +145,7 @@ function PriceChart({itemId,chartHeight="400px",orientation = "horizontal"}) {
             setWholeSaleNameDropdownOptions(
               response.data
             )
+            if(response.data[0]) setSelectedWholesaleDropdownOption(response.data[0].nameId)
             
           },
         },
