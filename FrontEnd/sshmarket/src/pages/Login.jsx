@@ -40,7 +40,7 @@ export default function LoginPage() {
   useEffect(() => {
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "auth/login",
+      url: "/auth/login",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,6 +62,7 @@ export default function LoginPage() {
           return;
         }
         alert(e.response.data.message);
+        navigate("/")
       });
   }, []);
 

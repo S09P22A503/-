@@ -106,7 +106,7 @@ export default function MyProfile() {
 
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "auth/members/check/" + inputNickname.trim(),
+      url: "/auth/members/check/" + inputNickname.trim(),
       method: "GET",
     })
       .then((res) => {
@@ -130,7 +130,7 @@ export default function MyProfile() {
 
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "auth/members/profile",
+      url: "/auth/members/profile",
       method: "PATCH",
       headers: {
         "Content-Type": "multipart/form-data",
@@ -159,10 +159,10 @@ export default function MyProfile() {
 
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "application/json",
+      url: "/auth/members/nickname",
       method: "PATCH",
       headers: {
-        "Content-Type": "auth/members/nickname",
+        "Content-Type": "application/json",
       },
       data: {
         nickname: inputNickname,
