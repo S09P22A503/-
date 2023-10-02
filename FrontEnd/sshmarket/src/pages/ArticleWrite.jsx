@@ -3,6 +3,7 @@ import {useState,useEffect} from 'react'
 import ImageUpload from "../components/article/ImageUpload";
 import MultipleImageUpload from "../components/article/MultipleImageUpload";
 import PriceChart from "../components/common/PriceChart"
+import { getProductData } from "../api/product";
 
 const commonStyles = {
   border: '1px solid #B388EB',
@@ -199,69 +200,149 @@ const ImageUploadSection = styled.section`
 
 
 export default function ArticleWrite() {
-  const [selectedOptions, setSelectedOptions] = useState({});
   const [showWeight, setShowWeight] = useState(false); // 토글 상태를 저장하기 위한 상태
 
-  // 드롭다운 항목들
-  const [categoryOptions, setCategoryOptions] = useState([]);
-  const [transactionOptions, setTransactionOptions] = useState([]);
-  const [regionOptions, setRegionOptions] = useState([]);
+  // 가져올 상품 리스트들
+  const [wholeProductList, setWholeProductList] = useState([]);
 
+
+  // 처음 렌더링할때 상품 가져오기
+  useEffect(() => {
+    async function fetchData() {
+      await getProductData({
+        responseFunc: {
+          200: (response) => {
+            setWholeProductList(response.data)
+            console.log(wholeProductList)
+          },
+        }
+      });
+    }
+    fetchData()
+  }, []);
+
+  // 상품 카테고리 항목들
+  const categoryOptions = [{key:'1',category:"식량작물"},{key:'2',category:"채소류"},{key:'3',category:"특용작물"},{key:'4',category:"과일류"},{key:'6',category:"수산물"}]
+
+  // 거래 카테고리 항목들
+  const transactionOptions = ["직거래","택배","무관"]
+
+  // 지역 카테고리 항목들
+  const regionOptions = ['무관', '서울특별시', '부산광역시','대구광역시',
+                        '인천광역시','광주광역시','대전광역시','울산광역시','세종특별자치시',
+                        '경기도','강원특별자치도','충청북도','충청남도',
+                        '전라북도','전라남도','경상북도','경상남도','제주특별자치도'
+                        ]
+  
+  // 상품 항목들 (선택한 상품 카테고리 항목에 따라 동적으로 바뀌어야함)
+  const [productOptions,setProductOptions] = useState([]);
+
+  // 선택한 상품 카테고리 항목
+  const [selectedCategoryOption, setSelectedCategoryOption] = useState('');
+
+  // 선택한 거래 카테고리 항목
+  const [selectedTransactionOption, setSelectedTransactionOption] = useState("");
+
+  // 선택한 지역 카테고리 항목
+  const [selectedRegionOption, setSelectedRegionOption] = useState("");
+
+  // 선택한 상품 항목
+  const [selectedProductOption, setSelectedProductOption] = useState("999");
+  
   //제목
   const [productTitle, setProductTitle] = useState("");
 
   //중량
   const [productWeight, setProductWeight] = useState("");
 
+  //중량 단위
+  const [productWeightUnit,setProductWeightUnit] = useState("");
+  
   //개수
 
   const [productAmount, setProductAmount] = useState("");
 
-  //가격
+  // 가격
   const [productPrice,setProductPrice] = useState("");
 
-  useEffect(() => {
-    // 페이지 로딩 시 옵션 리스트 설정
-    const loadOptions = () => {
-      setCategoryOptions(['카테고리1', '카테고리2', '카테고리3']);
-      setTransactionOptions(['직거래', '택배', '무관']);
-      setRegionOptions(['무관', '서울특별시', '부산광역시','대구광역시',
-      '인천광역시','광주광역시','대전광역시','울산광역시','세종특별자치시',
-      '경기도','강원특별자치도','충청북도','충청남도',
-      '전라북도','전라남도','경상북도','경상남도','제주특별자치도'
-    ]);
-    };
+  // 내용
+  const [productContent,setProductContent] = useState("");
 
-
-    loadOptions();
-  }, []);
-
-
-  const handleOptionChange = (index, value) => {
-    setSelectedOptions(prevState => ({ ...prevState, [index]: value }));
+  //카테고리 옵션 변경 콜백
+  const handleCategoryOptionChange = (value) => {
+    setSelectedCategoryOption(value)
   };
+
+  //카테고리 옵션 변경 시 품목 리스트를 변경해야함
+  useEffect(() => {
+    setProductOptions(
+      wholeProductList.filter(
+        item=>item.itemId.toString().startsWith(selectedCategoryOption)
+      )
+    )
+    setSelectedProductOption("999")
+  }, [selectedCategoryOption]);
+
+  const handleProductOptionChange = (value) => {
+    setSelectedProductOption(value)
+  };
+
+  // 거래 방식 변경시
+  const handleTransactionOptionChange = (value) =>{
+    setSelectedTransactionOption(value)
+  }
+
+  // 거래 지역 변경시
+  const handleRegionOptionChange = (value) =>{
+    setSelectedRegionOption(value)
+  }
 
   return (
     <Container>
       <Title>상품 등록</Title>
       <DropdownContainer>
-        {[
-          { label: '품목', options: categoryOptions },
-          { label: '거래방식', options: transactionOptions },
-          { label: '지역', options: regionOptions }
-        ].map(({ label, options }, index) => (
           <Dropdown 
-            key={label}
-            value={selectedOptions[index] || ''}
-            onChange={(e) => handleOptionChange(index, e.target.value)}
+            value={selectedCategoryOption}
+            onChange={(e) => handleCategoryOptionChange(e.target.value)}
           >
-            <option value=""> {label} </option>
-            {options.map(option => (
-              <option key={option} value={option}>{option}</option>
+            <option value='' disabled> 카테고리 </option>
+            {categoryOptions.map(categoryOption => (
+              <option value={categoryOption.key}>{categoryOption.category}</option>
             ))}
           </Dropdown>
-        ))}
+
+          <Dropdown 
+            value={selectedProductOption}
+            onChange={(e) => handleProductOptionChange(e.target.value)}
+          >
+            <option value="999" disabled> 상품 </option>
+            {productOptions.map(productOption => (
+              <option value={productOption.itemId}>{productOption.itemName}</option>
+            ))}
+          </Dropdown>
+
+          <Dropdown 
+            value={selectedTransactionOption}
+            onChange={(e) => handleTransactionOptionChange(e.target.value)}
+          >
+            <option value="999" disabled> 거래 방식 </option>
+            {transactionOptions.map(transactionOption => (
+              <option value={transactionOption}>{transactionOption}</option>
+            ))}
+          </Dropdown>
+
+          <Dropdown 
+            value={selectedRegionOption}
+            onChange={(e) => handleRegionOptionChange(e.target.value)}
+          >
+            <option value="999" disabled> 거래 지역 </option>
+            {regionOptions.map(regionOption => (
+              <option value={regionOption}>{regionOption}</option>
+            ))}
+          </Dropdown>
+
       </DropdownContainer>
+
       <InputLabel htmlFor="productTitle">제목</InputLabel>
       <StyledInput 
         type="text" 
@@ -281,8 +362,7 @@ export default function ArticleWrite() {
             
 
       <PriceChart 
-        itemId = '111'
-        nameId = '01'
+        itemId = {selectedProductOption}
       ></PriceChart>
       <ToggleButton onClick={() => setShowWeight(!showWeight)}>
         {showWeight ? '수량 및 가격 입력창 보기' : '무게 및 가격 입력창 보기'}
@@ -295,8 +375,8 @@ export default function ArticleWrite() {
             <InputGroup>
               <GroupLabel htmlFor="productWeight">무게</GroupLabel>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <GroupInput type="number" id="productWeight" placeholder="무게를 입력하세요." />
-                <UnitSelect>
+                <GroupInput type="number" id="productWeight" value={productWeight} onChange={(e)=>setProductWeight(e.target.value)} placeholder="무게를 입력하세요." />
+                <UnitSelect id="productWeightUnit" value={productWeightUnit} onChange={(e)=>setProductWeightUnit(e.target.value)} >
                   <option value="kg">kg</option>
                   <option value="g">g</option>
                 </UnitSelect>
@@ -304,18 +384,18 @@ export default function ArticleWrite() {
             </InputGroup>
             <InputGroup>
               <GroupLabel htmlFor="productPrice">가격</GroupLabel>
-              <GroupInput type="number" id="productPrice" placeholder="가격을 입력하세요." />
+              <GroupInput type="number" id="productPrice" value={productPrice} onChange={(e)=>setProductPrice(e.target.value)} placeholder="가격을 입력하세요." />
             </InputGroup>
           </>
         ) : (
           <>
             <InputGroup>
               <GroupLabel htmlFor="productQuantity">개수</GroupLabel>
-              <GroupInput type="number" id="productQuantity" placeholder="개수를 입력하세요." />
+              <GroupInput type="number" id="productQuantity" value={productAmount} onChange={(e)=>setProductAmount(e.target.value)} placeholder="개수를 입력하세요." />
             </InputGroup>
             <InputGroup>
               <GroupLabel htmlFor="productPrice">가격</GroupLabel>
-              <GroupInput type="number" id="productPrice" placeholder="가격을 입력하세요." />
+              <GroupInput type="number" id="productPrice" value={productPrice} onChange={(e)=>setProductPrice(e.target.value)} placeholder="가격을 입력하세요." />
             </InputGroup>
           </>
         )}
@@ -324,7 +404,7 @@ export default function ArticleWrite() {
 
       <Section>
         <SectionTitle>세부사항 입력창</SectionTitle>
-        <TextArea></TextArea>
+        <TextArea id="productContent" value={productContent} onChange={(e)=>setProductContent(e.target.value)} ></TextArea>
       </Section>
       <Buttons>
         <Button>등록하기</Button>
