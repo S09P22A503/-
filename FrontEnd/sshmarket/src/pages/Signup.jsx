@@ -68,14 +68,35 @@ const DulicateMessage = styled.div`
   color: red;
 `;
 
+const PreferenceContainer = styled.div``;
+
+const PreferenceSelect = styled.select`
+  font-size: medium;
+  font-family: "pretendard";
+`;
+
+const PreferenceOption = styled.option`
+  font-family: "pretendard";
+`;
+
 export default function Signup() {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+  const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
+
+  const categoryList = [
+    { id: 1, name: "쌀/잡곡" },
+    { id: 2, name: "채소" },
+    { id: 3, name: "식용작물" },
+    { id: 4, name: "과일" },
+    { id: 6, name: "수산물/건어물" },
+  ];
 
   const [inputNickname, setInputNickname] = useState();
   const [inputProfile, setInputProfile] = useState(new File([], "tmp"));
   const [previewProfile, setPreviewProfile] = useState();
   const [isValidNickname, setIsValidNickname] = useState(false);
   const [isDuplicateNickname, setIsDuplicateNickname] = useState(false);
+  const [preferenceCategory, setPreferenceCategory] = useState(undefined);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -103,12 +124,23 @@ export default function Signup() {
     setPreviewProfile(undefined);
   };
 
+  const changePreference = (e) => {
+    setPreferenceCategory(e.target.value);
+  }
+
   const checkNickname = () => {
     if (!inputNickname.trim()) return;
 
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "auth/members/check/" + inputNickname.trim(),
+      url: "/auth/members/check/" + inputNickname.trim(),
+      timeout: 10000,
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": CLIENT_URL,
+        "Access-Control-Allow-Credentials": true,
+      },
+      withCredentials: true,
       method: "GET",
     })
       .then((res) => {
@@ -123,14 +155,22 @@ export default function Signup() {
   };
 
   const register = () => {
-    
-    if (inputNickname.length < 4 || inputNickname.length > 20) {
+    if (
+      !inputNickname ||
+      inputNickname.length < 4 ||
+      inputNickname.length > 20
+    ) {
       alert("닉네임은 4자 이상 20자 이하로 입력해주세요.");
       return;
     }
 
     if (!isValidNickname) {
       alert("닉네임 중복 확인을 해주세요.");
+      return;
+    }
+
+    if (!preferenceCategory) {
+      alert("선호 카테고리를 선택해주세요.");
       return;
     }
 
@@ -147,15 +187,19 @@ export default function Signup() {
 
     axios({
       baseURL: SERVER_URL,
-      url: SERVER_URL + "auth/register",
+      url: "/auth/register",
       method: "POST",
+      timeout: 10000,
       headers: {
         "Content-Type": "multipart/form-data",
+        "Access-Control-Allow-Origin": CLIENT_URL,
+        "Access-Control-Allow-Credentials": true,
       },
+      withCredentials: true,
       data: formData,
     })
       .then((res) => {
-        dispatch(Login({ data: { ...res.data.data } }));
+        dispatch(Login({ ...res.data.data }));
         alert(res.data.message);
         localStorage.removeItem("accessToken");
         navigate("/");
@@ -199,6 +243,19 @@ export default function Signup() {
           {"중복된 닉네임입니다."}
         </DulicateMessage>
       </NicknameContainer>
+      <LableContainer for="preference">{"선호 카테고리 선택"}</LableContainer>
+      <PreferenceContainer id="preference">
+        <PreferenceSelect name="preference" onChange={changePreference}>
+          <PreferenceOption value={undefined} selected disabled>{"카테고리 선택"}</PreferenceOption>
+          {categoryList.map((category, i) => {
+            return (
+              <PreferenceOption key={i} value={category.id}>
+                {category.name}
+              </PreferenceOption>
+            );
+          })}
+        </PreferenceSelect>
+      </PreferenceContainer>
       <StyledButton content={"회원가입"} onClick={register}></StyledButton>
     </Container>
   );
