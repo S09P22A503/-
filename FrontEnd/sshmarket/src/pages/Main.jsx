@@ -40,6 +40,7 @@ const CategoryText = styled.div`
   font-size: larger;
   font-weight: bold;
   background-color: white;
+  cursor: pointer;
 `;
 
 const MainArticleContainer = styled.div`
@@ -78,14 +79,16 @@ export default function Main() {
       <CategoryBoxContainer>
         {categoryIndexArray.map((i) => {
           let source = "categoryImage/" + i + ".jpg";
+          let boxid = "categorybox" + i;
           return categoryArray[i] ? (
             <CategoryItem>
               <CategoryBox
                 key={i}
                 src={source}
                 onClick={() => clickCategory(i)}
+                id={boxid}
               ></CategoryBox>
-              <CategoryText>{categoryArray[i]}</CategoryText>
+              <CategoryText onClick={() => document.getElementById(boxid).click()}>{categoryArray[i]}</CategoryText>
             </CategoryItem>
           ) : undefined;
         })}
