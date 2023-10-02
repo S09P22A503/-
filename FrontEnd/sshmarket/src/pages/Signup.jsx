@@ -70,6 +70,7 @@ const DulicateMessage = styled.div`
 
 export default function Signup() {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+  const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
 
   const [inputNickname, setInputNickname] = useState();
   const [inputProfile, setInputProfile] = useState(new File([], "tmp"));
@@ -109,6 +110,13 @@ export default function Signup() {
     axios({
       baseURL: SERVER_URL,
       url: "/auth/members/check/" + inputNickname.trim(),
+      timeout: 10000,
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": CLIENT_URL,
+        "Access-Control-Allow-Credentials": true,
+      },
+      withCredentials: true,
       method: "GET",
     })
       .then((res) => {
@@ -123,7 +131,6 @@ export default function Signup() {
   };
 
   const register = () => {
-    
     if (inputNickname.length < 4 || inputNickname.length > 20) {
       alert("닉네임은 4자 이상 20자 이하로 입력해주세요.");
       return;
@@ -144,18 +151,22 @@ export default function Signup() {
     formData.append("code", accessToken);
     formData.append("nickname", inputNickname);
     formData.append("profile", inputProfile);
-
+    
     axios({
       baseURL: SERVER_URL,
       url: "/auth/register",
       method: "POST",
+      timeout: 10000,
       headers: {
         "Content-Type": "multipart/form-data",
+        "Access-Control-Allow-Origin": CLIENT_URL,
+        "Access-Control-Allow-Credentials": true,
       },
+      withCredentials: true,
       data: formData,
     })
       .then((res) => {
-        dispatch(Login({ data: { ...res.data.data } }));
+        dispatch(Login({...res.data.data}));
         alert(res.data.message);
         localStorage.removeItem("accessToken");
         navigate("/");

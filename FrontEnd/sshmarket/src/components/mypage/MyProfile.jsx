@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SubButton from "../Button/SubButton";
@@ -72,11 +72,15 @@ const DulicateMessage = styled.div`
 `;
 
 export default function MyProfile() {
-  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-  const [inputNickname, setInputNickname] = useState();
+  const member = useSelector((state) => state.MemberReducer);
+
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+  const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
+
+  const [inputNickname, setInputNickname] = useState(member.nickname);
   const [inputProfile, setInputProfile] = useState(new File([], "tmp"));
-  const [previewProfile, setPreviewProfile] = useState();
+  const [previewProfile, setPreviewProfile] = useState(member.profile);
   const [isValidNickname, setIsValidNickname] = useState(false);
   const [isDuplicateNickname, setIsDuplicateNickname] = useState(false);
 
@@ -108,6 +112,13 @@ export default function MyProfile() {
       baseURL: SERVER_URL,
       url: "/auth/members/check/" + inputNickname.trim(),
       method: "GET",
+      timeout: 10000,
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": CLIENT_URL,
+        "Access-Control-Allow-Credentials": true,
+      },
+      withCredentials: true,
     })
       .then((res) => {
         setIsValidNickname(true);
@@ -132,9 +143,13 @@ export default function MyProfile() {
       baseURL: SERVER_URL,
       url: "/auth/members/profile",
       method: "PATCH",
+      timeout: 10000,
       headers: {
         "Content-Type": "multipart/form-data",
+        "Access-Control-Allow-Origin": CLIENT_URL,
+        "Access-Control-Allow-Credentials": true,
       },
+      withCredentials: true,
       data: formData,
     })
       .then((res) => {
@@ -161,19 +176,24 @@ export default function MyProfile() {
       baseURL: SERVER_URL,
       url: "/auth/members/nickname",
       method: "PATCH",
+      timeout: 10000,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": CLIENT_URL,
+        "Access-Control-Allow-Credentials": true,
       },
-      data: {
+      withCredentials: true,
+      params: {
         nickname: inputNickname,
       },
     })
       .then((res) => {
-        dispatch(ChangeNickname(res.data.data.nickname));
+        dispatch(ChangeNickname(res.data.data.nickname.toString()));
         alert(res.data.message);
-        navigate("/");
+        window.location.reload();
       })
       .catch((e) => {
+        console.log(e);
         alert(e.response.data.message);
       });
   };
@@ -205,7 +225,7 @@ export default function MyProfile() {
         <NicknameInput
           onChange={changeNickname}
           type="text"
-          placeholder="4자 이상 20자 이하로 입력해주세요."
+          placeholder={member.nickname}
         ></NicknameInput>
         <SubButton content={"중복확인"} onClick={checkNickname}></SubButton>
         <DulicateMessage hidden={!isDuplicateNickname}>
