@@ -17,10 +17,29 @@ const CategoryBoxContainer = styled.div`
   justify-content: space-between;
 `;
 
-const CartegoryBox = styled.img`
+const CategoryItem = styled.div`
+  height: 150px;
+  width: auto;
+  position: relative;
+  display: flex;
+`;
+
+const CategoryBox = styled.img`
   border: 5px solid var(--secondary);
   border-radius: 15px;
   cursor: pointer;
+`;
+
+const CategoryText = styled.div`
+  position: absolute;
+  left: 10%;
+  bottom: 8px;
+  width: 80%;
+  text-align: center;
+  z-index: 999;
+  font-size: larger;
+  font-weight: bold;
+  background-color: white;
 `;
 
 const MainArticleContainer = styled.div`
@@ -33,17 +52,17 @@ const MainArticleContainer = styled.div`
 
 const ArticleContainer = styled.div`
   margin-bottom: 2em;
-`
+`;
 
 export default function Main() {
   const categoryArray = [
-    "없음",
+    undefined,
     "쌀/잡곡",
     "채소",
-    "견과/건과",
-    "축산/계란",
-    "수산물/건어물",
+    "식용작물",
     "과일",
+    undefined,
+    "수산물/건어물",
   ];
   const categoryIndexArray = [1, 2, 3, 4, 5, 6];
 
@@ -59,13 +78,16 @@ export default function Main() {
       <CategoryBoxContainer>
         {categoryIndexArray.map((i) => {
           let source = "categoryImage/" + i + ".jpg";
-          return (
-            <CartegoryBox
-              key={i}
-              src={source}
-              onClick={() => clickCategory(i)}
-            ></CartegoryBox>
-          );
+          return categoryArray[i] ? (
+            <CategoryItem>
+              <CategoryBox
+                key={i}
+                src={source}
+                onClick={() => clickCategory(i)}
+              ></CategoryBox>
+              <CategoryText>{categoryArray[i]}</CategoryText>
+            </CategoryItem>
+          ) : undefined;
         })}
       </CategoryBoxContainer>
       <MainArticleContainer>
