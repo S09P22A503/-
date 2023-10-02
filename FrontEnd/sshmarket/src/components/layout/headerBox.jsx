@@ -98,12 +98,14 @@ const MenuItem = styled.div`
 
 export default function Header() {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-
+  const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
+  const OAUTH_URL = "https://accounts.google.com/o/oauth2/auth?client_id=780664099270-6fkn1r7iq6p9eihagmebg9do4j1mm4vd.apps.googleusercontent.com&redirect_uri=" + CLIENT_URL + "login/oauth2/code/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email"
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const member = useSelector((state) => state.MemberReducer.data);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [seachKeyword, setSearchKeyword] = useState("");
 
   const goMyPage = (e) => {
     navigate("/mypage");
@@ -133,6 +135,16 @@ export default function Header() {
     toggleMenu(e);
   };
 
+  const changeSeachKeyword = (e) => {
+    setSearchKeyword(e.target.value.trim());
+  }
+
+  const doSearch = (e) => {
+    if (!seachKeyword.trim()) return;
+    if (e.key !== 'Enter') return;
+    navigate(`/article?keyword=${seachKeyword}&page=1&size=24`)
+  }
+
   const toggleMenu = (e) => {
     setIsMenuOpen((prev) => !prev);
     e.stopPropagation();
@@ -152,12 +164,12 @@ export default function Header() {
       </LogoTitleContainer>
       <SearchContainer>
         <SearchBar>
-          <SearchInput placeholder=" 검색어를 입력해주세요."></SearchInput>
+          <SearchInput placeholder=" 검색어를 입력해주세요." onChange={changeSeachKeyword} onKeyDown={doSearch}></SearchInput>
         </SearchBar>
       </SearchContainer>
       {!member ? (
         <BeforeLoginContainer>
-          <LoginSignup href="https://accounts.google.com/o/oauth2/auth?client_id=780664099270-6fkn1r7iq6p9eihagmebg9do4j1mm4vd.apps.googleusercontent.com&redirect_uri=http://localhost:3000/login/oauth2/code/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email">
+          <LoginSignup href={OAUTH_URL}>
             {"로그인/회원가입"}
           </LoginSignup>
         </BeforeLoginContainer>
