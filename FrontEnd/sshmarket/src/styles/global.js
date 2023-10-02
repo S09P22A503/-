@@ -6,7 +6,7 @@ const GlobalVariableStyle = createGlobalStyle`
   // color
   --primary: #5F0080;
   --secondary: #B388EB;
-  --background: #F8F8F8;
+  --background: #F1C8FF;
   --red: red;
   --blue: blue;
   --gray-50: #f9fafb;

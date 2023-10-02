@@ -1,8 +1,31 @@
 import styled from "styled-components";
+import ReviewWriteModal from "../review/ReviewWriteModal";
+import { useState } from "react";
 
 function TradeHistory() {
+  const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
+  const [targetArticleId, setTargetArticleId] = useState();
+
+  const openReviewModal = (articleId) => {
+    setTargetArticleId(articleId);
+    setIsOpenReviewModal(true);
+  };
+
+  const closeModal = () => {
+    setTargetArticleId("");
+    setIsOpenReviewModal(false);
+  }
+
   return (
     <TradeHistoryContainer>
+      <button onClick={() => setIsOpenReviewModal((prev) => !prev)}>{"버튼"}</button>
+      <button onClick={closeModal}>{"닫기"}</button>
+      <ModalContainer hidden={!isOpenReviewModal}>
+        <ReviewWriteModal
+          articleId={targetArticleId}
+          closeModal={closeModal}
+        ></ReviewWriteModal>
+      </ModalContainer>
       <TradeHistoryListBox>
         <ProductBox>
           <ProductImage src="https://health.chosun.com/site/data/img_dir/2020/05/07/2020050702573_0.jpg" />
@@ -127,6 +150,14 @@ const ReviewWrapper = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+`;
+
+const ModalContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
 `;
 
 export default TradeHistory;
