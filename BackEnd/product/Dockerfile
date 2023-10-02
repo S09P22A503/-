@@ -2,7 +2,7 @@
 FROM python:3.11.1
 
 # 파이썬 소스코드 복사
-COPY ./BackEnd/product /app
+COPY . /app
 
 # 작업환경 변경
 WORKDIR /app
