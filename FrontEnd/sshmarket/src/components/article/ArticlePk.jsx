@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import styled from "styled-components";
 import StyledButton from "../Button/StyledButton";
 import RecommendArticle from "./organism/RecommendArticle";
+import { postCreateTrade } from "../../api/trade.js";
 
 const Container = styled.div``;
 
@@ -88,6 +90,24 @@ export default function ArticlePk() {
     setCurrentIndex(index);
   }
 
+  //articleId, buyerId, sellerId 수정필요
+  const navigate = useNavigate();
+  const articleId = 50;
+  const buyerId = 10;
+  const sellerId = 20;
+  const createTrade = async () => {
+    await postCreateTrade({
+      responseFunc: {
+        200: (response) => {
+          const tradeId = response.data.data;
+          console.log(tradeId);
+          navigate(`/trade/${tradeId}`, { state: { tradeId } });
+        },
+      },
+      data: { articleId, buyerId, sellerId },
+    });
+  };
+
   return (
     <Container>
       <ImageContainer>
@@ -106,7 +126,11 @@ export default function ArticlePk() {
       <ContentsContainer>
         <ButtonContainer>
           <StyledButton content="❤" width={445} marginright={10}></StyledButton>
-          <StyledButton content="채팅하기" width={445}></StyledButton>
+          <StyledButton
+            content="채팅하기"
+            width={445}
+            onClick={createTrade}
+          ></StyledButton>
         </ButtonContainer>
         <InfoContainer>
           <Title>{data.title}</Title>
