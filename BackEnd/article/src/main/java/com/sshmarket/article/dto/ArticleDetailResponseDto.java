@@ -21,7 +21,11 @@ public class ArticleDetailResponseDto {
 
     private Integer mass;
 
+    private String mainImage;
+
     private List<String> images;
+
+    private Integer itemId;
 
     private String content;
 
@@ -29,14 +33,17 @@ public class ArticleDetailResponseDto {
 
     private Boolean isLike;
 
-    public ArticleDetailResponseDto(Long id, Member member, String title, Integer price, Integer amount, Integer mass, List<String> images, String content, String location, Boolean isLike) {
+    public ArticleDetailResponseDto(Long id, Member member, String title, Integer price, Integer amount, Integer mass, String mainImage,
+                                    List<String> images, Integer itemId, String content, String location, Boolean isLike) {
         this.id = id;
         this.member = member;
         this.title = title;
         this.price = price;
         this.amount = amount;
         this.mass = mass;
+        this.mainImage = mainImage;
         this.images = images;
+        this.itemId = itemId;
         this.content = content;
         this.location = location;
         this.isLike = isLike;
