@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "member", url = "{member.url}")
+@FeignClient(name = "member", url = "${member.url}")
 @Component
 public interface MemberFeignClient {
 

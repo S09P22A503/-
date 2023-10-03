@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface ProductRepository {
 
-    Optional<Product> findProductById(Long id);
+    Optional<Product> findProductByItemId(Long itemId);
 
 }
