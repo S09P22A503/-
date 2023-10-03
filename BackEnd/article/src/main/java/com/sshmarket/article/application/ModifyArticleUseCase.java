@@ -44,7 +44,7 @@ public class ModifyArticleUseCase {
         Location location = locationRepository.findLocationById(articleModifyRequestDto.getLocationId())
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 지역입니다."));
 
-        Product product = productRepository.findProductById(articleModifyRequestDto.getProductId())
+        Product product = productRepository.findProductByItemId(articleModifyRequestDto.getItemId())
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 상품입니다."));
 
 

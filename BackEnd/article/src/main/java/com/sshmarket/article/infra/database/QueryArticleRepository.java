@@ -35,8 +35,8 @@ public class QueryArticleRepository {
 
     }
 
-    private BooleanExpression productEq(Integer itemId) {
-        return itemId != null? product.itemId.eq(itemId) : null;
+    private BooleanExpression productEq(Integer category) {
+        return category != null? product.itemId.between(category * 100, (category * 100) + 99) : null;
     }
 
     private BooleanExpression tradeTypeEq(TradeType tradeType) {
