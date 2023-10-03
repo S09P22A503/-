@@ -10,7 +10,7 @@ const writeArticle = async ({ responseFunc, data }) => {
   const request = { memberId,productId,price,amount,mass,locationId,title,content,tradeType};
   console.log(images)
   images.forEach((image) => formData.append("images", image));
-  
+
   formData.append("mainImage",mainImage)
   formData.append('memberId', memberId);
   formData.append('productId', productId);
@@ -28,6 +28,7 @@ const writeArticle = async ({ responseFunc, data }) => {
       headers: {
         "Content-Type": "multipart/form-data"
       },
+      withCredentials: true,
     });
     console.log(response);
     processApiResponse({ responseFunc, response });
