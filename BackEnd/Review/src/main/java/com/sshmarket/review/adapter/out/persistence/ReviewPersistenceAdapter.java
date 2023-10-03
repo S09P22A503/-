@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @PersistenceAdapter
-class ReviewPersistenceAdapter implements LoadReviewPort, SaveReviewPort, UpdateReviewPort {
+class ReviewPersistenceAdapter implements SaveReviewPort, UpdateReviewPort {
 
     private final JPAReviewRepository reviewRepository;
     private final JPAReviewImageRepository jpaReviewImageRepository;
@@ -35,14 +35,6 @@ class ReviewPersistenceAdapter implements LoadReviewPort, SaveReviewPort, Update
         return savedReview.convertToDomain();
     }
 
-    @Override
-    public Review findReviewById(Long id) {
-        JPAReviewEntity savedReview = reviewRepository.findById(id)
-                                                      .orElseThrow(() -> new NotFoundException(
-                                                              "존재하지 않는 리뷰 ID 입니다."));
-
-        return savedReview.convertToDomain();
-    }
 
     @Override
     public void updateReview(Review review) {
