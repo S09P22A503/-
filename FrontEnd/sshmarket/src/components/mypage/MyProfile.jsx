@@ -3,9 +3,12 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Login } from "../modules/memberReducer/action";
-import StyledButton from "../components/Button/StyledButton";
-import SubButton from "./../components/Button/SubButton";
+import SubButton from "../Button/SubButton";
+import StyledButton from "../Button/StyledButton";
+import {
+  ChangeNickname,
+  ChangeProfile,
+} from "../../modules/memberReducer/action";
 
 const Container = styled.div`
   height: 500px;
@@ -68,7 +71,7 @@ const DulicateMessage = styled.div`
   color: red;
 `;
 
-export default function Signup() {
+export default function MyProfile() {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   const [inputNickname, setInputNickname] = useState();
@@ -98,11 +101,6 @@ export default function Signup() {
     reader.readAsDataURL(file);
   };
 
-  const resetProfile = () => {
-    setInputProfile(new File([], "tmp"));
-    setPreviewProfile(undefined);
-  };
-
   const checkNickname = () => {
     if (!inputNickname.trim()) return;
 
@@ -122,42 +120,57 @@ export default function Signup() {
       });
   };
 
-  const register = () => {
-    
-    if (inputNickname.length < 4 || inputNickname.length > 20) {
-      alert("닉네임은 4자 이상 20자 이하로 입력해주세요.");
+  const updateProfile = () => {
+    if (inputProfile.size === 0) {
       return;
-    }
-
-    if (!isValidNickname) {
-      alert("닉네임 중복 확인을 해주세요.");
-      return;
-    }
-
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      alert("잘못된 접근입니다.");
-      navigate("/");
     }
 
     const formData = new FormData();
-    formData.append("code", accessToken);
-    formData.append("nickname", inputNickname);
     formData.append("profile", inputProfile);
 
     axios({
       baseURL: SERVER_URL,
-      url: "/auth/register",
-      method: "POST",
+      url: "/auth/members/profile",
+      method: "PATCH",
       headers: {
         "Content-Type": "multipart/form-data",
       },
       data: formData,
     })
       .then((res) => {
-        dispatch(Login({ data: { ...res.data.data } }));
+        dispatch(ChangeProfile(res.data.data.profile));
         alert(res.data.message);
-        localStorage.removeItem("accessToken");
+        window.location.reload();
+      })
+      .catch((e) => {
+        alert(e.response.data.message);
+      });
+  };
+
+  const updateNickname = () => {
+    if (inputNickname.length < 4 || inputNickname.length > 20) {
+      alert("닉네임은 4자 이상 20자 이하로 입력해주세요.");
+      return;
+    }
+    if (!isValidNickname) {
+      alert("닉네임 중복 확인을 해주세요.");
+      return;
+    }
+
+    axios({
+      baseURL: SERVER_URL,
+      url: "/auth/members/nickname",
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        nickname: inputNickname,
+      },
+    })
+      .then((res) => {
+        dispatch(ChangeNickname(res.data.data.nickname));
+        alert(res.data.message);
         navigate("/");
       })
       .catch((e) => {
@@ -183,10 +196,10 @@ export default function Signup() {
           id="profileupload"
         ></ProfileInput>
       </ProfileContainer>
-      <SubButton
-        content={"프로필 사진 초기화"}
-        onClick={resetProfile}
-      ></SubButton>
+      <StyledButton
+        content={"프로필 사진 변경"}
+        onClick={updateProfile}
+      ></StyledButton>
       <LableContainer for="nickname">{"닉네임 입력"}</LableContainer>
       <NicknameContainer id="nickname">
         <NicknameInput
@@ -199,7 +212,10 @@ export default function Signup() {
           {"중복된 닉네임입니다."}
         </DulicateMessage>
       </NicknameContainer>
-      <StyledButton content={"회원가입"} onClick={register}></StyledButton>
+      <StyledButton
+        content={"닉네임 변경"}
+        onClick={updateNickname}
+      ></StyledButton>
     </Container>
   );
 }

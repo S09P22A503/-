@@ -1,12 +1,38 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as Search } from "../../assets/icons/search.svg";
 import { ReactComponent as Profile } from "../../assets/icons/profile.svg";
 import Dropdown from "./Dropdown";
-import { getTradeList } from "../../api/trade.js";
+import { getTradeList, getTradeListByKeyword } from "../../api/trade.js";
 
-function ChatList() {
+function formatDateTime(inputDateString) {
+  const inputDate = new Date(inputDateString);
+  const today = new Date();
+
+  if (
+    inputDate.getDate() === today.getDate() &&
+    inputDate.getMonth() === today.getMonth() &&
+    inputDate.getFullYear() === today.getFullYear()
+  ) {
+    const options = {
+      hour: "numeric", // 시간을 1자리 숫자 형태(예: "2")로 표시
+      minute: "2-digit", // 분을 2자리 숫자 형태(예: "29")로 표시
+    };
+    return new Intl.DateTimeFormat("ko-KR", options).format(inputDate);
+  } else {
+    const options = {
+      month: "long", // 월을 긴 형태(예: "9월")로 표시
+      day: "numeric", // 일을 숫자 형태(예: "29")로 표시
+    };
+    return new Intl.DateTimeFormat("ko-KR", options).format(inputDate);
+  }
+}
+
+function ChatList({ setSelectedTradeId, messageFlag }) {
+  const keywordInputRef = useRef(null);
+  const [keyword, setKeyword] = useState("");
+
   const states = [
     { id: 1, label: "전체대화", status: "ALL" },
     { id: 2, label: "대화중", status: "CHAT" },
@@ -18,7 +44,7 @@ function ChatList() {
     label: "전체대화",
     status: "ALL",
   });
-  const [trade, setTrade] = useState([]);
+  const [trades, setTrades] = useState();
   const memberId = 10;
 
   useEffect(() => {
@@ -26,15 +52,41 @@ function ChatList() {
       await getTradeList({
         responseFunc: {
           200: (response) => {
-            setTrade({ ...response.data.data });
-            console.log(trade);
+            console.log("trade", response.data.data);
+            setTrades(response.data.data);
           },
         },
         data: { memberId: memberId, status: selectedState.status },
       });
     }
     fetchData();
-  }, [selectedState]);
+  }, [selectedState, messageFlag]);
+
+  // 키워드 조회
+  const handleKeywordChange = (event) => {
+    setKeyword(event.target.value.trim());
+  };
+
+  const handleKeywordSubmit = async () => {
+    async function fetchData() {
+      await getTradeListByKeyword({
+        responseFunc: {
+          200: (response) => {
+            setTrades(response.data.data);
+          },
+        },
+        data: {
+          status: selectedState.status,
+          keyword: keyword,
+        },
+      });
+    }
+    fetchData();
+  };
+
+  const handleTradeClick = (tradeId) => {
+    setSelectedTradeId(tradeId); // 선택한 거래 ID 업데이트
+  };
 
   return (
     <TradeContainer>
@@ -49,74 +101,44 @@ function ChatList() {
             onChange={setSelectedState}
           />
           <TradeSearchBox>
-            <TradeSearchWrapper>대화방 검색</TradeSearchWrapper>
-            <SearchIconWrapper>
+            <TradeSearchWrapper
+              placeholder="대화방 검색"
+              ref={keywordInputRef}
+              value={keyword}
+              onChange={handleKeywordChange}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  keywordInputRef.current.blur();
+                  handleKeywordSubmit(event);
+                }
+              }}
+            />
+            <SearchIconWrapper onClick={handleKeywordSubmit}>
               <Search />
             </SearchIconWrapper>
           </TradeSearchBox>
         </TradeStateBox>
       </TradeStateContainer>
       <TradeListContainer>
-        <TradeListBox>
-          <ProfileImageWrapper>
-            <Profile />
-          </ProfileImageWrapper>
-          <ProfileWrapper>
-            <ProfileNameWrapper>김농부</ProfileNameWrapper>
-            <LastMessageWrapper>어떠세요?</LastMessageWrapper>
-          </ProfileWrapper>
-          <DateWrapper>8월 31일</DateWrapper>
-        </TradeListBox>
-        <TradeListBox>
-          <ProfileImageWrapper>
-            <Profile />
-          </ProfileImageWrapper>
-          <ProfileWrapper>
-            <ProfileNameWrapper>김농부</ProfileNameWrapper>
-            <LastMessageWrapper>어떠세요?</LastMessageWrapper>
-          </ProfileWrapper>
-          <DateWrapper>8월 31일</DateWrapper>
-        </TradeListBox>
-        <TradeListBox>
-          <ProfileImageWrapper>
-            <Profile />
-          </ProfileImageWrapper>
-          <ProfileWrapper>
-            <ProfileNameWrapper>김농부</ProfileNameWrapper>
-            <LastMessageWrapper>어떠세요?</LastMessageWrapper>
-          </ProfileWrapper>
-          <DateWrapper>8월 31일</DateWrapper>
-        </TradeListBox>
-        <TradeListBox>
-          <ProfileImageWrapper>
-            <Profile />
-          </ProfileImageWrapper>
-          <ProfileWrapper>
-            <ProfileNameWrapper>김농부</ProfileNameWrapper>
-            <LastMessageWrapper>어떠세요?</LastMessageWrapper>
-          </ProfileWrapper>
-          <DateWrapper>8월 31일</DateWrapper>
-        </TradeListBox>
-        <TradeListBox>
-          <ProfileImageWrapper>
-            <Profile />
-          </ProfileImageWrapper>
-          <ProfileWrapper>
-            <ProfileNameWrapper>김농부</ProfileNameWrapper>
-            <LastMessageWrapper>어떠세요?</LastMessageWrapper>
-          </ProfileWrapper>
-          <DateWrapper>8월 31일</DateWrapper>
-        </TradeListBox>
-        <TradeListBox>
-          <ProfileImageWrapper>
-            <Profile />
-          </ProfileImageWrapper>
-          <ProfileWrapper>
-            <ProfileNameWrapper>김농부</ProfileNameWrapper>
-            <LastMessageWrapper>어떠세요?</LastMessageWrapper>
-          </ProfileWrapper>
-          <DateWrapper>8월 31일</DateWrapper>
-        </TradeListBox>
+        {trades &&
+          trades.map((trade) => (
+            <TradeListBox
+              key={trade.tradeId}
+              onClick={() => handleTradeClick(trade.tradeId)}
+            >
+              <ProfileImageWrapper>
+                <Profile />
+              </ProfileImageWrapper>
+              <ProfileWrapper>
+                <ProfileNameWrapper>
+                  {trade.memberResponseDto.nickname}
+                </ProfileNameWrapper>
+                <LastMessageWrapper>{trade.lastChatMessage}</LastMessageWrapper>
+              </ProfileWrapper>
+              <DateWrapper>{formatDateTime(trade.createdAt)}</DateWrapper>
+            </TradeListBox>
+          ))}
       </TradeListContainer>
     </TradeContainer>
   );
@@ -139,7 +161,7 @@ const TradeStateContainer = styled.div`
 
 const TradeListContainer = styled.div`
   width: 350px;
-  max-height: 400px;
+  height: 400px;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 16px 8px;
@@ -167,28 +189,34 @@ const TradeSearchBox = styled.div`
   height: 44px;
   justify-content: center;
   align-items: center;
-  gap: 200px;
+  gap: 10px;
   flex-shrink: 0;
   background: #fff;
 `;
 
-const TradeSearchWrapper = styled.div`
+const TradeSearchWrapper = styled.input`
   color: rgba(0, 0, 0, 0.4);
-  text-align: center;
-  font-size: 14px;
+  border: none;
+  outline: none;
+  text-align: start;
+  width: 300px;
+  height: 40px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  margin-left: 15px;
 `;
 
 const SearchIconWrapper = styled.div`
   cursor: pointer;
+  margin-right: 15px;
 `;
 
 const TradeListBox = styled.div`
   cursor: pointer;
   display: flex;
-  width: 360px;
+  width: 350px;
   padding: 15px 0px;
   justify-content: center;
   align-items: flex-end;
@@ -227,6 +255,7 @@ const LastMessageWrapper = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 16px;
+  overflow: hidden;
 `;
 
 const DateWrapper = styled.div`

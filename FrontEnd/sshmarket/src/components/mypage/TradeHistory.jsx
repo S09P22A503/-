@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import ReviewWriteModal from "../review/ReviewWriteModal";
 import { getTradeHistory } from '../../api/trade.js';
 
 function TradeHistory() {
+    const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
+    const [targetArticleId, setTargetArticleId] = useState();
     const [tradeHistory, setTradeHistory] = useState([]);
     const memberId = 1; // 실제 회원 ID로 대체하세요
+
+    const openReviewModal = (articleId) => {
+      setTargetArticleId(articleId);
+      setIsOpenReviewModal(true);
+    };
+  
+    const closeModal = () => {
+      setTargetArticleId("");
+      setIsOpenReviewModal(false);
+    }
 
     useEffect(() => {
         // API 엔드포인트 URL을 정의합니다.
@@ -19,6 +32,7 @@ function TradeHistory() {
     const handleApiResponse = (response) => {
         if (response.status === 200) {
             // API 호출이 성공하면 데이터를 설정합니다.
+            console.log(response.data.data.content)
             setTradeHistory(response.data.data.content);
         } else {
             // API 호출이 실패하면 오류를 처리합니다.
@@ -28,6 +42,12 @@ function TradeHistory() {
 
     return (
         <TradeHistoryContainer>
+          <ModalContainer hidden={!isOpenReviewModal}>
+            <ReviewWriteModal
+              articleId={targetArticleId}
+              closeModal={closeModal}
+            ></ReviewWriteModal>
+          </ModalContainer>
             {tradeHistory.map((tradeItem, index) => (
                 <TradeHistoryListBox key={index}>
                     <ProductBox>
@@ -39,12 +59,14 @@ function TradeHistory() {
                         </ProductInfoBox>
                     </ProductBox>
                     <ReviewButton>
-                        <ReviewWrapper>{tradeItem.isReviewed ? '리뷰완료' : '리뷰쓰기'}</ReviewWrapper>
+                        <ReviewWrapper onClick={tradeItem.reviewed ? null : () => setIsOpenReviewModal((prev) => !prev)}
+                        >{tradeItem.reviewed ? '리뷰완료' : '리뷰쓰기'}</ReviewWrapper>
                     </ReviewButton>
                 </TradeHistoryListBox>
             ))}
         </TradeHistoryContainer>
     );
+
 }
 
 const TradeHistoryContainer = styled.div``;
@@ -122,6 +144,14 @@ const ReviewWrapper = styled.div`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+`;
+
+const ModalContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
 `;
 
 export default TradeHistory;

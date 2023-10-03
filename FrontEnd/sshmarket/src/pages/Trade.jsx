@@ -1,24 +1,37 @@
 import styled from "styled-components";
+import { useState } from "react";
 import Chat from "../components/chat/Chat";
+import NoChat from "../components/chat/NoChat";
+
 import ChatList from "../components/chat/ChatList";
 
-const Container = styled.div`
-  
-`;
+const Container = styled.div``;
 
 const ChatBox = styled.div`
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin: 40px 80px;
 `;
 
 export default function Trade() {
+  const [selectedTradeId, setSelectedTradeId] = useState(null);
+  const [messageFlag, setMessageFlag] = useState(null);
   return (
     <Container>
       <ChatBox>
-        <ChatList></ChatList>
-        <Chat></Chat>
+        <ChatList
+          setSelectedTradeId={setSelectedTradeId}
+          messageFlag={messageFlag}
+        ></ChatList>
+        {selectedTradeId === null ? ( // tradeId가 null인 경우 NoDataContainer 출력
+          <NoChat />
+        ) : (
+          <Chat
+            tradeId={selectedTradeId}
+            setMessageFlag={setMessageFlag}
+          ></Chat>
+        )}
       </ChatBox>
     </Container>
   );

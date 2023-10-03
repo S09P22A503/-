@@ -5,8 +5,8 @@ const GlobalVariableStyle = createGlobalStyle`
 :root {
   // color
   --primary: #5F0080;
-  --secondary: #E2E0F9;
-  --background: #F8F8F8;
+  --secondary: #B388EB;
+  --background: #F1C8FF;
   --red: red;
   --blue: blue;
   --gray-50: #f9fafb;
