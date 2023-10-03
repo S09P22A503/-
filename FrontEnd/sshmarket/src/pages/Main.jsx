@@ -95,28 +95,28 @@ export default function Main() {
       </CategoryBoxContainer>
       <MainArticleContainer>
         <ArticleContainer>
-          <ArticleCard></ArticleCard>
+          <ArticleCard width={280}></ArticleCard>
         </ArticleContainer>
         <ArticleContainer>
-          <ArticleCard></ArticleCard>
+          <ArticleCard width={280}></ArticleCard>
         </ArticleContainer>
         <ArticleContainer>
-          <ArticleCard></ArticleCard>
+          <ArticleCard width={280}></ArticleCard>
         </ArticleContainer>
         <ArticleContainer>
-          <ArticleCard></ArticleCard>
+          <ArticleCard width={280}></ArticleCard>
         </ArticleContainer>
         <ArticleContainer>
-          <ArticleCard></ArticleCard>
+          <ArticleCard width={280}></ArticleCard>
         </ArticleContainer>
         <ArticleContainer>
-          <ArticleCard></ArticleCard>
+          <ArticleCard width={280}></ArticleCard>
         </ArticleContainer>
         <ArticleContainer>
-          <ArticleCard></ArticleCard>
+          <ArticleCard width={280}></ArticleCard>
         </ArticleContainer>
         <ArticleContainer>
-          <ArticleCard></ArticleCard>
+          <ArticleCard width={280}></ArticleCard>
         </ArticleContainer>
       </MainArticleContainer>
     </Container>

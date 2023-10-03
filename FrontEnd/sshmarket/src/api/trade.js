@@ -44,7 +44,7 @@ const getTradeMessage = async ({ responseFunc, data }) => {
 
 const postCreateTrade = async ({ responseFunc, data }) => {
   try {
-    const response = await instance.get(`/trades`, data);
+    const response = await instance.post(`/trades`, data);
     console.log(response);
     processApiResponse({ responseFunc, response });
     return response;
