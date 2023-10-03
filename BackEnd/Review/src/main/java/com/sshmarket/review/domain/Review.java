@@ -14,34 +14,34 @@ import lombok.NonNull;
 public class Review {
 
     @Getter
-    private final Long id;
+    private Long id;
 
     @Getter
     @NonNull
-    private final Long memberId;
+    private Long memberId;
 
     @Getter
     @NonNull
-    private final Long articleId;
+    private Long articleId;
 
     @Getter
     @NonNull
-    private final Long buyHistoryId;
+    private Long buyHistoryId;
 
     @Getter
     @NonNull
-    private final String message;
+    private String message;
 
     @Getter
     @NonNull
-    private final int starRating;
+    private int starRating;
 
     @Getter
     @NonNull
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Getter
-    private final List<ReviewImage> reviewImages = new ArrayList<>();
+    private List<ReviewImage> reviewImages = new ArrayList<>();
 
     public static Review createReviewWithoutId(Long memberId, Long articleId, Long buyHistoryId,
             String message, int starRating) {
@@ -74,6 +74,29 @@ public class Review {
 
     public void addReviewImages(List<ReviewImage> reviewImages) {
         this.reviewImages.addAll(reviewImages);
+    }
+
+    public void modifyReview(String message, int starRating, List<Long> savedReviewIds,
+            List<ReviewImage> newReviewImages) {
+        if (message != null) {
+            this.message = message;
+        }
+
+        if (starRating != 0) {
+            this.starRating = starRating;
+        }
+
+        modifyReviewImages(savedReviewIds, newReviewImages);
+
+    }
+
+    private void modifyReviewImages(List<Long> savedReviewIds,
+            List<ReviewImage> newReviewImages) {
+
+        this.reviewImages.removeIf(
+                reviewImage -> !savedReviewIds.contains(reviewImage.getReviewId()));
+
+        this.addReviewImages(newReviewImages);
     }
 
 
