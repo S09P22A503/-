@@ -1,4 +1,4 @@
-import instance from "./instance";
+import axios from "axios";
 import processApiResponse from "../utils/api";
 
 const writeArticle = async ({ responseFunc, data }) => {
@@ -8,15 +8,27 @@ const writeArticle = async ({ responseFunc, data }) => {
 
   const formData = new FormData();
   const request = { memberId,productId,price,amount,mass,locationId,title,content,tradeType};
+  console.log(images)
   images.forEach((image) => formData.append("images", image));
+  
   formData.append("mainImage",mainImage)
+  formData.append('memberId', memberId);
+  formData.append('productId', productId);
+  formData.append('price', price);
+  formData.append('amount', amount);
+  formData.append('mass', mass);
+  formData.append('locationId', locationId);
+  formData.append('title', title);
+  formData.append('content', content);
+  formData.append('tradeType', tradeType);
 
-  formData.append(
-    "request",
-    new Blob([JSON.stringify(request)], { type: "application/json" })
-  );
+  console.log(formData)
   try {
-    const response = await instance.post(`/articles`,formData);
+    const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/articles`,formData,{
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+    });
     console.log(response);
     processApiResponse({ responseFunc, response });
     return response;
