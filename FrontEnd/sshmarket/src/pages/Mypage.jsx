@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import TradeHistory from "../components/mypage/TradeHistory";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MyArticle from "../components/mypage/MyArticle";
 import MyBookmark from "../components/mypage/MyBookmark";
 import MyProfile from "../components/mypage/MyProfile";
 import MyReview from "../components/mypage/MyReview";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -39,6 +41,10 @@ const CurrMenu = styled.div`
 `;
 
 export default function Mypage() {
+
+  const member = useSelector((state) => state.MemberReducer);
+  const navigate = useNavigate();
+
   const navMenuList = [
     "내 프로필",
     "등록 상품",
@@ -54,6 +60,13 @@ export default function Mypage() {
   const changeMenu = (menu) => {
     setCurrMenu(menu)
   }
+
+  useEffect(() => {
+    if (!member.id) {
+      alert("잘못된 접근입니다.");
+      navigate("/");
+    }
+  },[])
 
   return (
     <Container>
