@@ -32,7 +32,7 @@ public class ReviewController {
 
     @PatchMapping
     public ResponseEntity<?> reviewModify(ReviewModifyRequestDto reviewModifyRequestDto) {
-        modifyReviewUseCase.modifyReview(reviewModifyRequestDto);
+        modifyReviewUseCase.modifyReview(reviewModifyRequestDto.covertToCommand());
         return HttpResponse.ok(HttpStatus.OK, "리뷰를 수정했습니다.");
     }
 

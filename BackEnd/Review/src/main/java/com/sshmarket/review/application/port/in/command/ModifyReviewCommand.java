@@ -21,15 +21,18 @@ public class ModifyReviewCommand extends SelfValidating<ModifyReviewCommand> {
     @NotBlank
     private final String message;
 
-    private final List<MultipartFile> reviewImages;
+    private final List<Long> savedReviewIds;
+
+    private final List<MultipartFile> newReviewImages;
 
     @Builder
     public ModifyReviewCommand(Long id, Integer startRating, String message,
-            List<MultipartFile> reviewImages) {
+            List<Long> savedReviewIds, List<MultipartFile> newReviewImages) {
         this.id = id;
         this.startRating = startRating;
         this.message = message;
-        this.reviewImages = reviewImages;
+        this.savedReviewIds = savedReviewIds;
+        this.newReviewImages = newReviewImages;
         this.validateSelf();
     }
 

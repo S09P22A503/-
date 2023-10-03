@@ -20,16 +20,19 @@ public class ReviewModifyRequestDto {
     @NotBlank(message = "별점을 입력해주세요.")
     private Integer starRating;
 
+    private List<Long> savedReviewIds;
+
     @AllowedContentType(allowedTypes = {"image/jpg", "image/jpeg", "image/png"},
             allowedExtensions = {"jpg", "jpeg", "png"})
-    private List<MultipartFile> reviewImages;
+    private List<MultipartFile> newReviewImages;
 
     public ModifyReviewCommand covertToCommand() {
         return ModifyReviewCommand.builder()
                                   .id(id)
                                   .message(message)
                                   .startRating(starRating)
-                                  .reviewImages(reviewImages)
+                                  .savedReviewIds(savedReviewIds)
+                                  .newReviewImages(newReviewImages)
                                   .build();
     }
 }
