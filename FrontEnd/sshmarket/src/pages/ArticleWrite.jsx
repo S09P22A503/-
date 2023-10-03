@@ -206,13 +206,15 @@ export default function ArticleWrite() {
   //멤버 가져오기
   const member = useSelector((state) => state.MemberReducer)
 
+
+
   // 네비게이트 객체
   const navigate = useNavigate()
 
-  // if(!member.id){
-  //   alert("로그인을 해주세요!")
-  //   navigate('/')
-  // }
+  if(!member.id){
+    alert("로그인을 해주세요!")
+    navigate('/')
+  }
 
   const [showWeight, setShowWeight] = useState(false); // 토글 상태를 저장하기 위한 상태
 
@@ -334,7 +336,7 @@ export default function ArticleWrite() {
           },
         },
         data:{
-          memberId : member.memberId,
+          memberId : member.id,
           productId : selectedProductOption,
           price : productPrice,
           amount : productAmount,
