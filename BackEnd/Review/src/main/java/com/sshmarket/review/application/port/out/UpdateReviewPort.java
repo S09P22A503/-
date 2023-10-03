@@ -2,7 +2,8 @@ package com.sshmarket.review.application.port.out;
 
 import com.sshmarket.review.domain.Review;
 
-public interface LoadReviewPort {
+public interface UpdateReviewPort {
 
-    Review findReviewById(Long id);
+    void updateReview(Review review);
+
 }

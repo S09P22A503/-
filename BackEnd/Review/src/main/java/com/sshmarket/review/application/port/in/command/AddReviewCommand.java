@@ -1,8 +1,6 @@
-package com.sshmarket.review.application.port.in;
+package com.sshmarket.review.application.port.in.command;
 
 import com.sshmarket.review.common.SelfValidating;
-import com.sshmarket.review.domain.Review;
-import com.sshmarket.review.domain.ReviewImage;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import lombok.Builder;
