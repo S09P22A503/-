@@ -21,7 +21,6 @@ const writeArticle = async ({ responseFunc, data }) => {
   formData.append('title', title);
   formData.append('content', content);
   formData.append('tradeType', tradeType);
-
   console.log(formData)
   try {
     const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/articles`,formData,{
