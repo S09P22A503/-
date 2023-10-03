@@ -6,6 +6,7 @@ function useChat({ tradeId }) {
   const REACT_APP_SOCKET_URL = process.env.REACT_APP_SOCKET_URL;
   const stompCilent = useRef({});
   const [message, setMessage] = useState("");
+  const [curTradeId, setCurTradeId] = useState(null);
   const [newMessages, setNewMessages] = useState([]);
   const memberId = 10;
   const headers = {
@@ -37,6 +38,7 @@ function useChat({ tradeId }) {
     stompCilent.current.connect(headers, () => {
       setTimeout(function () {
         onConnected();
+        setCurTradeId(tradeId);
       }, 500);
     });
   }
@@ -60,6 +62,13 @@ function useChat({ tradeId }) {
   };
 
   useEffect(() => {
+    if (curTradeId != null) {
+      stompCilent.current?.unsubscribe({
+        Authorization: window.localStorage.getItem("accessToken"),
+        chatNumber: curTradeId,
+      });
+      stompCilent.current?.disconnect();
+    }
     connect();
     setNewMessages([]);
   }, [tradeId]);
