@@ -1,0 +1,46 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/sshmarket_review?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ssafy
+    password: ssafy
+  application:
+    name: auth-service
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+cloud:
+  aws:
+    s3:
+      bucket: a503
+    credentials:
+      access-key: AKIAVBDPFAQOKFRIMRGE
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+
+jwt:
+  secret: wearesixbacknofronthere
+  expiration: 86400000
+
+member:
+  url: http://member-spring-app:8082
