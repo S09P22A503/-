@@ -241,7 +241,7 @@ export default function ArticleWrite() {
   const categoryOptions = [{key:'1',category:"식량작물"},{key:'2',category:"채소류"},{key:'3',category:"특용작물"},{key:'4',category:"과일류"},{key:'6',category:"수산물"}]
 
   // 거래 카테고리 항목들
-  const transactionOptions = ["직거래","택배","무관"]
+  const transactionOptions = [{label:"직거래",value:"DIRECT"},{label:"택배",value:"PARCEL"},{label:"무관",value:"NONE"}]
 
   // 지역 카테고리 항목들
   const firstRegionOptions = ['무관','서울특별시', '부산광역시','대구광역시',
@@ -381,7 +381,7 @@ export default function ArticleWrite() {
           >
             <option value="999" disabled> 거래 방식 </option>
             {transactionOptions.map(transactionOption => (
-              <option value={transactionOption}>{transactionOption}</option>
+              <option value={transactionOption.value}>{transactionOption.label}</option>
             ))}
           </Dropdown>
 
