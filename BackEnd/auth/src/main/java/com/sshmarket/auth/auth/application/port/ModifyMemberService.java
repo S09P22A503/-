@@ -66,7 +66,10 @@ public class ModifyMemberService implements ModifyMemberUseCase {
         member.changeProfile(afterProfile.getUrl());
         memberRepository.updateMemberProfile(member);
 
-        memberProfileRepository.removeMemberProfile(beforeProfile);
+        if (beforeProfile != null) {
+            memberProfileRepository.removeMemberProfile(beforeProfile);
+        }
+
 
         member.fillToken(jwtAdmin.generateToken(member));
 
