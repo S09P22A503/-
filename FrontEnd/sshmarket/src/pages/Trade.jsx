@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Chat from "../components/chat/Chat";
 import NoChat from "../components/chat/NoChat";
-
 import ChatList from "../components/chat/ChatList";
 
 const Container = styled.div``;
@@ -17,6 +17,15 @@ const ChatBox = styled.div`
 export default function Trade() {
   const [selectedTradeId, setSelectedTradeId] = useState(null);
   const [messageFlag, setMessageFlag] = useState(null);
+  const { tradeId } = useParams();
+
+  useEffect(() => {
+    if (tradeId !== undefined) {
+      setSelectedTradeId(tradeId);
+      console.log("tradeId", tradeId);
+    }
+  }, [tradeId]);
+
   return (
     <Container>
       <ChatBox>
