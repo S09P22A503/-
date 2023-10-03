@@ -65,10 +65,47 @@ const getTradeHistory = async ({ responseFunc, data }) => {
   }
 };
 
+const getTradeDetail = async ({ responseFunc, data }) => {
+  const { tradeId } = data;
+
+  try {
+      const response = await instance.get(`/trades/detail/${tradeId}`);
+      console.log(response)
+      processApiResponse({ responseFunc, response });
+      return response;
+  } catch (e) {
+      return e.response;
+  }
+};
+
+const setTradeSell = async ({ responseFunc, data }) => {
+  const { tradeId } = data;
+
+  try {
+      instance.patch(`/trades/${tradeId}/sell`)
+  } catch (e) {
+      return e.response;
+  }
+};
+
+const setTradeBuy = async ({ responseFunc, data }) => {
+  const { tradeId, requestBody } = data;
+
+  try {
+      console.log(requestBody)
+      instance.post(`/trades/${tradeId}/buy`, requestBody)
+  } catch (e) {
+      return e.response;
+  }
+};
+
 export {
   getTradeList,
   getTradeListByKeyword,
   getTradeMessage,
   postCreateTrade,
-  getTradeHistory
+  getTradeHistory,
+  getTradeDetail,
+  setTradeSell,
+  setTradeBuy
 };
