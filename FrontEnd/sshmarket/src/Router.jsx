@@ -27,6 +27,7 @@ const router = createBrowserRouter([
       {
         path: "trade",
         element: <Trade />,
+        children: [{ path: ":tradeId", element: <Trade /> }],
       },
       {
         path: "article",
@@ -54,7 +55,7 @@ const router = createBrowserRouter([
   },
   {
     path: "login/oauth2/code/google",
-    element: <Login />
+    element: <Login />,
   },
   {
     path: "*",
