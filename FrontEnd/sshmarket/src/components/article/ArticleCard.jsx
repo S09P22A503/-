@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Star from "../common/Star";
 
 const Container = styled.div`
-  width: 290px;
+  width: ${({width}) => width}px;
   margin-right: 15px;
   border-radius: 15px;
   /* box-shadow: 2px 2px 2px #989797; */
@@ -60,10 +60,12 @@ export default function ArticleCard({
   starRating,
   reviewCnt,
   articleId,
+  width,
+  height
 }) {
   return (
-    <Container>
-      <ImageContainer width={290} height={300}>
+    <Container width={width?width:290}>
+      <ImageContainer width={width?width:290} height={height?height:300}>
         <Image src={mainImage}></Image>
       </ImageContainer>
       <InfoContainer>
