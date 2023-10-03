@@ -40,7 +40,7 @@ public class AddArticleUseCase {
         Location location = locationRepository.findLocationById(articleAddRequestDto.getLocationId())
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 지역입니다."));
 
-        Product product = productRepository.findProductById(articleAddRequestDto.getProductId())
+        Product product = productRepository.findProductByItemId(articleAddRequestDto.getItemId())
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 상품입니다."));;
 
         String directory = "article/image/";

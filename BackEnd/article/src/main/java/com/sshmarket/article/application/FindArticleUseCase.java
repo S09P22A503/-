@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class FindArticleUseCase {
+public class  FindArticleUseCase {
 // 디테일, 리스트, 정렬 기준 검색,
 
     private final ArticleRepository articleRepository;
@@ -45,14 +45,17 @@ public class FindArticleUseCase {
 
         Member member = memberFeignClient.getMember(memberId);
 
+
         ArticleDetailResponseDto responseDto = ArticleDetailResponseDto.builder()
                 .id(articleId)
                 .title(article.getTitle())
                 .amount(article.getAmount())
                 .mass(article.getMass())
+                .mainImage(article.getMainImage())
                 .images(article.getArticleImages().stream()
                         .map(ArticleImage::getImageUrl)
                         .collect(Collectors.toList()))
+                .itemId(article.getProduct().getItemId())
                 .content(article.getContent())
                 .location(article.getLocation().getLocationName())
                 .isLike(isLike)
@@ -67,9 +70,9 @@ public class FindArticleUseCase {
     }
 
     @Transactional(readOnly = true)
-    public Page<ArticleCardResponseDto> findArticleList(Integer itemId, Long locationId, TradeType tradeType, String keyword, Pageable pageable){
+    public Page<ArticleCardResponseDto> findArticleList(Integer category, Long locationId, TradeType tradeType, String keyword, Pageable pageable){
 
-        List<Article> articleList = articleRepository.findArticleListByKeyword(itemId, locationId, tradeType, keyword, pageable);
+        List<Article> articleList = articleRepository.findArticleListByKeyword(category, locationId, tradeType, keyword, pageable);
 
         // articleId의 리스트 추출
         List<Long> articleIds = articleList.stream()
