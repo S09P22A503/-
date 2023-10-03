@@ -114,6 +114,8 @@ public class TradeController {
     @GetMapping("/trades/detail/{tradeId}")
     public ResponseEntity<?> tradeDetail(@PathVariable("tradeId") Long tradeId,
             @CookieValue(value = "jwt", required = true) String token) {
+        System.out.println("--------------------------------------------------------");
+        System.out.println("tradeId = " + tradeId);
         return HttpResponse.okWithData(HttpStatus.OK, "채팅방 검색 성공했습니다.", findTradeUseCase.findTradeDetail(tradeId, token));
     }
 

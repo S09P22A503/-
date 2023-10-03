@@ -1,6 +1,7 @@
 package com.sshmarket.trade.dto;
 
 import com.sshmarket.trade.domain.Member;
+import java.util.LinkedHashMap;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -41,5 +42,19 @@ public class ArticleDetailResponseDto {
         this.content = content;
         this.location = location;
         this.isLike = isLike;
+    }
+
+    public static ArticleDetailResponseDto from(LinkedHashMap articleResponse) {
+        return ArticleDetailResponseDto.builder()
+                                       .id(new Long((Integer)articleResponse.get("id")))
+                                       .title((String)articleResponse.get("title"))
+                                       .price((Integer) articleResponse.get("price"))
+                                       .amount((Integer) articleResponse.get("amount"))
+                                       .mass((Integer) articleResponse.get("mass"))
+                                       .images((List<String>) articleResponse.get("images"))
+                                       .content((String) articleResponse.get("content"))
+                                       .location((String) articleResponse.get("location"))
+                                       .isLike((Boolean) articleResponse.get("isLike"))
+                                       .build();
     }
 }
