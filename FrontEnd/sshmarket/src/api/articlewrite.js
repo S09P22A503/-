@@ -10,7 +10,7 @@ const writeArticle = async ({ responseFunc, data }) => {
   const request = { memberId,productId,price,amount,mass,locationId,title,content,tradeType};
   console.log(images)
   images.forEach((image) => formData.append("images", image));
-  
+
   formData.append("mainImage",mainImage)
   formData.append('memberId', memberId);
   formData.append('productId', productId);
@@ -21,13 +21,13 @@ const writeArticle = async ({ responseFunc, data }) => {
   formData.append('title', title);
   formData.append('content', content);
   formData.append('tradeType', tradeType);
-
   console.log(formData)
   try {
     const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/articles`,formData,{
       headers: {
         "Content-Type": "multipart/form-data"
       },
+      withCredentials: true,
     });
     console.log(response);
     processApiResponse({ responseFunc, response });
