@@ -172,7 +172,7 @@ function PriceChart({itemId,chartHeight="400px",orientation = "horizontal"}) {
                       title: {
                         display: true,
                         fontSize: 30, // <--- this is not a managed option since CHART.JS 3
-                        text: `단위 : ${response.data[0].retailUnit =="kg" || response.data[0].retailUnit=="g" ? response.data[0].retailMass : parseInt(response.data[0].retailMass)} ${response.data[0].retailUnit} `
+                        text: `단위 : ${response.data[0].retailUnit =="kg" || response.data[0].retailUnit=="g" ? response.data[0].retailMass.slice(0,-8) : parseInt(response.data[0].retailMass)} ${response.data[0].retailUnit} `
                       }
                     }
                   }

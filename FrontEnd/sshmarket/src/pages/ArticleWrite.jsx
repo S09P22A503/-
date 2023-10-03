@@ -1,9 +1,12 @@
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {useState,useEffect} from 'react'
 import ImageUpload from "../components/article/ImageUpload";
 import MultipleImageUpload from "../components/article/MultipleImageUpload";
 import PriceChart from "../components/common/PriceChart"
 import { getProductData } from "../api/product";
+import { writeArticle } from "../api/articlewrite";
 
 const commonStyles = {
   border: '1px solid #B388EB',
@@ -15,7 +18,6 @@ const commonStyles = {
 const Container = styled.div`
   width: 1000px;
   margin: 0 auto;
-  font-family: 'Arial', sans-serif;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -200,6 +202,18 @@ const ImageUploadSection = styled.section`
 
 
 export default function ArticleWrite() {
+
+  //멤버 가져오기
+  const member = useSelector((state) => state.MemberReducer)
+
+  // 네비게이트 객체
+  const navigate = useNavigate()
+
+  // if(!member.id){
+  //   alert("로그인을 해주세요!")
+  //   navigate('/')
+  // }
+
   const [showWeight, setShowWeight] = useState(false); // 토글 상태를 저장하기 위한 상태
 
   // 가져올 상품 리스트들
@@ -221,6 +235,8 @@ export default function ArticleWrite() {
     fetchData()
   }, []);
 
+  //
+  
   // 상품 카테고리 항목들
   const categoryOptions = [{key:'1',category:"식량작물"},{key:'2',category:"채소류"},{key:'3',category:"특용작물"},{key:'4',category:"과일류"},{key:'6',category:"수산물"}]
 
@@ -228,12 +244,16 @@ export default function ArticleWrite() {
   const transactionOptions = ["직거래","택배","무관"]
 
   // 지역 카테고리 항목들
-  const regionOptions = ['무관', '서울특별시', '부산광역시','대구광역시',
-                        '인천광역시','광주광역시','대전광역시','울산광역시','세종특별자치시',
+  const firstRegionOptions = ['무관','서울특별시', '부산광역시','대구광역시',
+                        '인천광역시','광주광역시','대전광역시','울산광역시',
                         '경기도','강원특별자치도','충청북도','충청남도',
-                        '전라북도','전라남도','경상북도','경상남도','제주특별자치도'
+                        '전라북도','전라남도','경상북도','경상남도','제주특별자치도','세종특별자치시',
                         ]
   
+  const regionOptions = firstRegionOptions.map((region,index)=>{
+    return {locationId : index,locationName:region}
+  })
+
   // 상품 항목들 (선택한 상품 카테고리 항목에 따라 동적으로 바뀌어야함)
   const [productOptions,setProductOptions] = useState([]);
 
@@ -244,7 +264,7 @@ export default function ArticleWrite() {
   const [selectedTransactionOption, setSelectedTransactionOption] = useState("");
 
   // 선택한 지역 카테고리 항목
-  const [selectedRegionOption, setSelectedRegionOption] = useState("");
+  const [selectedRegionOption, setSelectedRegionOption] = useState(0);
 
   // 선택한 상품 항목
   const [selectedProductOption, setSelectedProductOption] = useState("999");
@@ -267,6 +287,12 @@ export default function ArticleWrite() {
 
   // 내용
   const [productContent,setProductContent] = useState("");
+
+  // 게시판 이미지들
+  const [uploadedImages, setUploadedImages] = useState([]);
+
+  // 대표 이미지
+  const [profileImage,setProfileImage] = useState(null);
 
   //카테고리 옵션 변경 콜백
   const handleCategoryOptionChange = (value) => {
@@ -295,7 +321,35 @@ export default function ArticleWrite() {
   // 거래 지역 변경시
   const handleRegionOptionChange = (value) =>{
     setSelectedRegionOption(value)
+    console.log(value)
   }
+
+  // 등록 버튼 눌렀을시
+  const onSubmit = ()=>{
+    async function fetchData() {
+      await writeArticle({
+        responseFunc: {
+          201: (response) => {
+            console.log(response)
+          },
+        },
+        data:{
+          memberId : member.memberId,
+          productId : selectedProductOption,
+          price : productPrice,
+          amount : productAmount,
+          mass : productWeight,
+          locationId : selectedRegionOption,
+          title : productTitle,
+          content: productContent,
+          tradeType : selectedTransactionOption,
+          mainImage: profileImage,
+          images : uploadedImages
+        }
+    });
+  }
+  fetchData();
+}
 
   return (
     <Container>
@@ -337,7 +391,7 @@ export default function ArticleWrite() {
           >
             <option value="999" disabled> 거래 지역 </option>
             {regionOptions.map(regionOption => (
-              <option value={regionOption}>{regionOption}</option>
+              <option value={regionOption.locationId}>{regionOption.locationName}</option>
             ))}
           </Dropdown>
 
@@ -353,11 +407,11 @@ export default function ArticleWrite() {
       />
       <ImageUploadSection>
         <SectionTitle>대표 이미지등록</SectionTitle>
-        <ImageUpload />
+        <ImageUpload image={profileImage} setImage={setProfileImage}/>
       </ImageUploadSection>    
        <ImageUploadSection>
         <SectionTitle>게시글 이미지등록</SectionTitle>
-        <MultipleImageUpload />
+        <MultipleImageUpload images={uploadedImages} setImages={setUploadedImages}/>
       </ImageUploadSection>
             
 
@@ -407,10 +461,9 @@ export default function ArticleWrite() {
         <TextArea id="productContent" value={productContent} onChange={(e)=>setProductContent(e.target.value)} ></TextArea>
       </Section>
       <Buttons>
-        <Button>등록하기</Button>
+        <Button onClick={onSubmit}>등록하기</Button>
         <Button secondary>취소하기</Button>
       </Buttons>
     </Container>
   );
-
 }

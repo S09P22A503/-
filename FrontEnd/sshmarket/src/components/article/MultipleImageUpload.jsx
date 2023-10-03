@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function MultipleImageUpload() {
-  const [images, setImages] = useState([]);
+function MultipleImageUpload({ images, setImages }) {
   const fileInputRef = React.createRef(); // 파일 입력 참조 생성
 
   const handleChange = (e) => {
