@@ -53,9 +53,22 @@ const postCreateTrade = async ({ responseFunc, data }) => {
   }
 };
 
+const getTradeHistory = async ({ responseFunc, data }) => {
+  const { memberId } = data;
+
+  try {
+      const response = await instance.get(`/trades/history/${memberId}`);
+      processApiResponse({ responseFunc, response });
+      return response;
+  } catch (e) {
+      return e.response;
+  }
+};
+
 export {
   getTradeList,
   getTradeListByKeyword,
   getTradeMessage,
   postCreateTrade,
+  getTradeHistory
 };
