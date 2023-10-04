@@ -46,7 +46,7 @@ public class  FindArticleUseCase {
 
         Boolean isLike = articleBookmarkRepository.isExistArticleBookmark(article, memberId);
 
-        Object memberResponse = ((LinkedHashMap) memberFeignClient.getMember(memberId)
+        Object memberResponse = ((LinkedHashMap) memberFeignClient.getMember(article.getMemberId())
                 .getBody()).get("data");
 
         Member member = null;
@@ -59,6 +59,7 @@ public class  FindArticleUseCase {
 
 
 //        Member member = Member.createWithPublicInfo(1L, "보숙", "https://images.chosun.com/resizer/iNZAEGcD0GFzHTGZrdNQpeiwTIw=/530x718/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/6NARDQ2I2QN3J3ZDAC4S6W5DHE.jpg");
+
         ArticleDetailResponseDto responseDto = ArticleDetailResponseDto.builder()
                 .id(articleId)
                 .title(article.getTitle())
