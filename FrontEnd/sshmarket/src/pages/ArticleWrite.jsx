@@ -352,7 +352,7 @@ export default function ArticleWrite() {
         responseFunc: {
           201: (response) => {
             console.log(response);
-            navigate(`/article/${response.data}`);
+            navigate(`/article/${response.data.data}`);
           },
           400: (response) => {
             alert("입력값이 잘못되었습니다.");
