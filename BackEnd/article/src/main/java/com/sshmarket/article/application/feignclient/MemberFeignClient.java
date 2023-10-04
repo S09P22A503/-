@@ -16,6 +16,6 @@ public interface MemberFeignClient {
     ResponseEntity<?> getMemberList(@RequestBody List<Long> idList);
 
     @GetMapping("/members/{memberId}")
-    ResponseEntity<?> getMember(@PathVariable Long memberId);
+    ResponseEntity<?> getMember(@PathVariable("memberId") Long memberId);
 
 }
