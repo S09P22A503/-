@@ -31,8 +31,8 @@ export default function ArticleDetail() {
     customAxios
       .get(`reviews/${param}`)
       .then((res) => {
-        setData(res.data.data);
         console.log(res.data.data);
+        setReview(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -42,7 +42,7 @@ export default function ArticleDetail() {
   return (
     <Container>
       <ArticlePk res={data}></ArticlePk>
-      <ReviewList></ReviewList>
+      <ReviewList data={review}></ReviewList>
     </Container>
   );
 }
