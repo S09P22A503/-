@@ -21,12 +21,8 @@ public class ArticleService {
         ObjectMapper objectMapper = new ObjectMapper();
         Object articleResponse = ((LinkedHashMap) articleClient.articleDetail(articleId)
                                                                .getBody()).get("data");
-        try {
-            return objectMapper.readValue(
-                    objectMapper.writeValueAsString(articleResponse),
-                    ArticleDetailResponseDto.class);
-        } catch (JsonProcessingException e) {
-            throw new NotFoundResourceException("해당 상품이 존재하지 않습니다.");
-        }
+        ArticleDetailResponseDto from = ArticleDetailResponseDto.from(
+                (LinkedHashMap) articleResponse);
+        return from;
     }
 }
