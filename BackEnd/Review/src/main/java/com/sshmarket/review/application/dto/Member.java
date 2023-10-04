@@ -1,4 +1,4 @@
-package com.sshmarket.review.application.feign;
+package com.sshmarket.review.application.dto;
 
 import lombok.Getter;
 

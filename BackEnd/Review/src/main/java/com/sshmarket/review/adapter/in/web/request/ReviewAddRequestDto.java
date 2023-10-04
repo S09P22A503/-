@@ -5,10 +5,16 @@ import com.sshmarket.review.application.port.in.command.AddReviewCommand;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewAddRequestDto {
 
     @NotBlank
@@ -37,7 +43,7 @@ public class ReviewAddRequestDto {
                                .articleId(articleId)
                                .buyHistoryId(buyHistoryId)
                                .message(message)
-                               .startRating(starRating)
+                               .starRating(starRating)
                                .reviewImages(reviewImages)
                                .build();
     }

@@ -6,4 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 interface JPAReviewRepository extends JpaRepository<JPAReviewEntity, Long> {
 
     List<JPAReviewEntity> findAllByMemberId(Long memberId);
+
+    List<JPAReviewEntity> findAllByArticleId(Long articleId);
+
+    Integer countByArticleId(Long articleId);
+
+
 }

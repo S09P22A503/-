@@ -21,16 +21,16 @@ class ReviewPersistenceAdapter implements SaveReviewPort, UpdateReviewPort {
     public Review saveReview(Review review) {
         JPAReviewEntity newReview = JPAReviewEntity.from(review);
 
+        JPAReviewEntity savedReview = reviewRepository.save(newReview);
+
         List<JPAReviewImageEntity> jpaReviewImageEntities = jpaReviewImageRepository.saveAll(
                 review.getReviewImages()
                       .stream()
-                      .map(JPAReviewImageEntity::from)
+                      .map(reviewImage -> JPAReviewImageEntity.from(reviewImage, savedReview))
                       .collect(
                               Collectors.toList()));
 
         newReview.addReviewImages(jpaReviewImageEntities);
-
-        JPAReviewEntity savedReview = reviewRepository.save(newReview);
 
         return savedReview.convertToDomain();
     }
@@ -43,7 +43,7 @@ class ReviewPersistenceAdapter implements SaveReviewPort, UpdateReviewPort {
         List<JPAReviewImageEntity> jpaReviewImageEntities = jpaReviewImageRepository.saveAll(
                 review.getReviewImages()
                       .stream()
-                      .map(JPAReviewImageEntity::from)
+                      .map(reviewImage -> JPAReviewImageEntity.from(reviewImage, oldReview))
                       .collect(
                               Collectors.toList()));
 

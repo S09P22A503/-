@@ -1,5 +1,6 @@
 package com.sshmarket.review.application.feign;
 
+import com.sshmarket.review.application.dto.Article;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,10 +15,10 @@ public class ArticleClientService {
 
     public Map<Long, String> getArticleInfo(List<Long> articleIds) {
 
-        List<Article> articles = articleClient.getArticleNames(List.copyOf(articleIds));
+        List<Article> articles = articleClient.getArticleTitle(List.copyOf(articleIds));
 
         return articles.stream()
                        .collect(Collectors.toMap(Article::getId,
-                               Article::getName));
+                               Article::getTitle));
     }
 }

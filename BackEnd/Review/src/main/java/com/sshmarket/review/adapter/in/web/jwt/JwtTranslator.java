@@ -1,6 +1,6 @@
 package com.sshmarket.review.adapter.in.web.jwt;
 
-import com.sshmarket.review.application.feign.Member;
+import com.sshmarket.review.application.dto.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import javax.annotation.PostConstruct;

@@ -1,5 +1,6 @@
 package com.sshmarket.review.adapter.out.persistence;
 
+import com.sshmarket.review.application.dto.ReviewRatingAndNum;
 import com.sshmarket.review.application.port.out.LoadReviewPort;
 import com.sshmarket.review.common.QueryRepository;
 import com.sshmarket.review.domain.Review;
@@ -9,10 +10,11 @@ import lombok.RequiredArgsConstructor;
 
 @QueryRepository
 @RequiredArgsConstructor
-class QueryReviewRepository implements LoadReviewPort {
+class ReviewQueryAdapter implements LoadReviewPort {
 
     private JPAReviewRepository jpaReviewRepository;
 
+    private QueryDslRepository queryDslRepository;
 
     @Override
     public Review findReviewById(Long id) {
@@ -30,5 +32,19 @@ class QueryReviewRepository implements LoadReviewPort {
         return myReviewList.stream()
                            .map(JPAReviewEntity::convertToDomain)
                            .toList();
+    }
+
+    @Override
+    public List<Review> findReviewByArticleId(Long articleId) {
+        List<JPAReviewEntity> articleReviews = jpaReviewRepository.findAllByArticleId(articleId);
+
+        return articleReviews.stream()
+                             .map(JPAReviewEntity::convertToDomain)
+                             .toList();
+    }
+
+    @Override
+    public List<ReviewRatingAndNum> findAllReviewAvgRatingAndNums(List<Long> articleIds) {
+        return queryDslRepository.findAllReviewAvgRatingAndNums(articleIds);
     }
 }
