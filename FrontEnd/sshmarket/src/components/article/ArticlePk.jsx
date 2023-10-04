@@ -142,9 +142,12 @@ export default function ArticlePk({ res }) {
   const { articleId } = useParams();
   const { id } = useSelector((state) => state.MemberReducer);
   const buyerId = id;
-  const sellerId = res.member.id;
+  const [sellerId, setSellerId] = useState("");
   useEffect(() => {
-    console.log(res);
+    console.log("ArticlePk", res);
+    console.log("setSellerId", res.member?.id);
+    console.log("buyerId", id);
+    setSellerId(res.member?.id);
   }, [res]);
   const createTrade = async () => {
     await postCreateTrade({
