@@ -107,7 +107,7 @@ export default function ArticlePk({ res }) {
     setCurrentIndex(index);
   }
 
-  const param = useLocation().pathname.split("/")[3];
+  const param = useLocation().pathname.split("/")[2];
 
   const handleLike = () => {
     axios
