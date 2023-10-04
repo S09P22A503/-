@@ -7,9 +7,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Builder
 public class Review {
 
@@ -37,7 +39,6 @@ public class Review {
     private int starRating;
 
     @Getter
-    @NonNull
     private LocalDateTime createdAt;
 
     @Getter
@@ -51,6 +52,7 @@ public class Review {
                      .buyHistoryId(buyHistoryId)
                      .message(message)
                      .starRating(starRating)
+                     .reviewImages(new ArrayList<>())
                      .build();
     }
 
@@ -65,6 +67,7 @@ public class Review {
                               .buyHistoryId(buyHistoryId)
                               .message(message)
                               .starRating(starRating)
+                              .reviewImages(new ArrayList<>())
                               .build();
 
         review.addReviewImages(reviewImages);
