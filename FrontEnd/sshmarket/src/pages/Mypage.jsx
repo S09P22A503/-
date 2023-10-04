@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import TradeHistory from "../components/mypage/TradeHistory";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyArticle from "../components/mypage/MyArticle";
 import MyBookmark from "../components/mypage/MyBookmark";
 import MyProfile from "../components/mypage/MyProfile";
 import MyReview from "../components/mypage/MyReview";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -40,10 +40,13 @@ const CurrMenu = styled.div`
   justify-content: center;
 `;
 
-export default function Mypage() {
+export default function Mypage({menu}) {
 
   const member = useSelector((state) => state.MemberReducer);
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const paramValue = searchParams.get('menu');
 
   const navMenuList = [
     "내 프로필",
@@ -53,9 +56,9 @@ export default function Mypage() {
     "리뷰 관리",
   ];
 
-  const menuComponentList = [MyProfile(), MyArticle(), MyBookmark(), TradeHistory(), MyReview()];
+  const menuComponentList = [MyProfile, MyArticle, MyBookmark, TradeHistory, MyReview];
 
-  const [currMenu, setCurrMenu] = useState(0);
+  const [currMenu, setCurrMenu] = useState(menu?menu:0);
   
   const changeMenu = (menu) => {
     setCurrMenu(menu)
@@ -68,6 +71,12 @@ export default function Mypage() {
     }
   },[])
 
+  useEffect(() => {
+    if (paramValue) {
+      setCurrMenu(paramValue)
+    }
+  },[])
+
   return (
     <Container>
       <NavBar>
@@ -76,7 +85,7 @@ export default function Mypage() {
         })}
       </NavBar>
       <CurrMenu>
-        {menuComponentList[currMenu]}
+        {React.createElement(menuComponentList[currMenu])}
       </CurrMenu>
     </Container>
   );
