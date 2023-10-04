@@ -351,6 +351,7 @@ export default function ArticleWrite() {
       await writeArticle({
         responseFunc: {
           201: (response) => {
+            console.log(response);
             navigate(`/article/${response.data}`);
           },
           400: (response) => {
