@@ -18,7 +18,6 @@ export default function Trade() {
   const [selectedTradeId, setSelectedTradeId] = useState(null);
   const [messageFlag, setMessageFlag] = useState(null);
   const { tradeId } = useParams();
-  const [member, setMember] = useState(null);
 
   useEffect(() => {
     if (tradeId !== undefined) {
@@ -31,7 +30,6 @@ export default function Trade() {
     <Container>
       <ChatBox>
         <ChatList
-          setMember={setMember}
           setSelectedTradeId={setSelectedTradeId}
           messageFlag={messageFlag}
         ></ChatList>
@@ -39,7 +37,6 @@ export default function Trade() {
           <NoChat />
         ) : (
           <Chat
-            member={member}
             tradeId={selectedTradeId}
             setMessageFlag={setMessageFlag}
           ></Chat>
