@@ -70,10 +70,9 @@ public class ModifyArticleUseCase {
         Article modifiedArticle = articleModifyRequestDto.toEntity(imageDir + mainImageName, imageUrls, location, product);
 
         originalArticle.modifyArticle(modifiedArticle);
-
-        articleImageRepository.saveImages(modifiedArticle.getArticleImages());
-
+        
         articleRepository.saveArticle(originalArticle);
+        articleImageRepository.saveImages(modifiedArticle.getArticleImages());
     }
 
     // 지워진 파일들의 url 리스트를 받아서 삭제
