@@ -209,10 +209,10 @@ export default function ArticleModify() {
   // 네비게이트 객체
   const navigate = useNavigate();
 
-  if (!member.id) {
-    alert("로그인을 해주세요!");
-    navigate("/");
-  }
+  // if (!member.id) {
+  //   alert("로그인을 해주세요!");
+  //   navigate("/");
+  // }
 
   const [showWeight, setShowWeight] = useState(false); // 토글 상태를 저장하기 위한 상태
 
@@ -599,7 +599,7 @@ export default function ArticleModify() {
       </Section>
       <Buttons>
         <Button onClick={onSubmit}>수정하기</Button>
-        <Button secondary>취소하기</Button>
+        <Button onClick={navigate(`/article/${articleId}`)}>취소하기</Button>
       </Buttons>
     </Container>
   );
