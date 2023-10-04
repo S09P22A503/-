@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useLocation} from "react-router-dom";
 import { useState, useEffect } from "react";
 import ImageUpload from "../components/article/ImageUpload";
 import MultipleImageUpload from "../components/article/MultipleImageUpload";
 import PriceChart from "../components/common/PriceChart";
 import { getProductData } from "../api/product";
-import { writeArticle } from "../api/articlewrite";
+import { modifyArticle } from "../api/articlemodify";
 import { readArticle } from "../api/articleread";
 const commonStyles = {
   border: "1px solid #B388EB",
@@ -199,6 +199,9 @@ const ImageUploadSection = styled.section`
 `;
 
 export default function ArticleModify() {
+
+
+  const articleId = useLocation().pathname.split("/")[3];
   //멤버 가져오기
   const member = useSelector((state) => state.MemberReducer);
 
@@ -269,6 +272,11 @@ export default function ArticleModify() {
     "세종특별자치시",
   ];
 
+  function findLocationIdByLocationName(locationName){
+    return regionOptions.findIndex((location)=> locationName === location.locationName);
+  }
+
+
   const regionOptions = firstRegionOptions.map((region, index) => {
     return { locationId: index, locationName: region };
   });
@@ -293,14 +301,14 @@ export default function ArticleModify() {
   const [productTitle, setProductTitle] = useState("");
 
   //중량
-  const [productWeight, setProductWeight] = useState("");
+  const [productWeight, setProductWeight] = useState(null);
 
   //중량 단위
-  const [productWeightUnit, setProductWeightUnit] = useState("");
+  const [productWeightUnit, setProductWeightUnit] = useState(null);
 
   //개수
 
-  const [productAmount, setProductAmount] = useState("");
+  const [productAmount, setProductAmount] = useState(null);
 
   // 가격
   const [productPrice, setProductPrice] = useState("");
@@ -313,6 +321,12 @@ export default function ArticleModify() {
 
   // 대표 이미지
   const [profileImage, setProfileImage] = useState(null);
+
+  const [deletedUrls,setDeletedUrls] = useState([]);
+
+  const [mainImageChanged,setMainImageChanged] = useState(false);
+
+
 
   // 처음 렌더링할때 해당하는 상품정보 가져오기
   useEffect(() => {
@@ -331,11 +345,25 @@ export default function ArticleModify() {
               mass,
               price,
               title,
+              tradeType
             } = response.data.data;
-
-            fetch(
-              "https://a503.s3.ap-northeast-2.amazonaws.com/review/images/44e1bd28-c0dd-4f8b-a2ff-4e235fcb2986.png"
-            ).then((res) => console.log(res));
+            setDeletedUrls(images);
+            fetch(mainImage).then(
+                (res)=> res.blob().then(
+                  (blob)=> {
+                    setProfileImage(blob)
+                  }
+                )
+            );
+            images.map((imageUrl)=>{
+              fetch(imageUrl).then(
+                (res)=> res.blob().then(
+                  (blob)=> setUploadedImages(prev=>[...prev,blob])
+                )
+              )
+            })
+            setSelectedTransactionOption(tradeType)
+            setSelectedRegionOption(findLocationIdByLocationName(location))
             setSelectedCategoryOption(parseInt(itemId / 100));
             setSelectedProductOption(itemId);
             setProductAmount(amount);
@@ -343,10 +371,9 @@ export default function ArticleModify() {
             setProductPrice(price);
             setProductTitle(title);
             setProductContent(content);
-            setProfileImage(mainImage);
           },
         },
-        articleId: 443,
+        articleId,
       });
     }
     fetchData();
@@ -383,13 +410,14 @@ export default function ArticleModify() {
   // 등록 버튼 눌렀을시
   const onSubmit = () => {
     async function fetchData() {
-      await writeArticle({
+      await modifyArticle({
         responseFunc: {
-          201: (response) => {
+          200: (response) => {
             console.log(response);
           },
         },
         data: {
+          articleId,
           memberId: member.id,
           productId: selectedProductOption,
           price: productPrice,
@@ -401,6 +429,8 @@ export default function ArticleModify() {
           tradeType: selectedTransactionOption,
           mainImage: profileImage,
           images: uploadedImages,
+          mainImageChanged,
+          deletedUrls
         },
       });
     }
@@ -482,7 +512,7 @@ export default function ArticleModify() {
       />
       <ImageUploadSection>
         <SectionTitle>대표 이미지등록</SectionTitle>
-        <ImageUpload image={profileImage} setImage={setProfileImage} />
+        <ImageUpload image={profileImage} setImage={setProfileImage} mainImageChanged={mainImageChanged} setMainImageChanged={setMainImageChanged}/>
       </ImageUploadSection>
       <ImageUploadSection>
         <SectionTitle>게시글 이미지등록</SectionTitle>

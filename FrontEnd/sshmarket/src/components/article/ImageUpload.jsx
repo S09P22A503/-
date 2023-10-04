@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect} from "react";
 
-function ImageUpload({ image, setImage }) {
+function ImageUpload({ image, setImage, mainImageChanged=false,setMainImageChanged=undefined}) {
   const [previewURL, setPreviewURL] = useState(null);
   const fileInputRef = useRef(null); // 파일 입력 요소 참조 생성
 
@@ -8,12 +8,18 @@ function ImageUpload({ image, setImage }) {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
-      console.log(file);
       setPreviewURL(URL.createObjectURL(file));
     } else {
       resetImage();
     }
+    if(setMainImageChanged) setMainImageChanged(true);
   };
+
+  useEffect(()=>{
+    if(image){
+      setPreviewURL(URL.createObjectURL(image));
+    }
+  },[image])
 
   const resetImage = () => {
     setImage(null);
