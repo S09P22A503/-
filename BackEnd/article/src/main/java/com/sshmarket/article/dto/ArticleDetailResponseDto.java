@@ -37,7 +37,7 @@ public class ArticleDetailResponseDto {
     private Boolean isLike;
 
     public ArticleDetailResponseDto(Long id, Member member, String title, Integer price, Integer amount, Integer mass, String mainImage,
-                                    List<String> images, Integer itemId, String content, String location, Boolean isLike) {
+                                    List<String> images, Integer itemId, String content, String location, TradeType tradeType, Boolean isLike) {
         this.id = id;
         this.member = member;
         this.title = title;
@@ -49,6 +49,7 @@ public class ArticleDetailResponseDto {
         this.itemId = itemId;
         this.content = content;
         this.location = location;
+        this.tradeType = tradeType;
         this.isLike = isLike;
     }
 }
