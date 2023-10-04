@@ -288,7 +288,7 @@ export default function ReviewModifyModal({ review, closeModal }) {
             id="closebtn"
           ></StyledButton>
         </CloseCheck>
-        <StyledButton content={"수정"}></StyledButton>
+        <StyledButton content={"수정"} onClick={updateReview}></StyledButton>
       </ButtonContainer>
     </Container>
   );
