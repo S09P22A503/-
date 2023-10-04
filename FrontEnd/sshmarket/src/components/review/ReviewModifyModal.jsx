@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { BsStar, BsStarFill } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StyledButton from "../Button/StyledButton";
 import axios from "axios";
 
@@ -96,20 +96,42 @@ export default function ReviewModifyModal({ review, closeModal }) {
   const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
 
   const [rating, setRating] = useState(
-    new Array(review.starRating)
-      .fill(true)
-      .concat(new Array(5 - review.starRating).fill(false))
+    review
+      ? new Array(review.starRating)
+          .fill(true)
+          .concat(new Array(5 - review.starRating).fill(false))
+      : ["true", "true", "true", "true", "true"]
   );
-  const [content, setContent] = useState(review.message);
+  const [content, setContent] = useState(review ? review.message : "");
   const [fileList, setFileList] = useState([
     new File([], "tmp"),
     new File([], "tmp"),
     new File([], "tmp"),
   ]);
   const [previewList, setPreviewList] = useState(
-    review.images.concat(new Array(3 - review.images.length).fill(""))
+    review
+      ? review.images.concat(new Array(3 - review.images.length).fill(""))
+      : ["", "", ""]
   );
-  const [fileIndex, setFileIndex] = useState(review.images.length);
+  const [fileIndex, setFileIndex] = useState(
+    review ? review.images.length : 0
+  );
+
+  useEffect(() => {
+    if (!review || !review.images) return;
+    let newFileList = [];
+    review.images.forEach(async (e,i) => {
+      try {
+        const res = await fetch(e);
+        const blob = await res.blob();
+        newFileList.push(new File(blob,"origin"+i));
+      } catch {
+        alert("리뷰 이미지를 불러오는 중 문제가 발생했습니다.");
+      }
+    })
+    newFileList.concat(new Array(3-newFileList.length).fill(new File([],"tmp")));
+    setFileList((prev) => newFileList);
+  },[])
 
   const changeRate = (i) => {
     let newRate = [];
@@ -197,7 +219,7 @@ export default function ReviewModifyModal({ review, closeModal }) {
           }
           onChange={changeContent}
           id="contentinput"
-          defaultValue={review.message}
+          defaultValue={review?review.message:""}
         ></ContentInput>
       </ContentContainer>
       <FileInputContainer>
