@@ -1,5 +1,6 @@
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import styled from "styled-components";
@@ -137,10 +138,12 @@ export default function ArticlePk({ res }) {
       .catch((err) => console.log(err));
   };
 
-  //articleId, buyerId, sellerId 수정필요
+  //sellerId 수정필요
   const navigate = useNavigate();
-  const articleId = 50;
-  const buyerId = 10;
+  const { articleId } = useParams();
+  const { id } = useSelector((state) => state.MemberReducer);
+  // const sellerId = member.id;
+  const buyerId = id;
   const sellerId = 20;
   useEffect(() => {
     console.log(res);
@@ -150,7 +153,7 @@ export default function ArticlePk({ res }) {
       responseFunc: {
         200: (response) => {
           const tradeId = response.data.data;
-          console.log(tradeId);
+          console.log("ArticlePk-buyerId", buyerId);
           navigate(`/trade/${tradeId}`, { state: { tradeId } });
         },
       },
