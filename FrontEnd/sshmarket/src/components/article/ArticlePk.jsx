@@ -138,13 +138,11 @@ export default function ArticlePk({ res }) {
       .catch((err) => console.log(err));
   };
 
-  //sellerId 수정필요
   const navigate = useNavigate();
   const { articleId } = useParams();
   const { id } = useSelector((state) => state.MemberReducer);
-  // const sellerId = member.id;
   const buyerId = id;
-  const sellerId = 20;
+  const sellerId = res.member.id;
   useEffect(() => {
     console.log(res);
   }, [res]);
