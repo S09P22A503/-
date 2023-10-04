@@ -351,9 +351,12 @@ export default function ArticleWrite() {
       await writeArticle({
         responseFunc: {
           201: (response) => {
-            navigate("/article/${response.data}");
+            navigate(`/article/${response.data}`);
           },
           400: (response) => {
+            alert("입력값이 잘못되었습니다.");
+          },
+          500: (response) => {
             alert("입력값이 잘못되었습니다.");
           },
         },
