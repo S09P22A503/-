@@ -11,6 +11,7 @@ import { IoMdHeart } from "react-icons/io";
 import PriceChart from "../common/PriceChart";
 import MemberProfile from "../common/MemberProfile";
 import { customAxios } from "../../api/customAxios";
+import axios from "axios";
 
 const Container = styled.div``;
 
@@ -107,7 +108,14 @@ export default function ArticlePk({ res }) {
   }
 
   const handleLike = () => {
-    customAxios()
+    axios
+      .create({
+        baseURL: process.env.REACT_APP_SERVER_URL,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
       .post(`articles/${res.articleId}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
@@ -119,7 +127,14 @@ export default function ArticlePk({ res }) {
   };
 
   const handleDislike = () => {
-    customAxios()
+    axios
+      .create({
+        baseURL: process.env.REACT_APP_SERVER_URL,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
       .delete(`articles/${res.articleId}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
@@ -181,13 +196,15 @@ export default function ArticlePk({ res }) {
       {res.title && (
         <ContentsContainer>
           <ButtonContainer>
-            <BookmarkButton>
-              {res.isLike ? (
-                <FillHeart onClick={handleDislike}></FillHeart>
-              ) : (
-                <EmptyHeart onClick={handleLike}></EmptyHeart>
-              )}
-            </BookmarkButton>
+            {res.isLike ? (
+              <BookmarkButton onClick={handleDislike}>
+                <FillHeart></FillHeart>
+              </BookmarkButton>
+            ) : (
+              <BookmarkButton onClick={handleLike}>
+                <EmptyHeart></EmptyHeart>
+              </BookmarkButton>
+            )}
             <StyledButton
               content="채팅하기"
               width={500}
