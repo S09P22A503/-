@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         element: <ArticleWrite />,
       },
       {
-        path: "article/modify",
+        path: "article/modify/:articleId",
         element: <ArticleModify />,
       },
       {
