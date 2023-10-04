@@ -91,19 +91,25 @@ const ButtonContainer = styled.div`
 
 const CloseCheck = styled.div``;
 
-export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
+export default function ReviewModifyModal({ review, closeModal }) {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
 
-  const [rating, setRating] = useState([true, true, true, true, true]);
-  const [content, setContent] = useState("");
+  const [rating, setRating] = useState(
+    new Array(review.starRating)
+      .fill(true)
+      .concat(new Array(5 - review.starRating).fill(false))
+  );
+  const [content, setContent] = useState(review.message);
   const [fileList, setFileList] = useState([
     new File([], "tmp"),
     new File([], "tmp"),
     new File([], "tmp"),
   ]);
-  const [previewList, setPreviewList] = useState(["", "", ""]);
-  const [fileIndex, setFileIndex] = useState(0);
+  const [previewList, setPreviewList] = useState(
+    review.images.concat(new Array(3 - review.images.length).fill(""))
+  );
+  const [fileIndex, setFileIndex] = useState(review.images.length);
 
   const changeRate = (i) => {
     let newRate = [];
@@ -171,38 +177,6 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
     document.getElementById("contentinput").value = "";
   };
 
-  const postReview = () => {
-    let formData = new FormData();
-    formData.append("articleId", articleId);
-    formData.append("tradeId", tradeId);
-    formData.append("starRating", rating.filter((e) => e === true).length);
-    formData.append("message", content);
-    formData.append(
-      "images",
-      fileList.filter((e) => e.size !== 0)
-    );
-
-    axios({
-      baseURL: SERVER_URL,
-      url: "/reviews",
-      method: "POST",
-      timeout: 10000,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "Access-Control-Allow-Origin": CLIENT_URL,
-        "Access-Control-Allow-Credentials": true,
-      },
-      withCredentials: true,
-    }).then((res) => {
-      alert(res.data.message);
-      document.getElementById("reset").click();
-      document.getElementById("closebtn").click();
-    })
-    .catch((e) => {
-      alert(e.response.data.message);
-    });
-  };
-
   return (
     <Container>
       <MessageContainer>{"이 상품을 추천하시겠어요?"}</MessageContainer>
@@ -223,6 +197,7 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
           }
           onChange={changeContent}
           id="contentinput"
+          defaultValue={review.message}
         ></ContentInput>
       </ContentContainer>
       <FileInputContainer>
@@ -251,9 +226,13 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
       </FileInputContainer>
       <ButtonContainer>
         <CloseCheck onClick={resetState} id="reset">
-          <StyledButton content={"취소"} onClick={closeModal} id="closebtn"></StyledButton>
+          <StyledButton
+            content={"취소"}
+            onClick={closeModal}
+            id="closebtn"
+          ></StyledButton>
         </CloseCheck>
-        <StyledButton content={"등록"} onClick={postReview}></StyledButton>
+        <StyledButton content={"수정"}></StyledButton>
       </ButtonContainer>
     </Container>
   );
