@@ -27,12 +27,12 @@ const Menu = styled.div`
   cursor: pointer;
 
   &:hover {
-    background-color: var(--secondary);
+    background-color: #ebdaff;
   }
   ${({ $active }) =>
     $active &&
     `
-    background-color: var(--secondary);
+    background-color: #ebdaff;
   `}
 `;
 
@@ -59,7 +59,7 @@ const SubMenu = styled.div`
   ${({ $active }) =>
     $active &&
     `
-    background-color: #d1cef2;
+    background-color: #d7b7fd;
   `}
 `;
 
@@ -74,7 +74,7 @@ const Category = styled.div`
   text-decoration: none;
   font-weight: bold;
   font-size: large;
-  background-color: var(--secondary);
+  background-color: #dfc3ff;
 `;
 
 const StyledLink = styled(Link)`
@@ -84,88 +84,45 @@ const StyledLink = styled(Link)`
 export default function SideBar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [clicked, setClicked] = useState(location.pathname);
-  const [subClicked, setSubClicked] = useState(false);
+  // const [clicked, setClicked] = useState(location.pathname);
 
-  console.log(clicked);
+  const url = new URL(document.URL);
+  const query = url.searchParams; //?appliedCompany=%E3%85%87%E3%85%87&job=hh&careerLevel=ALL
+  // console.log(query.get("appliedCompany"));
 
-  useEffect(() => {
-    if (location.pathname === "/mypage") {
-      navigate("/mypage/edit");
-    }
-
-    if (location.pathname === "/mypage/get") {
-      setClicked("내 쪽지함");
-      setSubClicked("get");
-    } else if (location.pathname === "/mypage/send") {
-      setSubClicked("send");
-    } else {
-      setClicked(location.pathname);
-    }
-  }, [location, navigate]);
+  const clicked = query.get("category");
 
   function handleClick(menu) {
-    setSubClicked(false);
-    setClicked(menu);
+    window.location.replace(linkList[menu]);
   }
 
   const menuList = [
-    "쌀/잡곡",
-    "채소",
-    "견과/건과",
-    "축산/계란",
-    "수산물/건어물",
-    "과일",
+    { id: 1, name: "쌀/잡곡" },
+    { id: 2, name: "채소" },
+    { id: 3, name: "식용작물" },
+    { id: 4, name: "과일" },
+    { id: 6, name: "수산물/건어물" },
   ];
   const linkList = [
-    "/mypage/edit",
-    "/mypage/study",
-    "/mypage/bookmark",
-    "/mypage/get",
-    "/mypage/calendar",
-    "/mypage/myarticle",
+    `/article?category=1`,
+    `/article?category=2`,
+    `/article?category=3`,
+    `/article?category=4`,
+    `/article?category=6`,
   ];
+
+  const category = [1, 2, 3, 4, 6];
+
   const menuListDoms = menuList.map((menu, idx) => {
-    if (menu === "내 쪽지함" && clicked) {
-      return (
-        <div key={idx}>
-          <Menu
-            $active={clicked === (menu || "/mypage/get" || "/mypage/send")}
-            onClick={() => setClicked(menu)}
-          >
-            {menu}
-          </Menu>
-          <StyledLink to={"/mypage/get"}>
-            <SubMenu
-              $dropdown={clicked === menu}
-              onClick={() => setSubClicked("get")}
-              $active={subClicked === "get"}
-            >
-              받은 쪽지함
-            </SubMenu>
-          </StyledLink>
-          <StyledLink to={"/mypage/send"}>
-            <SubMenu
-              $dropdown={clicked === menu}
-              onClick={() => setSubClicked("send")}
-              $active={subClicked === "send"}
-            >
-              보낸 쪽지함
-            </SubMenu>
-          </StyledLink>
-        </div>
-      );
-    } else {
-      return (
-        <StyledLink
-          to={linkList[idx]}
-          onClick={() => handleClick(linkList[idx])}
-          key={idx}
-        >
-          <Menu $active={clicked === linkList[idx]}>{menu}</Menu>
-        </StyledLink>
-      );
-    }
+    return (
+      <StyledLink
+        // to={linkList[idx]}
+        onClick={() => handleClick(idx)}
+        key={idx}
+      >
+        <Menu $active={clicked == menuList[idx].id}>{menu.name}</Menu>
+      </StyledLink>
+    );
   });
 
   return (
