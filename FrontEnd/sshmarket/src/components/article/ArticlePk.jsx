@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
@@ -11,6 +11,7 @@ import { IoMdHeart } from "react-icons/io";
 import PriceChart from "../common/PriceChart";
 import MemberProfile from "../common/MemberProfile";
 import { customAxios } from "../../api/customAxios";
+import axios from "axios";
 
 const Container = styled.div``;
 
@@ -106,20 +107,18 @@ export default function ArticlePk({ res }) {
     setCurrentIndex(index);
   }
 
-  // axios
-  // .create(config)
-  // .get(`articles/${param}`)
-  // .then((res) => {
-  //   setData(res.data.data);
-  //   console.log(res.data.data);
-  // })
-  // .catch((err) => {
-  //   console.log(err);
-  // });
+  const param = useLocation().pathname.split("/")[3];
 
   const handleLike = () => {
-    customAxios()
-      .post(`/${res.articleId}/bookmarks`)
+    axios
+      .create({
+        baseURL: process.env.REACT_APP_SERVER_URL,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
+      .post(`articles/${param}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
         console.log("버튼 눌렸음");
@@ -130,8 +129,15 @@ export default function ArticlePk({ res }) {
   };
 
   const handleDislike = () => {
-    customAxios()
-      .delete(`/${res.articleId}/bookmarks`)
+    axios
+      .create({
+        baseURL: process.env.REACT_APP_SERVER_URL,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
+      .delete(`articles/${param}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
       })
@@ -142,9 +148,12 @@ export default function ArticlePk({ res }) {
   const { articleId } = useParams();
   const { id } = useSelector((state) => state.MemberReducer);
   const buyerId = id;
-  const sellerId = res.member.id;
+  const [sellerId, setSellerId] = useState("");
   useEffect(() => {
-    console.log(res);
+    console.log("ArticlePk", res);
+    console.log("setSellerId", res.member?.id);
+    console.log("buyerId", id);
+    setSellerId(res.member?.id);
   }, [res]);
   const createTrade = async () => {
     await postCreateTrade({
@@ -189,17 +198,15 @@ export default function ArticlePk({ res }) {
       {res.title && (
         <ContentsContainer>
           <ButtonContainer>
-            <BookmarkButton>
-              {res.isLike ? (
-                <FillHeart
-                // onClick={handleDislike()}
-                ></FillHeart>
-              ) : (
-                <EmptyHeart
-                // onClick={handleLike()}
-                ></EmptyHeart>
-              )}
-            </BookmarkButton>
+            {res.isLike ? (
+              <BookmarkButton onClick={handleDislike}>
+                <FillHeart></FillHeart>
+              </BookmarkButton>
+            ) : (
+              <BookmarkButton onClick={handleLike}>
+                <EmptyHeart></EmptyHeart>
+              </BookmarkButton>
+            )}
             <StyledButton
               content="채팅하기"
               width={500}
@@ -228,7 +235,7 @@ export default function ArticlePk({ res }) {
               <InfoDetail>판매지 : {res.location}</InfoDetail>
             )}
           </InfoContainer>
-          <PriceChart itemId={res.itemId}></PriceChart>
+          <PriceChart itemId={res.itemId} orientation="vertical"></PriceChart>
           <ContentContainer>{res.content}</ContentContainer>
           <TextContainer>유사한 상품 추천</TextContainer>
           <RecommendArticle></RecommendArticle>

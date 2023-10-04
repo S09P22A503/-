@@ -85,8 +85,8 @@ function ChatList({ setSelectedTradeId, messageFlag }) {
     fetchData();
   };
 
-  const handleTradeClick = (tradeId) => {
-    setSelectedTradeId(tradeId); // 선택한 거래 ID 업데이트
+  const handleTradeClick = (trade) => {
+    setSelectedTradeId(trade.tradeId); // 선택한 거래 ID 업데이트
   };
 
   return (
@@ -126,7 +126,7 @@ function ChatList({ setSelectedTradeId, messageFlag }) {
           trades.map((trade) => (
             <TradeListBox
               key={trade.tradeId}
-              onClick={() => handleTradeClick(trade.tradeId)}
+              onClick={() => handleTradeClick(trade)}
             >
               <ProfileImageWrapper
                 src={trade.memberResponseDto.profile}
