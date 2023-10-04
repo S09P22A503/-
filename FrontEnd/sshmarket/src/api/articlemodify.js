@@ -20,10 +20,10 @@ const modifyArticle = async ({ responseFunc, data }) => {
   } = data;
 
   const formData = new FormData();
-  images.forEach((image) => formData.append("images", image));
+  images.forEach((image) => formData.append("images[]", image));
   formData.append("id",articleId)
   formData.append("mainImageChanged", mainImageChanged);
-  formData.append("deletedUrls", deletedUrls);
+  deletedUrls.forEach((url)=> formData.append("deletedUrls[]",url));
   formData.append("mainImage", mainImage);
   formData.append("memberId", memberId);
   formData.append("itemId", productId);

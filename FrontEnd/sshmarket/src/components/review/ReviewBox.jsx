@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Star from "../common/Star";
+import MemberProfile from "../common/MemberProfile";
 
 const Container = styled.div`
   margin-top: 40px;
@@ -57,9 +58,7 @@ const Image = styled.img`
 `;
 
 export default function ReviewBox({
-  memberId,
-  nickname,
-  profile,
+  member,
   key,
   starRating,
   articleTitle,
@@ -94,7 +93,7 @@ export default function ReviewBox({
       <ImageListContainer>
         {images.map((image, index) => (
           <ImageContainer width={280} height={280}>
-            <Image src={image} key={index} />
+            <Image src={image.index.imageUrl} key={index} />
           </ImageContainer>
         ))}
       </ImageListContainer>
