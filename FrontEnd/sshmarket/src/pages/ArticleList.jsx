@@ -4,6 +4,7 @@ import styled from "styled-components";
 import ArticleCard from "../components/article/ArticleCard";
 import Select from "react-select";
 import ArticleCardList from "../components/article/organism/ArticleCardList";
+import { customAxios } from "../api/customAxios";
 
 const Container = styled.div`
   display: flex;
@@ -21,82 +22,88 @@ const SelectContainger = styled.div`
 `;
 
 export default function ArticleList() {
-  const SERVER = process.env.REACT_APP_SERVER_URL;
-  const config = {
-    baseURL: SERVER,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+  const [data, setData] = useState([]);
 
-  const data = [
-    {
-      articleId: 6,
-      title: "제목1",
-      mainImage:
-        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-      mass: null,
-      amount: 10,
-      price: 10000,
-      starRating: 4.3,
-      reviewCnt: 10,
-    },
-    {
-      articleId: 6,
-      title: "제목1",
-      mainImage:
-        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-      mass: null,
-      amount: 10,
-      price: 10000,
-      starRating: 4.3,
-      reviewCnt: 10,
-    },
-    {
-      articleId: 6,
-      title: "제목1",
-      mainImage:
-        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-      mass: null,
-      amount: 10,
-      price: 10000,
-      starRating: 4.3,
-      reviewCnt: 10,
-    },
-    {
-      articleId: 6,
-      title: "제목1",
-      mainImage:
-        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-      mass: null,
-      amount: 10,
-      price: 10000,
-      starRating: 4.3,
-      reviewCnt: 10,
-    },
-    {
-      articleId: 6,
-      title: "제목5",
-      mainImage:
-        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-      mass: null,
-      amount: 10,
-      price: 10000,
-      starRating: 4.3,
-      reviewCnt: 10,
-    },
-    {
-      articleId: 5,
-      title: "제목6",
-      mainImage:
-        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-      mass: null,
-      amount: 10,
-      price: 10000,
-      starRating: 4.3,
-      reviewCnt: 10,
-    },
-  ];
+  useEffect(() => {
+    customAxios
+      .get(`articles?size=20&page=0`)
+      .then((res) => {
+        console.log(res.data.data);
+        setData(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // const data = [
+  //   {
+  //     articleId: 6,
+  //     title: "제목1",
+  //     mainImage:
+  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
+  //     mass: null,
+  //     amount: 10,
+  //     price: 10000,
+  //     starRating: 4.3,
+  //     reviewCnt: 10,
+  //   },
+  //   {
+  //     articleId: 6,
+  //     title: "제목1",
+  //     mainImage:
+  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
+  //     mass: null,
+  //     amount: 10,
+  //     price: 10000,
+  //     starRating: 4.3,
+  //     reviewCnt: 10,
+  //   },
+  //   {
+  //     articleId: 6,
+  //     title: "제목1",
+  //     mainImage:
+  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
+  //     mass: null,
+  //     amount: 10,
+  //     price: 10000,
+  //     starRating: 4.3,
+  //     reviewCnt: 10,
+  //   },
+  //   {
+  //     articleId: 6,
+  //     title: "제목1",
+  //     mainImage:
+  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
+  //     mass: null,
+  //     amount: 10,
+  //     price: 10000,
+  //     starRating: 4.3,
+  //     reviewCnt: 10,
+  //   },
+  //   {
+  //     articleId: 6,
+  //     title: "제목5",
+  //     mainImage:
+  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
+  //     mass: null,
+  //     amount: 10,
+  //     price: 10000,
+  //     starRating: 4.3,
+  //     reviewCnt: 10,
+  //   },
+  //   {
+  //     articleId: 5,
+  //     title: "제목6",
+  //     mainImage:
+  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
+  //     mass: null,
+  //     amount: 10,
+  //     price: 10000,
+  //     starRating: 4.3,
+  //     reviewCnt: 10,
+  //   },
+  // ];
 
   const handleOptionChange = (option) => {
     // setTradeSelect(option);
