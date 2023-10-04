@@ -9,7 +9,4 @@ interface JPAReviewRepository extends JpaRepository<JPAReviewEntity, Long> {
 
     List<JPAReviewEntity> findAllByArticleId(Long articleId);
 
-    Integer countByArticleId(Long articleId);
-
-
 }

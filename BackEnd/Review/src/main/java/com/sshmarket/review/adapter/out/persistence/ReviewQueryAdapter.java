@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class ReviewQueryAdapter implements LoadReviewPort {
 
-    private JPAReviewRepository jpaReviewRepository;
+    private final JPAReviewRepository jpaReviewRepository;
 
-    private QueryDslRepository queryDslRepository;
+    private final QueryDslRepository queryDslRepository;
 
     @Override
     public Review findReviewById(Long id) {
