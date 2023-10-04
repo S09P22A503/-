@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import styled from "styled-components";
@@ -90,17 +91,19 @@ export default function ArticlePk() {
     setCurrentIndex(index);
   }
 
-  //articleId, buyerId, sellerId 수정필요
+  //sellerId 수정필요
   const navigate = useNavigate();
-  const articleId = 50;
-  const buyerId = 10;
+  const { articleId } = useParams();
+  const { id } = useSelector((state) => state.MemberReducer);
+  // const sellerId = member.id;
+  const buyerId = id;
   const sellerId = 20;
   const createTrade = async () => {
     await postCreateTrade({
       responseFunc: {
         200: (response) => {
           const tradeId = response.data.data;
-          console.log(tradeId);
+          console.log("ArticlePk-buyerId", buyerId);
           navigate(`/trade/${tradeId}`, { state: { tradeId } });
         },
       },
