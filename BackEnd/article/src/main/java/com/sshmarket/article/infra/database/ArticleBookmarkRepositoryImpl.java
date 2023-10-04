@@ -4,8 +4,10 @@ import com.sshmarket.article.application.repository.ArticleBookmarkRepository;
 import com.sshmarket.article.domain.Article;
 import com.sshmarket.article.domain.ArticleBookmark;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -32,6 +34,11 @@ public class ArticleBookmarkRepositoryImpl implements ArticleBookmarkRepository 
     @Override
     public Optional<ArticleBookmark> findArticleBookmark(Article article, Long memberId) {
         return jpaArticleBookmarkRepository.findByArticleAndMemberId(article, memberId);
+    }
+
+    @Override
+    public List<ArticleBookmark> findArticleBookmarkByMemberId(Long memberId, Pageable pageable) {
+        return jpaArticleBookmarkRepository.findByMemberId(memberId, pageable);
     }
 
 }

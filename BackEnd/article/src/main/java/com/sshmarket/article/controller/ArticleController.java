@@ -6,6 +6,7 @@ import com.sshmarket.article.application.jwttranslator.JwtTranslator;
 import com.sshmarket.article.domain.TradeType;
 import com.sshmarket.article.dto.ArticleAddRequestDto;
 import com.sshmarket.article.dto.ArticleModifyRequestDto;
+import com.sshmarket.article.dto.ArticleTitleResponseDto;
 import com.sshmarket.article.dto.Member;
 import com.sshmarket.article.global.dto.HttpResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
@@ -110,5 +112,32 @@ public class ArticleController {
                                          Pageable pageable){
         return HttpResponse.okWithData(HttpStatus.OK, "판매글 리스트 조회 성공",
                 findArticleUseCase.findArticleList(category, LocationId, tradeType, keyword, pageable));
+    }
+
+    @GetMapping("/articleTitle")
+    public List<ArticleTitleResponseDto> articleTitleList(@RequestParam List<Long> articleIds){
+
+        return findArticleUseCase.findArticleTitleByArticleIds(articleIds);
+    }
+
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<?> memberArticleList(@PathVariable Long memberId, Pageable pageable){
+
+        return HttpResponse.okWithData(HttpStatus.OK, "멤버 작성 판매글 리스트 조회 성공",
+                findArticleUseCase.memberArticleList(memberId, pageable));
+    }
+
+    @GetMapping("/bookmark/{memberId}")
+    public ResponseEntity<?> bookmarkArticleList(@PathVariable Long memberId, Pageable pageable){
+
+        return HttpResponse.okWithData(HttpStatus.OK, "북마크한 판매글 리스트 조회 성공",
+                findArticleUseCase.bookmarkArticleList(memberId, pageable));
+    }
+
+    @GetMapping("/recommend")
+    public ResponseEntity<?> articleListByArticleIdList(@RequestParam List<Long> articleId) {
+
+        return HttpResponse.okWithData(HttpStatus.OK, "추천 글 리스트 조회 성공",
+                findArticleUseCase.articleListByArticleIdList(articleId));
     }
 }
