@@ -1,21 +1,63 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styled from "styled-components";
 import { useEffect, useState, useRef } from "react";
-import { ReactComponent as Profile } from "../../assets/icons/profile.svg";
+import { useSelector } from "react-redux";
 import { ReactComponent as Send } from "../../assets/icons/send.svg";
-import { ReactComponent as Close } from "../../assets/icons/close-icon.svg";
 import { useChat } from "../../hooks";
-import { getTradeMessage } from "../../api/trade.js";
+import {
+  getTradeMessage,
+  getTradeDetail,
+  setTradeSell,
+  setTradeBuy,
+} from "../../api/trade.js";
 
-function Chat({ tradeId, setMessageFlag }) {
+function Chat({ tradeId, setMessageFlag, member }) {
   const { message, sendMessage, newMessages, ChangeMessages } = useChat({
     tradeId,
   });
   const [messages, setMessages] = useState();
-  const memberId = 10;
+  const [tradeDetail, setTradeDetail] = useState();
+  const { id } = useSelector((state) => state.MemberReducer);
+  const memberId = id;
+  const [showButtons, setShowButtons] = useState(true);
 
   // TradeBox를 참조하기 위한 useRef 생성
   const tradeBoxRef = useRef(null);
+
+  const handleTradeFinish = async (isSeller, status) => {
+    try {
+      if (isSeller) {
+        // 판매자인 경우에 수행할 동작 추가
+        if (status === "CHAT") {
+          await setTradeSell({ data: { tradeId } });
+          tradeDetail.staus = "ACCEPT";
+          alert("판매 완료 처리되었습니다.");
+          setShowButtons(false);
+        } else if (status === "ACCEPT") {
+          alert("이미 판매 완료 처리되었습니다.");
+        }
+      } else {
+        // 구매자인 경우에 수행할 동작 추가
+        if (status === "ACCEPT") {
+          const requestBody = {
+            price: tradeDetail.price,
+            title: tradeDetail.articleTitle,
+            mainImage: tradeDetail.mainImage,
+          };
+          await setTradeBuy({ data: { tradeId, requestBody } });
+          tradeDetail.staus = "FINISH";
+          setShowButtons(false);
+          alert("구매 확정 처리되었습니다.");
+        } else if (status === "FINISH") {
+          alert("이미 구매 확정 처리되었습니다.");
+        }
+      }
+      // Trade가 성공적으로 완료되면 메시지나 상태 업데이트 등을 처리할 수 있음
+      // 예: setMessageFlag(true);
+    } catch (error) {
+      console.error("거래 완료 처리에 실패했습니다.", error);
+    }
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -24,6 +66,15 @@ function Chat({ tradeId, setMessageFlag }) {
           responseFunc: {
             200: (response) => {
               setMessages(response.data.data);
+            },
+          },
+          data: { tradeId },
+        });
+
+        await getTradeDetail({
+          responseFunc: {
+            200: (response) => {
+              setTradeDetail(response.data.data);
             },
           },
           data: { tradeId },
@@ -45,29 +96,62 @@ function Chat({ tradeId, setMessageFlag }) {
       <TradeTitleContainer>
         <TradeTitleBox>
           <ProfileBox>
-            <ProfileImageWrapper>
-              <Profile />
-            </ProfileImageWrapper>
+            <ProfileImageWrapper src={member.profile}></ProfileImageWrapper>
             <ProfileWrapper>
-              <NameWrapper>생소한 마켓</NameWrapper>
-              <TitleWrapper>23년산 햇감자 3KG (중) 단품</TitleWrapper>
+              <NameWrapper>{member.nickname}</NameWrapper>
+              <TitleWrapper>{tradeDetail?.articleTitle}</TitleWrapper>
             </ProfileWrapper>
           </ProfileBox>
           <TradeWrapper>
-            <PriceWrapper>20000원</PriceWrapper>
+            <PriceWrapper>{tradeDetail?.price}원</PriceWrapper>
             <TradeButtonBox>
-              <TradeFinishButton>
-                <TradeFinishWrapper>거래완료</TradeFinishWrapper>
+              <TradeFinishButton
+                style={{
+                  display:
+                    !showButtons ||
+                    (tradeDetail?.isSeller === false &&
+                      tradeDetail?.status === "FINISH") ||
+                    (tradeDetail?.isSeller === true &&
+                      tradeDetail?.status === "ACCEPT")
+                      ? "none"
+                      : "block",
+                }}
+              >
+                <TradeFinishWrapper
+                  onClick={() => {
+                    handleTradeFinish(
+                      tradeDetail?.isSeller,
+                      tradeDetail.status
+                    );
+                  }}
+                >
+                  {tradeDetail?.isSeller === false ? "구매확정" : "판매완료"}
+                </TradeFinishWrapper>
               </TradeFinishButton>
-              <TradeCancelButton>
-                <TradeCancelWrapper>거래취소</TradeCancelWrapper>
+              <TradeCancelButton
+                style={{
+                  display:
+                    !showButtons ||
+                    (tradeDetail?.isSeller === false &&
+                      tradeDetail?.status === "FINISH") ||
+                    (tradeDetail?.isSeller === true &&
+                      tradeDetail?.status === "ACCEPT")
+                      ? "none"
+                      : "block",
+                }}
+              >
+                <TradeCancelWrapper
+                  onClick={() => {
+                    // 여기에 거래취소 버튼 클릭 시 수행할 작업 추가
+                    setShowButtons(false); // 거래취소 버튼 클릭 시 버튼 숨기기
+                  }}
+                >
+                  거래취소
+                </TradeCancelWrapper>
               </TradeCancelButton>
             </TradeButtonBox>
           </TradeWrapper>
         </TradeTitleBox>
-        <CloseWrapper>
-          <Close />
-        </CloseWrapper>
       </TradeTitleContainer>
       <TradeBox ref={tradeBoxRef}>
         {messages &&
@@ -78,9 +162,7 @@ function Chat({ tradeId, setMessageFlag }) {
               </RightMessageBox>
             ) : (
               <MessageBox key={message.id}>
-                <ProfileImageWrapper>
-                  <Profile />
-                </ProfileImageWrapper>
+                <ProfileImageWrapper src={member.profile}></ProfileImageWrapper>
                 <LeftMessageBox>{message.message}</LeftMessageBox>
               </MessageBox>
             )
@@ -93,9 +175,7 @@ function Chat({ tradeId, setMessageFlag }) {
               </RightMessageBox>
             ) : (
               <MessageBox key={index}>
-                <ProfileImageWrapper>
-                  <Profile />
-                </ProfileImageWrapper>
+                <ProfileImageWrapper src={member.profile}></ProfileImageWrapper>
                 <LeftMessageBox>{newMessage.message}</LeftMessageBox>
               </MessageBox>
             )
@@ -144,9 +224,10 @@ const ProfileBox = styled.div`
   margin-right: 235px;
 `;
 
-const ProfileImageWrapper = styled.div`
+const ProfileImageWrapper = styled.img`
   width: 36px;
   height: 36px;
+  border-radius: 50%;
 `;
 
 const ProfileWrapper = styled.div`
@@ -237,13 +318,6 @@ const TradeCancelWrapper = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-`;
-
-const CloseWrapper = styled.div`
-  display: flex;
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
 `;
 
 const TradeBox = styled.div`
