@@ -47,13 +47,13 @@ public class AddArticleUseCase {
         else product = productList.get(0);
 
         String directory = "article/image/";
-        String mainImageName = imageDir + makeFileName(directory, articleAddRequestDto.getMainImage());
+        String mainImageName = makeFileName(directory, articleAddRequestDto.getMainImage());
         List<String> imageFileNames = new ArrayList<>();
         List<ArticleImage> images = new ArrayList<>();
 
         uploadList(directory, articleAddRequestDto.getImages(), imageFileNames, images);
 
-        Article article = articleAddRequestDto.toEntity(mainImageName, imageFileNames, location, product);
+        Article article = articleAddRequestDto.toEntity(imageDir + mainImageName, imageFileNames, location, product);
         Long id = articleRepository.saveArticle(article).getId();
 
         articleImageRepository.saveImages(article.getArticleImages());
