@@ -44,8 +44,10 @@ public class ModifyArticleUseCase {
         Location location = locationRepository.findLocationById(articleModifyRequestDto.getLocationId())
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 지역입니다."));
 
-        Product product = productRepository.findProductByItemId(articleModifyRequestDto.getItemId())
-                .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 상품입니다."));
+        List<Product> productList = productRepository.findProductByItemId(articleModifyRequestDto.getItemId());
+        Product product = null;
+        if(productList.size()==0) throw new NotFoundResourceException("존재하지 않는 상품입니다.");
+        else product = productList.get(0);
 
 
         String mainImageName = "";

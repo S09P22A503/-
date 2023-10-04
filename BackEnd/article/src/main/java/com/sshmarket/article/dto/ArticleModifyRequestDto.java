@@ -26,7 +26,7 @@ public class ArticleModifyRequestDto {
     private Long memberId;
 
     @NotNull(message = "상품 id가 비었습니다.")
-    private Long itemId;
+    private Integer itemId;
 
     @NotNull(message = "가격을 입력해주세요.")
     private Integer price;

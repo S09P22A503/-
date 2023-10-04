@@ -40,8 +40,11 @@ public class AddArticleUseCase {
         Location location = locationRepository.findLocationById(articleAddRequestDto.getLocationId())
                 .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 지역입니다."));
 
-        Product product = productRepository.findProductByItemId(articleAddRequestDto.getItemId())
-                .orElseThrow(()-> new NotFoundResourceException("존재하지 않는 상품입니다."));;
+        System.out.println(articleAddRequestDto.getItemId());
+        List<Product> productList = productRepository.findProductByItemId(articleAddRequestDto.getItemId());
+        Product product = null;
+        if(productList.size()==0) throw new NotFoundResourceException("존재하지 않는 상품입니다.");
+        else product = productList.get(0);
 
         String directory = "article/image/";
         String mainImageName = imageDir + makeFileName(directory, articleAddRequestDto.getMainImage());
