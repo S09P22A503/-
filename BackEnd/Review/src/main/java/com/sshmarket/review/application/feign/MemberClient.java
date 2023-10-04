@@ -1,5 +1,6 @@
 package com.sshmarket.review.application.feign;
 
+import com.sshmarket.review.application.dto.MemberIdRequestDto;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface MemberClient {
 
     @PostMapping("/members/list")
-    ResponseEntity<?> memberList(@RequestBody List<Long> idList);
+    ResponseEntity<?> memberList(@RequestBody MemberIdRequestDto memberIdRequestDto);
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sshmarket.review.application.dto.Member;
+import com.sshmarket.review.application.dto.MemberIdRequestDto;
 import com.sshmarket.review.exception.NotFoundException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,7 +24,7 @@ public class MemberClientService {
     public Map<Long, Member> getMembersInfo(List<Long> memberIds) {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        ResponseEntity<?> response = memberClient.memberList(memberIds);
+        ResponseEntity<?> response = memberClient.memberList(new MemberIdRequestDto(memberIds));
 
         Object memberInfo = ((LinkedHashMap) response.getBody()).get("data");
 
