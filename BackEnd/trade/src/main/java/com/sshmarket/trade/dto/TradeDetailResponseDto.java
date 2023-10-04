@@ -14,6 +14,7 @@ public class TradeDetailResponseDto {
     private Status status;
     private Boolean isSeller;
     private Long articleId;
+    private String mainImage;
 
     public static TradeDetailResponseDto from(Trade trade, Long userId,
             ArticleDetailResponseDto article) {
@@ -23,6 +24,7 @@ public class TradeDetailResponseDto {
                                      .status(trade.getStatus())
                                      .isSeller(userId.equals(trade.getSellerId()) ? true : false)
                                      .articleId(article.getId())
+                                     .mainImage(article.getMainImage())
                                      .build();
     }
 }

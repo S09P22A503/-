@@ -24,12 +24,5 @@ public class ArticleService {
         ArticleDetailResponseDto from = ArticleDetailResponseDto.from(
                 (LinkedHashMap) articleResponse);
         return from;
-//        try {
-//            return objectMapper.readValue(
-//                    objectMapper.writeValueAsString(articleResponse),
-//                    ArticleDetailResponseDto.class);
-//        } catch (JsonProcessingException e) {
-//            throw new NotFoundResourceException("해당 상품이 존재하지 않습니다.");
-//        }
     }
 }

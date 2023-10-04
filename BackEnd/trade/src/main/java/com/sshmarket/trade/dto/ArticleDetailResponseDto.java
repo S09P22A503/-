@@ -31,18 +31,7 @@ public class ArticleDetailResponseDto {
 
     private Boolean isLike;
 
-    public ArticleDetailResponseDto(Long id, Member member, String title, Integer price, Integer amount, Integer mass, List<String> images, String content, String location, Boolean isLike) {
-        this.id = id;
-        this.member = member;
-        this.title = title;
-        this.price = price;
-        this.amount = amount;
-        this.mass = mass;
-        this.images = images;
-        this.content = content;
-        this.location = location;
-        this.isLike = isLike;
-    }
+    private String mainImage;
 
     public static ArticleDetailResponseDto from(LinkedHashMap articleResponse) {
         return ArticleDetailResponseDto.builder()
@@ -55,6 +44,7 @@ public class ArticleDetailResponseDto {
                 .content((String) articleResponse.get("content"))
                 .location((String) articleResponse.get("location"))
                 .isLike((Boolean) articleResponse.get("isLike"))
+                .mainImage((String) articleResponse.get("mainImage"))
                 .build();
     }
 }
