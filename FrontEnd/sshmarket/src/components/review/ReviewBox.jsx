@@ -90,7 +90,7 @@ export default function ReviewBox({
       <ImageListContainer>
         {images.map((image, index) => (
           <ImageContainer width={280} height={280}>
-            <Image src={image.imageUrl} key={index} />
+            <Image src={image.index.imageUrl} key={index} />
           </ImageContainer>
         ))}
       </ImageListContainer>
