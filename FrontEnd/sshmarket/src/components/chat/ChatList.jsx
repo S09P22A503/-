@@ -29,7 +29,7 @@ function formatDateTime(inputDateString) {
   }
 }
 
-function ChatList({ setSelectedTradeId, messageFlag, setMember }) {
+function ChatList({ setSelectedTradeId, messageFlag }) {
   const keywordInputRef = useRef(null);
   const [keyword, setKeyword] = useState("");
 
@@ -87,7 +87,6 @@ function ChatList({ setSelectedTradeId, messageFlag, setMember }) {
 
   const handleTradeClick = (trade) => {
     setSelectedTradeId(trade.tradeId); // 선택한 거래 ID 업데이트
-    setMember(trade.memberResponseDto);
   };
 
   return (
