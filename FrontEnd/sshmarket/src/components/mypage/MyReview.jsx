@@ -65,9 +65,9 @@ export default function MyReview() {
       });
   }, []);
 
-  const deleteReview = () => {
+  // const deleteReview = () => {
 
-  }
+  // }
   
   return (
     <Container>
