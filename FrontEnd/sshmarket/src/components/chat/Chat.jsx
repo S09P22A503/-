@@ -1,18 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styled from 'styled-components';
 import { useEffect, useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { ReactComponent as Profile } from '../../assets/icons/profile.svg';
 import { ReactComponent as Send } from '../../assets/icons/send.svg';
 import { useChat } from '../../hooks';
 import { getTradeMessage, getTradeDetail, setTradeSell, setTradeBuy } from '../../api/trade.js';
 
-function Chat({ tradeId, setMessageFlag }) {
+function Chat({ tradeId, setMessageFlag, member }) {
     const { message, sendMessage, newMessages, ChangeMessages } = useChat({
         tradeId,
     });
     const [messages, setMessages] = useState();
     const [tradeDetail, setTradeDetail] = useState();
-    const memberId = 10;
+    const { id } = useSelector((state) => state.MemberReducer);
+    const memberId = id;
     const [showButtons, setShowButtons] = useState(true);
 
     // TradeBox를 참조하기 위한 useRef 생성
@@ -90,11 +92,9 @@ function Chat({ tradeId, setMessageFlag }) {
             <TradeTitleContainer>
                 <TradeTitleBox>
                     <ProfileBox>
-                        <ProfileImageWrapper>
-                            <Profile />
-                        </ProfileImageWrapper>
+                        <ProfileImageWrapper src={member.profile}></ProfileImageWrapper>
                         <ProfileWrapper>
-                            <NameWrapper>생소한 마켓</NameWrapper>
+                            <NameWrapper>{member.nickname}</NameWrapper>
                             <TitleWrapper>{tradeDetail?.articleTitle}</TitleWrapper>
                         </ProfileWrapper>
                     </ProfileBox>
@@ -209,7 +209,7 @@ const ProfileBox = styled.div`
     margin-right: 235px;
 `;
 
-const ProfileImageWrapper = styled.div`
+const ProfileImageWrapper = styled.img`
     width: 36px;
     height: 36px;
 `;

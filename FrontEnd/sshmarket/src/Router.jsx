@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import ArticleDetail from "./pages/ArticleDetail";
 import ArticleList from "./pages/ArticleList";
 import ArticleWrite from "./pages/ArticleWrite";
+import ArticleModify from "./pages/ArticleModify";
 import Login from "./pages/Login";
 import Main from "./pages/Main";
 import Mypage from "./pages/Mypage";
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "article/write",
         element: <ArticleWrite />,
+      },
+      {
+        path: "article/modify",
+        element: <ArticleModify />,
       },
       {
         path: "mypage",
