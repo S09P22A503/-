@@ -25,7 +25,6 @@ const TitleContainer = styled.div`
   margin-bottom: 15px;
   font-weight: bold;
   font-size: larger;
-
 `;
 
 const InfoContainer = styled.div`
@@ -95,7 +94,7 @@ export default function ReviewBox({
       <ImageListContainer>
         {images.map((image, index) => (
           <ImageContainer width={280} height={280}>
-            <Image src={image.index.imageUrl} key={index} />
+            <Image src={image.imageUrl} key={index} />
           </ImageContainer>
         ))}
       </ImageListContainer>
