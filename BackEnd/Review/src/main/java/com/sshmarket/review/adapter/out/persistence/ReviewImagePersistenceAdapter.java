@@ -1,6 +1,4 @@
 package com.sshmarket.review.adapter.out.persistence;
-
-import com.sshmarket.review.application.port.out.InsertReviewImagePort;
 import com.sshmarket.review.application.port.out.UploadReviewImagePort;
 import com.sshmarket.review.common.PersistenceAdapter;
 import lombok.AllArgsConstructor;

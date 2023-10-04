@@ -11,36 +11,30 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class AddReviewCommand extends SelfValidating<AddReviewCommand> {
-    
-    @NotBlank
+public class AddReviewCommand {
+
     private final Long memberId;
 
-    @NotBlank
     private final Long articleId;
 
-    @NotBlank
     private final Long buyHistoryId;
 
-    @NotBlank
-    private final Integer startRating;
+    private final Integer starRating;
 
-    @NotBlank
     private final String message;
 
     private final List<MultipartFile> reviewImages;
 
     @Builder
     public AddReviewCommand(Long memberId, Long articleId,
-            Long buyHistoryId, Integer startRating, String message,
+            Long buyHistoryId, Integer starRating, String message,
             List<MultipartFile> reviewImages) {
         this.memberId = memberId;
         this.articleId = articleId;
         this.buyHistoryId = buyHistoryId;
-        this.startRating = startRating;
+        this.starRating = starRating;
         this.message = message;
         this.reviewImages = reviewImages;
-        this.validateSelf();
     }
 
 }

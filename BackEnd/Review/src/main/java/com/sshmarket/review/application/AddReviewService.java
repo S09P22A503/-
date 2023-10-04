@@ -27,7 +27,7 @@ class AddReviewService implements AddReviewUseCase {
 
         Review newReview = Review.createReviewWithoutId(addReviewCommand.getMemberId(),
                 addReviewCommand.getArticleId(), addReviewCommand.getBuyHistoryId(),
-                addReviewCommand.getMessage(), addReviewCommand.getStartRating());
+                addReviewCommand.getMessage(), addReviewCommand.getStarRating());
 
         List<ReviewImage> images = addReviewImages(addReviewCommand.getReviewImages());
 

@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "review_image")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Builder
 class JPAReviewImageEntity {
 
@@ -30,21 +31,23 @@ class JPAReviewImageEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", nullable = false)
-    private JPAReviewEntity jpaReviewEntity;
+    private JPAReviewEntity review;
 
     @Column(nullable = false)
     private String imageUrl;
 
-    protected static JPAReviewImageEntity from(ReviewImage reviewImage) {
+
+    protected static JPAReviewImageEntity from(ReviewImage reviewImage, JPAReviewEntity review) {
         return JPAReviewImageEntity.builder()
                                    .imageUrl(reviewImage.getImageUrl())
+                                   .review(review)
                                    .build();
     }
 
     protected ReviewImage convertToDomain() {
         return ReviewImage.builder()
                           .id(this.id)
-                          .reviewId(this.jpaReviewEntity.getId())
+                          .reviewId(this.review.getId())
                           .imageUrl(this.imageUrl)
                           .build();
     }
