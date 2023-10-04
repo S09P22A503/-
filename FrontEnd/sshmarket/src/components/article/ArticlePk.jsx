@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
@@ -107,6 +107,8 @@ export default function ArticlePk({ res }) {
     setCurrentIndex(index);
   }
 
+  const param = useLocation().pathname.split("/")[3];
+
   const handleLike = () => {
     axios
       .create({
@@ -116,7 +118,7 @@ export default function ArticlePk({ res }) {
           "Access-Control-Allow-Credentials": true,
         },
       })
-      .post(`articles/${res.articleId}/bookmarks`)
+      .post(`articles/${param}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
         console.log("버튼 눌렸음");
@@ -135,7 +137,7 @@ export default function ArticlePk({ res }) {
           "Access-Control-Allow-Credentials": true,
         },
       })
-      .delete(`articles/${res.articleId}/bookmarks`)
+      .delete(`articles/${param}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
       })
