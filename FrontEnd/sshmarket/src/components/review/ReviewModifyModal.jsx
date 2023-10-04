@@ -95,43 +95,40 @@ export default function ReviewModifyModal({ review, closeModal }) {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
 
-  const [rating, setRating] = useState(
-    review
-      ? new Array(review.starRating)
-          .fill(true)
-          .concat(new Array(5 - review.starRating).fill(false))
-      : ["true", "true", "true", "true", "true"]
-  );
-  const [content, setContent] = useState(review ? review.message : "");
+  const [rating, setRating] = useState([true, true, true, true, true]);
+  const [content, setContent] = useState("");
   const [fileList, setFileList] = useState([
     new File([], "tmp"),
     new File([], "tmp"),
     new File([], "tmp"),
   ]);
-  const [previewList, setPreviewList] = useState(
-    review
-      ? review.reviewImages.concat(new Array(3 - review.reviewImages.length).fill(""))
-      : ["", "", ""]
-  );
-  const [fileIndex, setFileIndex] = useState(
-    review ? review.reviewImages.length : 0
-  );
+  const [previewList, setPreviewList] = useState(["", "", ""]);
+  const [fileIndex, setFileIndex] = useState(0);
 
   useEffect(() => {
-    if (!review || !review.reviewImages) return;
+    if (!review) return;
+    const oldImageCount = review.images.length;
+    setFileIndex(oldImageCount);
+    setRating(new Array(review.starRating).fill(true).concat(new Array(5 - review.starRating).fill(false)));
+    setContent(review.message);
+    setPreviewList(review.images.concat(new Array(3 - oldImageCount).fill("")));
     let newFileList = [];
-    review.reviewImages.forEach(async (e,i) => {
+    review.images.forEach(async (e, i) => {
       try {
-        const res = await fetch(e);
-        const blob = await res.blob();
-        newFileList.push(new File(blob,"origin"+i));
+        let blob = undefined;
+        await fetch(e).then((res) => {
+          blob = res.blob();
+        });
+        newFileList.push(new File(blob, "origin" + i));
       } catch {
         alert("리뷰 이미지를 불러오는 중 문제가 발생했습니다.");
       }
-    })
-    newFileList.concat(new Array(3-newFileList.length).fill(new File([],"tmp")));
+    });
+    newFileList.concat(
+      new Array(3 - newFileList.length).fill(new File([], "tmp"))
+    );
     setFileList((prev) => newFileList);
-  },[])
+  }, [review]);
 
   const changeRate = (i) => {
     let newRate = [];
@@ -230,8 +227,7 @@ export default function ReviewModifyModal({ review, closeModal }) {
       .catch((e) => {
         alert(e.response.data.message);
       });
-
-  }
+  };
 
   return (
     <Container>
@@ -253,7 +249,7 @@ export default function ReviewModifyModal({ review, closeModal }) {
           }
           onChange={changeContent}
           id="contentinput"
-          defaultValue={review?review.message:""}
+          defaultValue={review ? review.message : ""}
         ></ContentInput>
       </ContentContainer>
       <FileInputContainer>
