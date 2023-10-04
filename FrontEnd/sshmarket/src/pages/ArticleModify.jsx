@@ -7,7 +7,7 @@ import MultipleImageUpload from "../components/article/MultipleImageUpload";
 import PriceChart from "../components/common/PriceChart";
 import { getProductData } from "../api/product";
 import { writeArticle } from "../api/articlewrite";
-
+import { readArticle } from "../api/articleread";
 const commonStyles = {
   border: "1px solid #B388EB",
   borderRadius: "4px",
@@ -205,10 +205,10 @@ export default function ArticleModify() {
   // 네비게이트 객체
   const navigate = useNavigate();
 
-  if (!member.id) {
+  /* if (!member.id) {
     alert("로그인을 해주세요!");
     navigate("/");
-  }
+  } */
 
   const [showWeight, setShowWeight] = useState(false); // 토글 상태를 저장하기 위한 상태
 
@@ -222,7 +222,6 @@ export default function ArticleModify() {
         responseFunc: {
           200: (response) => {
             setWholeProductList(response.data);
-            console.log(wholeProductList);
           },
         },
       });
@@ -315,6 +314,44 @@ export default function ArticleModify() {
   // 대표 이미지
   const [profileImage, setProfileImage] = useState(null);
 
+  // 처음 렌더링할때 해당하는 상품정보 가져오기
+  useEffect(() => {
+    async function fetchData() {
+      await readArticle({
+        responseFunc: {
+          200: (response) => {
+            const {
+              amount,
+              content,
+              id,
+              images,
+              itemId,
+              location,
+              mainImage,
+              mass,
+              price,
+              title,
+            } = response.data.data;
+
+            fetch(
+              "https://a503.s3.ap-northeast-2.amazonaws.com/review/images/44e1bd28-c0dd-4f8b-a2ff-4e235fcb2986.png"
+            ).then((res) => console.log(res));
+            setSelectedCategoryOption(parseInt(itemId / 100));
+            setSelectedProductOption(itemId);
+            setProductAmount(amount);
+            setProductWeight(mass);
+            setProductPrice(price);
+            setProductTitle(title);
+            setProductContent(content);
+            setProfileImage(mainImage);
+          },
+        },
+        articleId: 443,
+      });
+    }
+    fetchData();
+  }, []);
+
   //카테고리 옵션 변경 콜백
   const handleCategoryOptionChange = (value) => {
     setSelectedCategoryOption(value);
@@ -327,7 +364,6 @@ export default function ArticleModify() {
         item.itemId.toString().startsWith(selectedCategoryOption)
       )
     );
-    setSelectedProductOption("999");
   }, [selectedCategoryOption]);
 
   const handleProductOptionChange = (value) => {
@@ -342,7 +378,6 @@ export default function ArticleModify() {
   // 거래 지역 변경시
   const handleRegionOptionChange = (value) => {
     setSelectedRegionOption(value);
-    console.log(value);
   };
 
   // 등록 버튼 눌렀을시
