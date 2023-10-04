@@ -78,4 +78,19 @@ public class FindTradeUseCase {
                 trade.getArticleId());
         return TradeDetailResponseDto.from(trade, userId, articleDetailResponseDto);
     }
+
+    public MemberResponseDto findTrader(Long tradeId, String token) {
+        Trade trade = tradeRepository.findById(tradeId).orElseThrow(
+                () -> new NotFoundResourceException("해당 거래가 존재하지 않습니다."));
+        Long userId = jwtTranslator.getUserId(token);
+        Long traderId = trade.findTrader(userId);
+        Object memberResponse = ((LinkedHashMap) memberClient.memberDetail(traderId)
+                .getBody()).get("data");
+        try {
+            return objectMapper.readValue(
+                    objectMapper.writeValueAsString(memberResponse), MemberResponseDto.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

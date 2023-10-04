@@ -9,13 +9,8 @@ import com.sshmarket.trade.application.ModifyTradeUseCase;
 import com.sshmarket.trade.application.SendMessageUseCase;
 import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
-import com.sshmarket.trade.dto.HttpResponse;
-import com.sshmarket.trade.dto.KafkaMessageDto;
-import com.sshmarket.trade.dto.TradeCreateRequestDto;
-import com.sshmarket.trade.dto.TradeHistoryCreateRequestDto;
-import com.sshmarket.trade.dto.TradeHistoryResponseDto;
-import com.sshmarket.trade.dto.TradeResponseDto;
-import com.sshmarket.trade.dto.TradeSearchResponseDto;
+import com.sshmarket.trade.dto.*;
+
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -117,4 +112,11 @@ public class TradeController {
         return HttpResponse.okWithData(HttpStatus.OK, "채팅방 검색 성공했습니다.", findTradeUseCase.findTradeDetail(tradeId, token));
     }
 
+    @GetMapping("/trades/trader/{tradeId}")
+    public ResponseEntity<?> traderDetail(@PathVariable("tradeId") Long tradeId,
+                                          @CookieValue(value = "jwt", required = true) String token) {
+        MemberResponseDto trader = findTradeUseCase.findTrader(tradeId, token);
+        log.info("traderDetail", trader);
+        return HttpResponse.okWithData(HttpStatus.OK, "상대방 프로필 조회 성공했습니다.", trader);
+    }
 }
