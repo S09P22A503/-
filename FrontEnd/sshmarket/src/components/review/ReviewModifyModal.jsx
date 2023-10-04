@@ -110,17 +110,17 @@ export default function ReviewModifyModal({ review, closeModal }) {
   ]);
   const [previewList, setPreviewList] = useState(
     review
-      ? review.images.concat(new Array(3 - review.images.length).fill(""))
+      ? review.reviewImages.concat(new Array(3 - review.reviewImages.length).fill(""))
       : ["", "", ""]
   );
   const [fileIndex, setFileIndex] = useState(
-    review ? review.images.length : 0
+    review ? review.reviewImages.length : 0
   );
 
   useEffect(() => {
-    if (!review || !review.images) return;
+    if (!review || !review.reviewImages) return;
     let newFileList = [];
-    review.images.forEach(async (e,i) => {
+    review.reviewImages.forEach(async (e,i) => {
       try {
         const res = await fetch(e);
         const blob = await res.blob();
@@ -198,6 +198,40 @@ export default function ReviewModifyModal({ review, closeModal }) {
     setFileIndex(0);
     document.getElementById("contentinput").value = "";
   };
+
+  const updateReview = () => {
+    let formData = new FormData();
+    let reviewImages = fileList.filter((e) => e.size !== 0);
+    formData.append("id", review.id);
+    formData.append("message", content);
+    formData.append("starRating", rating.filter((e) => e === true).length);
+    formData.append("savedReviewIds", []);
+    reviewImages.forEach((e) => {
+      formData.append("newReviewImages", e);
+    });
+
+    axios({
+      baseURL: SERVER_URL,
+      url: "/reviews",
+      method: "PATCH",
+      timeout: 10000,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Access-Control-Allow-Origin": CLIENT_URL,
+        "Access-Control-Allow-Credentials": true,
+      },
+      withCredentials: true,
+      data: formData,
+    })
+      .then((res) => {
+        alert(res.data.message);
+        window.location.replace("/mypage?menu=4");
+      })
+      .catch((e) => {
+        alert(e.response.data.message);
+      });
+
+  }
 
   return (
     <Container>
