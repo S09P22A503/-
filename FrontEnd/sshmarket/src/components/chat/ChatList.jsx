@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 import { ReactComponent as Search } from "../../assets/icons/search.svg";
-import { ReactComponent as Profile } from "../../assets/icons/profile.svg";
 import Dropdown from "./Dropdown";
 import { getTradeList, getTradeListByKeyword } from "../../api/trade.js";
 
@@ -45,7 +45,8 @@ function ChatList({ setSelectedTradeId, messageFlag }) {
     status: "ALL",
   });
   const [trades, setTrades] = useState();
-  const memberId = 10;
+  const { id } = useSelector((state) => state.MemberReducer);
+  const memberId = id;
 
   useEffect(() => {
     async function fetchData() {
@@ -127,9 +128,9 @@ function ChatList({ setSelectedTradeId, messageFlag }) {
               key={trade.tradeId}
               onClick={() => handleTradeClick(trade.tradeId)}
             >
-              <ProfileImageWrapper>
-                <Profile />
-              </ProfileImageWrapper>
+              <ProfileImageWrapper
+                src={trade.memberResponseDto.profile}
+              ></ProfileImageWrapper>
               <ProfileWrapper>
                 <ProfileNameWrapper>
                   {trade.memberResponseDto.nickname}
@@ -225,11 +226,12 @@ const TradeListBox = styled.div`
   background: #fff;
 `;
 
-const ProfileImageWrapper = styled.div`
+const ProfileImageWrapper = styled.img`
   width: 36px;
   height: 36px;
   margin-bottom: 3px;
   margin-left: -20px;
+  border-radius: 50%;
 `;
 
 const ProfileWrapper = styled.div`

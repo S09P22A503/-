@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styled from "styled-components";
 import { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import { ReactComponent as Profile } from "../../assets/icons/profile.svg";
 import { ReactComponent as Send } from "../../assets/icons/send.svg";
 import { ReactComponent as Close } from "../../assets/icons/close-icon.svg";
@@ -12,12 +13,14 @@ function Chat({ tradeId, setMessageFlag }) {
     tradeId,
   });
   const [messages, setMessages] = useState();
-  const memberId = 10;
+  const { id } = useSelector((state) => state.MemberReducer);
+  const memberId = id;
 
   // TradeBox를 참조하기 위한 useRef 생성
   const tradeBoxRef = useRef(null);
 
   useEffect(() => {
+    console.log("Chat memberId", memberId);
     async function fetchData() {
       if (tradeId !== null) {
         await getTradeMessage({

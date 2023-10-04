@@ -1,5 +1,6 @@
 import stomp from "stompjs";
 import SockJS from "sockjs-client";
+import { useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
 
 function useChat({ tradeId }) {
@@ -8,10 +9,23 @@ function useChat({ tradeId }) {
   const [message, setMessage] = useState("");
   const [curTradeId, setCurTradeId] = useState(null);
   const [newMessages, setNewMessages] = useState([]);
-  const memberId = 10;
+  const { id } = useSelector((state) => state.MemberReducer);
+  function getJwtFromCookie() {
+    const cookies = document.cookie.split(";");
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split("=");
+      if (name === "jwt") {
+        return value;
+      }
+    }
+    return null; // 'jwt' 이름의 쿠키를 찾지 못한 경우 null 반환
+  }
+
+  // JWT 쿠키 가져오기
+  const jwtToken = getJwtFromCookie();
+  const memberId = id;
   const headers = {
-    Authorization:
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWQiOjIsIm5pY2tuYW1lIjoiQkJCQkIiLCJpYXQiOjE2OTU2MTMxNzAsImV4cCI6MTY5NjQ3NzE3MH0.AUmzgtVXUN5IGJQGhlrAOwLQ38s8emLFRR_PEE2rMCWaO_MyJfuf7ZVjYZksJWruaJH7haN_xBDGAa1xdb_XYg",
+    Authorization: jwtToken,
     chatNumber: tradeId,
   };
 
@@ -64,7 +78,7 @@ function useChat({ tradeId }) {
   useEffect(() => {
     if (curTradeId != null) {
       stompCilent.current?.unsubscribe({
-        Authorization: window.localStorage.getItem("accessToken"),
+        Authorization: jwtToken,
         chatNumber: curTradeId,
       });
       stompCilent.current?.disconnect();
