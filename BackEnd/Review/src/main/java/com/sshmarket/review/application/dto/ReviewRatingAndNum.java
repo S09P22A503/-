@@ -13,6 +13,6 @@ public class ReviewRatingAndNum {
 
     private Long articleId;
     private Double starRating;
-    private Integer reviewCnt;
+    private Long reviewCnt;
 
 }

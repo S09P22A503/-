@@ -29,6 +29,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Getter
 @Table(name = "review")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 class JPAReviewEntity {
 
     @Id
@@ -68,6 +69,7 @@ class JPAReviewEntity {
         this.reviewImages = reviewImages;
     }
 
+
     protected static JPAReviewEntity from(Review review) {
         return JPAReviewEntity.builder()
                               .articleId(review.getArticleId())
@@ -82,7 +84,7 @@ class JPAReviewEntity {
     protected Review convertToDomain() {
         return Review.createReviewWithId(this.id, this.memberId, this.articleId,
                 this.buyHistoryId,
-                this.message, this.starRating, this.reviewImages.stream()
+                this.message, this.starRating, this.createdAt ,this.reviewImages.stream()
                                                                 .map(JPAReviewImageEntity::convertToDomain)
                                                                 .collect(
                                                                         Collectors.toList()));

@@ -58,7 +58,8 @@ public class Review {
 
     public static Review createReviewWithId(Long id, Long memberId, Long articleId,
             Long buyHistoryId,
-            String message, int starRating, List<ReviewImage> reviewImages) {
+            String message, int starRating, LocalDateTime createdAt,
+            List<ReviewImage> reviewImages) {
 
         Review review = Review.builder()
                               .id(id)
@@ -67,6 +68,7 @@ public class Review {
                               .buyHistoryId(buyHistoryId)
                               .message(message)
                               .starRating(starRating)
+                              .createdAt(createdAt)
                               .reviewImages(new ArrayList<>())
                               .build();
 

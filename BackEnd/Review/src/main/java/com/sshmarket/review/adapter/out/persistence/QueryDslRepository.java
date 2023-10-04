@@ -16,16 +16,15 @@ public class QueryDslRepository {
     public List<ReviewRatingAndNum> findAllReviewAvgRatingAndNums(List<Long> articleIds) {
         QJPAReviewEntity reviewEntity = QJPAReviewEntity.jPAReviewEntity;
 
-        return jpaQueryFactory.from(reviewEntity)
-                              .groupBy(reviewEntity.articleId)
-                              .select(Projections.bean(
+        return jpaQueryFactory.from(reviewEntity).
+                              select(Projections.constructor(
                                       ReviewRatingAndNum.class,
-                                      reviewEntity.articleId,
-                                      reviewEntity.starRating.avg(),
-                                      reviewEntity.count()
+                                      reviewEntity.articleId.as("articleId"),
+                                      reviewEntity.starRating.avg().as("starRating"),
+                                      reviewEntity.count().as("reviewCnt")
                               ))
-                              .where(reviewEntity.articleId.in(
-                                      articleIds))
+                              .where(reviewEntity.articleId.in(articleIds))
+                              .groupBy(reviewEntity.articleId)
                               .fetch();
     }
 
