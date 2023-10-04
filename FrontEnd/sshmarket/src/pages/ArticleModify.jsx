@@ -599,7 +599,7 @@ export default function ArticleModify() {
       </Section>
       <Buttons>
         <Button onClick={onSubmit}>수정하기</Button>
-        <Button onClick={navigate(`/article/${articleId}`)}>취소하기</Button>
+        <Button onClick={()=>{navigate(`/article/${articleId}`)}}>취소하기</Button>
       </Buttons>
     </Container>
   );
