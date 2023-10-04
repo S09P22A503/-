@@ -82,7 +82,9 @@ export default function ReviewBox({
       {isMyPage ? (
         <TitleContainer>{articleTitle}</TitleContainer>
       ) : (
-        <ProfileContainer></ProfileContainer>
+        <ProfileContainer>
+          <MemberProfile member={member}></MemberProfile>
+        </ProfileContainer>
       )}
       <InfoContainer>
         <Star rating={starRating}></Star>
