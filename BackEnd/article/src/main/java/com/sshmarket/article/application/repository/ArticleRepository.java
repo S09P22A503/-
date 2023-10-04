@@ -17,4 +17,9 @@ public interface ArticleRepository {
 
     List<Article> findArticleListByKeyword(Integer itemId, Long locationId, TradeType tradeType,
                                            String keyword, Pageable pageable);
+
+    List<Article> findArticleByArticleIds(List<Long> articleIds);
+
+    List<Article> findArticleListByMember(Long memberId, Pageable pageable);
+
 }
