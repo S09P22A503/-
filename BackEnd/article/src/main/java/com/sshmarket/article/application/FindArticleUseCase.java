@@ -76,8 +76,6 @@ public class  FindArticleUseCase {
                 .member(member)
                 .build();
 
-        article.addViewCount();
-        articleRepository.saveArticle(article);
 
         return responseDto;
     }
