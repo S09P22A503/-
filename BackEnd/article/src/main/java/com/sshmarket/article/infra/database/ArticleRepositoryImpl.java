@@ -39,4 +39,15 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
         return queryArticleRepository.searchArticleList(itemId, locationId, tradeType, keyword, pageable);
     }
+
+    @Override
+    public List<Article> findArticleByArticleIds(List<Long> articleIds) {
+        return jpaArticleRepository.findByIdIn(articleIds);
+    }
+
+    @Override
+    public List<Article> findArticleListByMember(Long memberId, Pageable pageable) {
+        return jpaArticleRepository.findByMemberId(memberId, pageable);
+    }
+
 }
