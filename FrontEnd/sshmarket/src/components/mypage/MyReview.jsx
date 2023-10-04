@@ -47,20 +47,28 @@ export default function MyReview() {
   useEffect(() => {
     axios({
       baseURL: SERVER_URL,
-      url: "/reviews/my-reviews",
+      url: "/reviews/my-review",
       method: "GET",
       timeout: 10000,
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json;charset=UTF-8",
         "Access-Control-Allow-Origin": CLIENT_URL,
         "Access-Control-Allow-Credentials": true,
       },
       withCredentials: true,
-    }).then((res) => {
-      setReviewList(res.data.data);
-    });
+    })
+      .then((res) => {
+        setReviewList(res.data.data);
+      })
+      .catch((e) => {
+        alert(e.response.data.message);
+      });
   }, []);
 
+  const deleteReview = () => {
+
+  }
+  
   return (
     <Container>
       <ModalContainer hidden={!isOpenModifyModal}>
@@ -84,7 +92,7 @@ export default function MyReview() {
                 content={"수정하기"}
                 onClick={() => openModifyModal(review, closeModal)}
               ></SubButton>
-              <SubButton content={"삭제하기"}></SubButton>
+              {/* <SubButton content={"삭제하기"}></SubButton> */}
             </ButtonContainer>
           </ReviewContainer>
         );
