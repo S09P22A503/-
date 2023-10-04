@@ -46,6 +46,7 @@ function useChat({ tradeId }) {
   }
 
   function connect() {
+    console.log("connect", tradeId);
     const socket = new SockJS(REACT_APP_SOCKET_URL); //REACT_APP_SOCKET_URL=http://localhost:8080/trade
     console.log("connect url", REACT_APP_SOCKET_URL);
     stompCilent.current = stomp.over(socket);
