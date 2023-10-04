@@ -1,5 +1,6 @@
 package com.sshmarket.article.dto;
 
+import com.sshmarket.article.domain.TradeType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -30,6 +31,8 @@ public class ArticleDetailResponseDto {
     private String content;
 
     private String location;
+
+    private TradeType tradeType;
 
     private Boolean isLike;
 
