@@ -15,6 +15,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Optional<Product> findProductByItemId(Long itemId){
-        return jpaProductRepository.findById(itemId);
+        return jpaProductRepository.findByItemId(itemId);
     }
 }
