@@ -5,6 +5,7 @@ import com.sshmarket.article.domain.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -14,7 +15,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final JpaProductRepository jpaProductRepository;
 
     @Override
-    public Optional<Product> findProductByItemId(Long itemId){
+    public List<Product> findProductByItemId(Integer itemId){
         return jpaProductRepository.findByItemId(itemId);
     }
 }
