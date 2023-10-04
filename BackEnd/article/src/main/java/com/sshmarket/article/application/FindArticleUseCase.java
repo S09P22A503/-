@@ -1,5 +1,7 @@
 package com.sshmarket.article.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sshmarket.article.application.feignclient.MemberFeignClient;
 import com.sshmarket.article.application.feignclient.ReviewFeignClient;
 import com.sshmarket.article.application.repository.ArticleBookmarkRepository;
@@ -34,6 +36,7 @@ public class  FindArticleUseCase {
     private final ArticleBookmarkRepository articleBookmarkRepository;
 
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final MemberFeignClient memberFeignClient;
     private final ReviewFeignClient reviewFeignClient;
 
@@ -43,9 +46,19 @@ public class  FindArticleUseCase {
 
         Boolean isLike = articleBookmarkRepository.isExistArticleBookmark(article, memberId);
 
-        Member member = memberFeignClient.getMember(memberId);
+        Object memberResponse = ((LinkedHashMap) memberFeignClient.getMember(memberId)
+                .getBody()).get("data");
+
+        Member member = null;
+        try {
+            member = objectMapper.readValue(
+                    objectMapper.writeValueAsString(memberResponse), Member.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
 
+//        Member member = Member.createWithPublicInfo(1L, "보숙", "https://images.chosun.com/resizer/iNZAEGcD0GFzHTGZrdNQpeiwTIw=/530x718/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/6NARDQ2I2QN3J3ZDAC4S6W5DHE.jpg");
         ArticleDetailResponseDto responseDto = ArticleDetailResponseDto.builder()
                 .id(articleId)
                 .title(article.getTitle())
