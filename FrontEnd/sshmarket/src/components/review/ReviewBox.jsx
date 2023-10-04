@@ -21,7 +21,12 @@ const ContentContainer = styled.div`
   margin-bottom: 15px;
 `;
 
-const TitleContainer = styled.div``;
+const TitleContainer = styled.div`
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: larger;
+
+`;
 
 const InfoContainer = styled.div`
   //별점과 리뷰 작성일이 담긴 컨테이너
@@ -75,11 +80,11 @@ export default function ReviewBox({
     <Container>
       <Line></Line>
       {isMyPage ? (
+        <TitleContainer>{articleTitle}</TitleContainer>
+      ) : (
         <ProfileContainer>
           <MemberProfile member={member}></MemberProfile>
         </ProfileContainer>
-      ) : (
-        <TitleContainer>{articleTitle}</TitleContainer>
       )}
       <InfoContainer>
         <Star rating={starRating}></Star>
