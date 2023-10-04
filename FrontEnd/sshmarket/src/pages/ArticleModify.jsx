@@ -8,6 +8,7 @@ import PriceChart from "../components/common/PriceChart";
 import { getProductData } from "../api/product";
 import { modifyArticle } from "../api/articlemodify";
 import { readArticle } from "../api/articleread";
+import ArticleList from "./ArticleList";
 const commonStyles = {
   border: "1px solid #B388EB",
   borderRadius: "4px",
@@ -208,10 +209,10 @@ export default function ArticleModify() {
   // 네비게이트 객체
   const navigate = useNavigate();
 
-  /* if (!member.id) {
+  if (!member.id) {
     alert("로그인을 해주세요!");
     navigate("/");
-  } */
+  }
 
   const [showWeight, setShowWeight] = useState(false); // 토글 상태를 저장하기 위한 상태
 
@@ -414,6 +415,7 @@ export default function ArticleModify() {
         responseFunc: {
           200: (response) => {
             console.log(response);
+            navigate(`/article/${articleId}`);
           },
         },
         data: {
@@ -596,7 +598,7 @@ export default function ArticleModify() {
         ></TextArea>
       </Section>
       <Buttons>
-        <Button onClick={onSubmit}>등록하기</Button>
+        <Button onClick={onSubmit}>수정하기</Button>
         <Button secondary>취소하기</Button>
       </Buttons>
     </Container>
