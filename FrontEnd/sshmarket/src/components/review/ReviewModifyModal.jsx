@@ -197,6 +197,9 @@ export default function ReviewModifyModal({ review, closeModal }) {
   };
 
   const updateReview = () => {
+    if (!content) {
+      alert("리뷰를 작성해주세요.");
+    }
     let formData = new FormData();
     let reviewImages = fileList.filter((e) => e.size !== 0);
     formData.append("id", review.id);
