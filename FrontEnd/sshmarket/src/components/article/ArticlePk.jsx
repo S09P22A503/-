@@ -106,20 +106,9 @@ export default function ArticlePk({ res }) {
     setCurrentIndex(index);
   }
 
-  // axios
-  // .create(config)
-  // .get(`articles/${param}`)
-  // .then((res) => {
-  //   setData(res.data.data);
-  //   console.log(res.data.data);
-  // })
-  // .catch((err) => {
-  //   console.log(err);
-  // });
-
   const handleLike = () => {
     customAxios()
-      .post(`/${res.articleId}/bookmarks`)
+      .post(`articles/${res.articleId}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
         console.log("버튼 눌렸음");
@@ -131,7 +120,7 @@ export default function ArticlePk({ res }) {
 
   const handleDislike = () => {
     customAxios()
-      .delete(`/${res.articleId}/bookmarks`)
+      .delete(`articles/${res.articleId}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
       })
@@ -194,13 +183,9 @@ export default function ArticlePk({ res }) {
           <ButtonContainer>
             <BookmarkButton>
               {res.isLike ? (
-                <FillHeart
-                // onClick={handleDislike()}
-                ></FillHeart>
+                <FillHeart onClick={handleDislike}></FillHeart>
               ) : (
-                <EmptyHeart
-                // onClick={handleLike()}
-                ></EmptyHeart>
+                <EmptyHeart onClick={handleLike}></EmptyHeart>
               )}
             </BookmarkButton>
             <StyledButton
@@ -231,7 +216,7 @@ export default function ArticlePk({ res }) {
               <InfoDetail>판매지 : {res.location}</InfoDetail>
             )}
           </InfoContainer>
-          <PriceChart itemId={res.itemId}></PriceChart>
+          <PriceChart itemId={res.itemId} orientation="vertical"></PriceChart>
           <ContentContainer>{res.content}</ContentContainer>
           <TextContainer>유사한 상품 추천</TextContainer>
           <RecommendArticle></RecommendArticle>
