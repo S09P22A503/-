@@ -178,6 +178,9 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
   };
 
   const postReview = () => {
+    if (!content) {
+      alert("리뷰를 작성해주세요.");
+    }
     let formData = new FormData();
     let reviewImages = fileList.filter((e) => e.size !== 0);
     formData.append("memberId", member.id);
