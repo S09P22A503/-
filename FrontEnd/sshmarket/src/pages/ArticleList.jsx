@@ -22,94 +22,6 @@ const SelectContainger = styled.div`
 `;
 
 export default function ArticleList() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    customAxios
-      .get(`articles?size=20&page=0`)
-      .then((res) => {
-        console.log(res.data.data);
-        setData(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  // const data = [
-  //   {
-  //     articleId: 6,
-  //     title: "제목1",
-  //     mainImage:
-  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-  //     mass: null,
-  //     amount: 10,
-  //     price: 10000,
-  //     starRating: 4.3,
-  //     reviewCnt: 10,
-  //   },
-  //   {
-  //     articleId: 6,
-  //     title: "제목1",
-  //     mainImage:
-  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-  //     mass: null,
-  //     amount: 10,
-  //     price: 10000,
-  //     starRating: 4.3,
-  //     reviewCnt: 10,
-  //   },
-  //   {
-  //     articleId: 6,
-  //     title: "제목1",
-  //     mainImage:
-  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-  //     mass: null,
-  //     amount: 10,
-  //     price: 10000,
-  //     starRating: 4.3,
-  //     reviewCnt: 10,
-  //   },
-  //   {
-  //     articleId: 6,
-  //     title: "제목1",
-  //     mainImage:
-  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-  //     mass: null,
-  //     amount: 10,
-  //     price: 10000,
-  //     starRating: 4.3,
-  //     reviewCnt: 10,
-  //   },
-  //   {
-  //     articleId: 6,
-  //     title: "제목5",
-  //     mainImage:
-  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-  //     mass: null,
-  //     amount: 10,
-  //     price: 10000,
-  //     starRating: 4.3,
-  //     reviewCnt: 10,
-  //   },
-  //   {
-  //     articleId: 5,
-  //     title: "제목6",
-  //     mainImage:
-  //       "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-  //     mass: null,
-  //     amount: 10,
-  //     price: 10000,
-  //     starRating: 4.3,
-  //     reviewCnt: 10,
-  //   },
-  // ];
-
-  const handleOptionChange = (option) => {
-    // setTradeSelect(option);
-    console.log(option);
-  };
-
   const TradeOption = [
     { value: "NONE", label: "거래방식 무관" },
     { value: "DIRECT", label: "직거래" },
@@ -135,7 +47,44 @@ export default function ArticleList() {
     { value: 15, label: "경상남도" },
     { value: 16, label: "제주도" },
   ];
+  const pageInfo = `&size=24&page=0`;
+  const [data, setData] = useState([]);
+
+  const url = new URL(document.URL);
+  const query = url.searchParams; //?appliedCompany=%E3%85%87%E3%85%87&job=hh&careerLevel=ALL
+  // console.log(query.get("appliedCompany"));
+
+  const keyword = query.get("keyword");
+  const category = query.get("category");
+
   const [TradeSelect, setTradeSelect] = useState(TradeOption[0]);
+  const [LocationSelect, setLocationSelect] = useState(LocationOption[0]);
+
+  useEffect(() => {
+    customAxios
+      .get(
+        `articles?${keyword ? "keyword=" + keyword : ""}&${
+          category ? "category=" + category : ""
+        }&locationId=${LocationSelect.value}&tradeType=${TradeSelect.value}` +
+          pageInfo
+      )
+      .then((res) => {
+        console.log(res.data.data);
+        setData(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [TradeSelect, LocationSelect]);
+
+  const handleLocationChange = (option) => {
+    setLocationSelect(option);
+    console.log(option);
+  };
+  const handleTradeChange = (option) => {
+    setTradeSelect(option);
+    console.log(option);
+  };
 
   return (
     <Container>
@@ -144,7 +93,7 @@ export default function ArticleList() {
           <Select
             defaultValue={TradeOption[0]}
             options={TradeOption}
-            onChange={setTradeSelect}
+            onChange={handleTradeChange}
             isSearchable={false}
           ></Select>
         </SelectContainger>
@@ -152,7 +101,7 @@ export default function ArticleList() {
           <Select
             defaultValue={LocationOption[0]}
             options={LocationOption}
-            onChange={handleOptionChange}
+            onChange={handleLocationChange}
             isSearchable={false}
           ></Select>
         </SelectContainger>
