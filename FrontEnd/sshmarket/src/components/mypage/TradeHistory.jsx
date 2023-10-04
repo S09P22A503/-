@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ReviewWriteModal from "../review/ReviewWriteModal";
 import { getTradeHistory } from "../../api/trade.js";
+import { useSelector } from "react-redux";
 
 function TradeHistory() {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
   const [targetArticleId, setTargetArticleId] = useState();
+  const [targetTradeId, setTargetTradeId] = useState();
   const [tradeHistory, setTradeHistory] = useState([]);
-  const { id } = useSelector((state) => state.MemberReducer);
-  const memberId = id; // 실제 회원 ID로 대체하세요
+  const memberId = useSelector((state) => state.MemberReducer).id;
 
-  const openReviewModal = (articleId) => {
+  const openReviewModal = (tradeId, articleId) => {
+    setTargetTradeId(tradeId);
     setTargetArticleId(articleId);
     setIsOpenReviewModal(true);
   };
 
   const closeModal = () => {
+    setTargetTradeId("");
     setTargetArticleId("");
     setIsOpenReviewModal(false);
   };
@@ -46,6 +48,7 @@ function TradeHistory() {
     <TradeHistoryContainer>
       <ModalContainer hidden={!isOpenReviewModal}>
         <ReviewWriteModal
+          tradeId={targetTradeId}
           articleId={targetArticleId}
           closeModal={closeModal}
         ></ReviewWriteModal>
@@ -65,7 +68,7 @@ function TradeHistory() {
               onClick={
                 tradeItem.reviewed
                   ? null
-                  : () => setIsOpenReviewModal((prev) => !prev)
+                  : () => openReviewModal(tradeItem.id, tradeItem.articleId)
               }
             >
               {tradeItem.reviewed ? "리뷰완료" : "리뷰쓰기"}
