@@ -3,6 +3,9 @@ import { BsStar, BsStarFill } from "react-icons/bs";
 import { useState } from "react";
 import StyledButton from "../Button/StyledButton";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { MemberReducer } from "./../../modules/memberReducer/memberReducer";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -94,6 +97,7 @@ const CloseCheck = styled.div``;
 export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
+  const member = useSelector((state) => state.MemberReducer);
 
   const [rating, setRating] = useState([true, true, true, true, true]);
   const [content, setContent] = useState("");
@@ -104,6 +108,8 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
   ]);
   const [previewList, setPreviewList] = useState(["", "", ""]);
   const [fileIndex, setFileIndex] = useState(0);
+
+  const navigate = useNavigate();
 
   const changeRate = (i) => {
     let newRate = [];
@@ -173,14 +179,15 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
 
   const postReview = () => {
     let formData = new FormData();
+    let reviewImages = fileList.filter((e) => e.size !== 0);
+    formData.append("memberId", member.id);
     formData.append("articleId", articleId);
-    formData.append("tradeId", tradeId);
+    formData.append("buyHistoryId", tradeId);
     formData.append("starRating", rating.filter((e) => e === true).length);
     formData.append("message", content);
-    formData.append(
-      "images",
-      fileList.filter((e) => e.size !== 0)
-    );
+    reviewImages.forEach((e) => {
+      formData.append("reviewImages", e);
+    });
 
     axios({
       baseURL: SERVER_URL,
@@ -193,14 +200,15 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
         "Access-Control-Allow-Credentials": true,
       },
       withCredentials: true,
-    }).then((res) => {
-      alert(res.data.message);
-      document.getElementById("reset").click();
-      document.getElementById("closebtn").click();
+      data: formData,
     })
-    .catch((e) => {
-      alert(e.response.data.message);
-    });
+      .then((res) => {
+        alert(res.data.message);
+        window.location.replace("/mypage?menu=3");
+      })
+      .catch((e) => {
+        alert(e.response.data.message);
+      });
   };
 
   return (
@@ -251,7 +259,11 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
       </FileInputContainer>
       <ButtonContainer>
         <CloseCheck onClick={resetState} id="reset">
-          <StyledButton content={"취소"} onClick={closeModal} id="closebtn"></StyledButton>
+          <StyledButton
+            content={"취소"}
+            onClick={closeModal}
+            id="closebtn"
+          ></StyledButton>
         </CloseCheck>
         <StyledButton content={"등록"} onClick={postReview}></StyledButton>
       </ButtonContainer>
