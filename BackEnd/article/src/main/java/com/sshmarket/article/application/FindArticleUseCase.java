@@ -74,6 +74,7 @@ public class  FindArticleUseCase {
                 .isLike(isLike)
                 .price(article.getPrice())
                 .member(member)
+                .tradeType(article.getTradeType())
                 .build();
 
 
