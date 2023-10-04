@@ -198,7 +198,7 @@ const ImageUploadSection = styled.section`
   margin-top: 20px;
 `;
 
-export default function ArticleWrite() {
+export default function ArticleModify() {
   //멤버 가져오기
   const member = useSelector((state) => state.MemberReducer);
 
@@ -352,13 +352,6 @@ export default function ArticleWrite() {
         responseFunc: {
           201: (response) => {
             console.log(response);
-            navigate(`/article/${response.data.data}`);
-          },
-          400: (response) => {
-            alert("입력값이 잘못되었습니다.");
-          },
-          500: (response) => {
-            alert("입력값이 잘못되었습니다.");
           },
         },
         data: {

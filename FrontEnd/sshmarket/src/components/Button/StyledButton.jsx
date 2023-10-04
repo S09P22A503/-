@@ -6,12 +6,12 @@ const Container = styled.button`
   height: ${(props) => `${props.height}px`};
 
   /* background: var(--secondary); */
-  background: #5f0080;
+  background: #b082c0;
   font-family: inherit;
   padding: 0.6em 1.3em;
   font-weight: 600;
   color: white;
-  /* border: 3px solid #232323; */
+  border: 2px solid #393939;
   border-radius: 0.4em;
   /* box-shadow: 0.1em 0.1em; */
 
@@ -31,10 +31,6 @@ const Container = styled.button`
   }
 
   cursor: pointer;
-`;
-
-const Span = styled.span`
-  color: #000000;
 `;
 
 export default function StyledButton({
