@@ -54,11 +54,11 @@ public class ModifyArticleUseCase {
 
         if(articleModifyRequestDto.getMainImageChanged()) {
             // 메인 이미지가 바꼈으면 다시 저장
-            s3Uploader.delete(originalArticle.getMainImage());
-            mainImageName = imageDir + makeFileName(directory, articleModifyRequestDto.getMainImage());
+            s3Uploader.delete(originalArticle.getMainImage().replaceFirst(imageDir, ""));
+            mainImageName = makeFileName(directory, articleModifyRequestDto.getMainImage());
         }
         else{
-            mainImageName = originalArticle.getMainImage();
+            mainImageName = originalArticle.getMainImage().replaceFirst(imageDir, "");
         }
         List<ArticleImage> imageFileNames = originalArticle.getArticleImages();
         removeImages(originalArticle, articleModifyRequestDto.getDeletedUrls(), imageFileNames);
@@ -67,9 +67,11 @@ public class ModifyArticleUseCase {
 
         uploadList(articleModifyRequestDto.getImages(), imageUrls);
 
-        Article modifiedArticle = articleModifyRequestDto.toEntity(mainImageName, imageUrls, location, product);
+        Article modifiedArticle = articleModifyRequestDto.toEntity(imageDir + mainImageName, imageUrls, location, product);
 
         originalArticle.modifyArticle(modifiedArticle);
+
+        articleImageRepository.saveImages(modifiedArticle.getArticleImages());
 
         articleRepository.saveArticle(originalArticle);
     }
@@ -82,7 +84,7 @@ public class ModifyArticleUseCase {
                     .orElseThrow(() -> new NotFoundResourceException("존재하지 않는 이미지입니다.")));
 
             articleImageRepository.removeImageByImageUrl(imageUrl);
-            s3Uploader.delete(imageUrl);
+            s3Uploader.delete(imageUrl.replaceFirst(imageDir, ""));
         }
     }
 
@@ -93,7 +95,7 @@ public class ModifyArticleUseCase {
 
         for (MultipartFile file : images) {
             url = makeFileName(directory, file);
-            imageUrls.add(imageDir+url);
+            imageUrls.add(imageDir + url);
             s3Uploader.upload(url, file);
         }
     }
