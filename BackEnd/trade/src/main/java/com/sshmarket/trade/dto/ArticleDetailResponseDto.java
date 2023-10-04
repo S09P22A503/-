@@ -4,7 +4,6 @@ import com.sshmarket.trade.domain.Member;
 import java.util.LinkedHashMap;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.util.List;
 
 @Getter

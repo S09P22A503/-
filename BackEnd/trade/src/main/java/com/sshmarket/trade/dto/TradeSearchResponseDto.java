@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class TradeSearchResponseDto {
 
     Long tradeId;
-    MemberResponseDto member;
+    MemberResponseDto memberResponseDto;
     String messageId;
     String lastChatMessage;
     LocalDateTime createdAt;
@@ -25,7 +25,7 @@ public class TradeSearchResponseDto {
                 .messageId(tradeMessage.getId())
                 .lastChatMessage(tradeMessage.getMessage())
                 .createdAt(tradeMessage.getCreatedAt())
-                .member(member).build();
+                .memberResponseDto(member).build();
     }
 
 }
