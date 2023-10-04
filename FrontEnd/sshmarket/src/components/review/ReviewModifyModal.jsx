@@ -96,25 +96,25 @@ export default function ReviewModifyModal({ review, closeModal }) {
   const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
 
   const [rating, setRating] = useState(
-    review.starRating
+    review
       ? new Array(review.starRating)
           .fill(true)
           .concat(new Array(5 - review.starRating).fill(false))
       : ["true", "true", "true", "true", "true"]
   );
-  const [content, setContent] = useState(review.message ? review.message : "");
+  const [content, setContent] = useState(review ? review.message : "");
   const [fileList, setFileList] = useState([
     new File([], "tmp"),
     new File([], "tmp"),
     new File([], "tmp"),
   ]);
   const [previewList, setPreviewList] = useState(
-    review.images
+    review
       ? review.images.concat(new Array(3 - review.images.length).fill(""))
       : ["", "", ""]
   );
   const [fileIndex, setFileIndex] = useState(
-    review.images ? review.images.length : 0
+    review ? review.images.length : 0
   );
 
   useEffect(() => {
@@ -219,7 +219,7 @@ export default function ReviewModifyModal({ review, closeModal }) {
           }
           onChange={changeContent}
           id="contentinput"
-          defaultValue={review.message}
+          defaultValue={review?review.message:""}
         ></ContentInput>
       </ContentContainer>
       <FileInputContainer>
