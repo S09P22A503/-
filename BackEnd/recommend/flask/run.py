@@ -4,6 +4,7 @@ import os
 import threading
 from pyspark.ml.recommendation import ALSModel
 from sparksession import CommonSparkSession
+from flask_cors import CORS
 
 from recommendation_model import RecommendationModel
 is_started = False
@@ -63,6 +64,8 @@ def create_app():
   global is_started
 
   app = Flask(__name__)
+  
+  CORS(app)
 
   app.config.from_object('config')
 
