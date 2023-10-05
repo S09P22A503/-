@@ -39,5 +39,8 @@ def recommend_item_by_userId():
   print(type(userId))
   # 추천리스트 받기
   recommendList = RecommendationModel().get_recommendation_for_user(int(userId))
+  
+  if(recommendList is None):
+    recommendList = RecommendationModel().get_proper_user_recommendations()
 
   return jsonify(recommendList)

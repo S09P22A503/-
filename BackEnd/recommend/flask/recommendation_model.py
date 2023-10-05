@@ -44,3 +44,7 @@ class RecommendationModel:
 
     def get_recommendation_model(self):
         return self.__model
+    
+    def get_proper_user_recommendations(self):   
+        first_user_id = next(iter(self.__recommendations))
+        return self.__recommendations.get(first_user_id,None)
