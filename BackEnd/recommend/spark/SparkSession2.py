@@ -9,6 +9,7 @@ import redis
 from apscheduler.schedulers.blocking import BlockingScheduler
 import os
 import requests
+import json
 from sqlalchemy import create_engine, MetaData, Table
 sched = BlockingScheduler()
 
@@ -137,7 +138,6 @@ def train_als():
 
     # redis pub/sub 채널에 모델 학습 사실을 publish
     r.publish('recommend-model-train','model train completed')
-
     print("모델 학습 완료")
 
 # 최초 실행
