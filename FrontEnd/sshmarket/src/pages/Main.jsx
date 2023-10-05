@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import ArticleCard from "../components/article/ArticleCard";
+import { useNavigate } from "react-router";
 
 const Container = styled.div``;
 
@@ -67,9 +68,14 @@ export default function Main() {
   ];
   const categoryIndexArray = [1, 2, 3, 4, 5, 6];
 
-  const clickCategory = (i) => {
-    alert(`카테고리 ${categoryArray[i]} 클릭`);
-  };
+  const categoryPath = "/article?category=";
+
+  const navigete = useNavigate();
+
+  function handleClick(menu) {
+    navigete(categoryPath + menu);
+  }
+
 
   return (
     <Container>
@@ -85,7 +91,7 @@ export default function Main() {
               <CategoryBox
                 key={i}
                 src={source}
-                onClick={() => clickCategory(i)}
+                onClick={() => handleClick(i)}
                 id={boxid}
               ></CategoryBox>
               <CategoryText onClick={() => document.getElementById(boxid).click()}>{categoryArray[i]}</CategoryText>
