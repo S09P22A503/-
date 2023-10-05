@@ -111,9 +111,11 @@ def train_als():
     # 모든 사용자와 아이템의 조합 생성
     all_users = spark.createDataFrame([Row(user_id=uid) for uid in member_ids])
     all_items = spark.createDataFrame([Row(article_id=pid) for pid in product_ids])
-
+    
+    sampled_items = all_items.sample(False, 0.1) 
+    
     # 기존의 data 데이터 프레임에 full_combinations 조인
-    full_combinations = all_users.crossJoin(all_items)
+    full_combinations = all_users.crossJoin(sampled_items)
     full_data = full_combinations.join(data, on=["user_id", "article_id"], how="left_outer").fillna({'score': 0}) # fillna를 사용하여 누락된 평가를 0으로 설정
 
     # Implicit ALS 모델 학습
