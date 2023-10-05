@@ -31,6 +31,7 @@ def replace_train_model():
   
   RecommendationModel().set_recommendation_model(model)
   print(model.userFactors.count())
+  print(model.itemFactors.count())
   print("Debug: 추천시스템 모델 교체 완료")
 
 
