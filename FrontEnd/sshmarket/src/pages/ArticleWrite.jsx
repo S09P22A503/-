@@ -539,7 +539,13 @@ export default function ArticleWrite() {
       </Section>
       <Buttons>
         <Button onClick={onSubmit}>등록하기</Button>
-        <Button onClick={navigate(`/`)}>취소하기</Button>
+        <Button
+          onClick={() => {
+            navigate(`/`);
+          }}
+        >
+          취소하기
+        </Button>
       </Buttons>
     </Container>
   );
