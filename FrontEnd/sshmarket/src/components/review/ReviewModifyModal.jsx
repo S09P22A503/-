@@ -3,6 +3,7 @@ import { BsStar, BsStarFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import StyledButton from "../Button/StyledButton";
 import axios from "axios";
+import { async } from "q";
 
 const Container = styled.div`
   display: flex;
@@ -109,21 +110,28 @@ export default function ReviewModifyModal({ review, closeModal }) {
     if (!review) return;
     const oldImageCount = review.images.length;
     setFileIndex(oldImageCount);
-    setRating(new Array(review.starRating).fill(true).concat(new Array(5 - review.starRating).fill(false)));
+    setRating(
+      new Array(review.starRating)
+        .fill(true)
+        .concat(new Array(5 - review.starRating).fill(false))
+    );
     setContent(review.message);
     let oldUrlList = [];
     review.images.map((image) => {
       return oldUrlList.push(image.imageUrl);
-    })
-    setPreviewList((prev) => oldUrlList.concat(new Array(3 - oldUrlList.length).fill("")));
+    });
+    setPreviewList((prev) =>
+      oldUrlList.concat(new Array(3 - oldUrlList.length).fill(""))
+    );
+
     let newFileList = [];
-    review.images.forEach(async (e, i) => {
+    review.images.forEach(async (image, i) => {
       try {
-        let blob = undefined;
-        await fetch(e.imageUrl).then((res) => {
-          blob = res.blob();
+        let tmpBlob = undefined;
+        await fetch(image.imageUrl).then(async (res) => {
+          await res.blob().then((res) => (tmpBlob = res));
         });
-        newFileList.push(new File(blob, "origin" + i));
+        newFileList.push(new File(tmpBlob, "origin" + i));
       } catch {
         alert("리뷰 이미지를 불러오는 중 문제가 발생했습니다.");
       }
