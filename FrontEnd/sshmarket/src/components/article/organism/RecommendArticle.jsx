@@ -1,42 +1,26 @@
 import styled from "styled-components";
 import ArticleCard from "../ArticleCard";
-import React from "react";
-
+import React, { useEffect } from "react";
+import { readUserRecommendations } from "../../../api/readUserRecommend";
 const Container = styled.div`
   display: flex;
 `;
 
-export default function RecommendArticle({}) {
-  const data = [
-    {
-      title: "[자연맛남] 제주직송 포슬포슬 노지감자 5KG (대)",
-      mainImage:
-        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-      price: 10000,
-      starRating: 4.7,
-      reviewCnt: 15,
-      articleId: 2,
-    },
-    {
-      title: "[자연맛남] 제주직송 포슬포슬 노지감자 5KG (대)",
-      mainImage:
-        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-      price: 10000,
-      starRating: 4.7,
-      reviewCnt: 15,
-      articleId: 2,
-    },
-    {
-      title: "[자연맛남] 제주직송 포슬포슬 노지감자 5KG (대)",
-      mainImage:
-        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/fv00/image/24VXzJOiAxtt6hE59p1yGOZDdsQ.jpg",
-      price: 10000,
-      starRating: 4.7,
-      reviewCnt: 15,
-      articleId: 2,
-    },
-  ];
-
+export default function RecommendArticle({memberId}) {
+  const data = []
+  useEffect(() => {
+    async function fetchData() {
+      await readUserRecommendations({
+        responseFunc: {
+          200: (response) => {
+            console.log(response)
+          },
+        },
+        memberId
+      });
+    }
+    fetchData();
+  }, [])
   return (
     <Container>
       {data.map((review, idx) => (
