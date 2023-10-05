@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Star from "../common/Star";
+import MemberProfile from "../common/MemberProfile";
 
 const Container = styled.div`
   margin-top: 40px;
@@ -20,7 +21,11 @@ const ContentContainer = styled.div`
   margin-bottom: 15px;
 `;
 
-const TitleContainer = styled.div``;
+const TitleContainer = styled.div`
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: larger;
+`;
 
 const InfoContainer = styled.div`
   //별점과 리뷰 작성일이 담긴 컨테이너
@@ -52,9 +57,7 @@ const Image = styled.img`
 `;
 
 export default function ReviewBox({
-  memberId,
-  nickname,
-  profile,
+  member,
   key,
   starRating,
   articleTitle,
@@ -76,9 +79,11 @@ export default function ReviewBox({
     <Container>
       <Line></Line>
       {isMyPage ? (
-        <ProfileContainer></ProfileContainer>
-      ) : (
         <TitleContainer>{articleTitle}</TitleContainer>
+      ) : (
+        <ProfileContainer>
+          <MemberProfile member={member}></MemberProfile>
+        </ProfileContainer>
       )}
       <InfoContainer>
         <Star rating={starRating}></Star>
@@ -89,7 +94,7 @@ export default function ReviewBox({
       <ImageListContainer>
         {images.map((image, index) => (
           <ImageContainer width={280} height={280}>
-            <Image src={image} key={index} />
+            <Image src={image.imageUrl} key={index} />
           </ImageContainer>
         ))}
       </ImageListContainer>

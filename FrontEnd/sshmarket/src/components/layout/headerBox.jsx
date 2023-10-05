@@ -152,7 +152,7 @@ export default function Header() {
   const doSearch = (e) => {
     if (!seachKeyword.trim()) return;
     if (e.key !== "Enter") return;
-    navigate(`/article?keyword=${seachKeyword}&page=1&size=24`);
+    window.location.replace(`/article?keyword=${seachKeyword}`);
   };
 
   const toggleMenu = (e) => {

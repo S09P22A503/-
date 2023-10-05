@@ -9,14 +9,16 @@ import {
   getTradeDetail,
   setTradeSell,
   setTradeBuy,
+  getTraderProfile,
 } from "../../api/trade.js";
 
-function Chat({ tradeId, setMessageFlag, member }) {
+function Chat({ tradeId, setMessageFlag }) {
   const { message, sendMessage, newMessages, ChangeMessages } = useChat({
     tradeId,
   });
   const [messages, setMessages] = useState();
   const [tradeDetail, setTradeDetail] = useState();
+  const [trader, setTrader] = useState();
   const { id } = useSelector((state) => state.MemberReducer);
   const memberId = id;
   const [showButtons, setShowButtons] = useState(true);
@@ -79,6 +81,15 @@ function Chat({ tradeId, setMessageFlag, member }) {
           },
           data: { tradeId },
         });
+
+        await getTraderProfile({
+          responseFunc: {
+            200: (response) => {
+              setTrader(response.data.data);
+            },
+          },
+          data: { tradeId },
+        });
       }
     }
     fetchData();
@@ -96,9 +107,9 @@ function Chat({ tradeId, setMessageFlag, member }) {
       <TradeTitleContainer>
         <TradeTitleBox>
           <ProfileBox>
-            <ProfileImageWrapper src={member.profile}></ProfileImageWrapper>
+            <ProfileImageWrapper src={trader?.profile}></ProfileImageWrapper>
             <ProfileWrapper>
-              <NameWrapper>{member.nickname}</NameWrapper>
+              <NameWrapper>{trader?.nickname}</NameWrapper>
               <TitleWrapper>{tradeDetail?.articleTitle}</TitleWrapper>
             </ProfileWrapper>
           </ProfileBox>
@@ -162,7 +173,9 @@ function Chat({ tradeId, setMessageFlag, member }) {
               </RightMessageBox>
             ) : (
               <MessageBox key={message.id}>
-                <ProfileImageWrapper src={member.profile}></ProfileImageWrapper>
+                <ProfileImageWrapper
+                  src={trader?.profile}
+                ></ProfileImageWrapper>
                 <LeftMessageBox>{message.message}</LeftMessageBox>
               </MessageBox>
             )
@@ -175,7 +188,9 @@ function Chat({ tradeId, setMessageFlag, member }) {
               </RightMessageBox>
             ) : (
               <MessageBox key={index}>
-                <ProfileImageWrapper src={member.profile}></ProfileImageWrapper>
+                <ProfileImageWrapper
+                  src={trader?.profile}
+                ></ProfileImageWrapper>
                 <LeftMessageBox>{newMessage.message}</LeftMessageBox>
               </MessageBox>
             )

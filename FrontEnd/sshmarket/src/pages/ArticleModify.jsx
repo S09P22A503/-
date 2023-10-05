@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useLocation} from "react-router-dom";
 import { useState, useEffect } from "react";
 import ImageUpload from "../components/article/ImageUpload";
 import MultipleImageUpload from "../components/article/MultipleImageUpload";
 import PriceChart from "../components/common/PriceChart";
 import { getProductData } from "../api/product";
-import { writeArticle } from "../api/articlewrite";
-
+import { modifyArticle } from "../api/articlemodify";
+import { readArticle } from "../api/articleread";
+import ArticleList from "./ArticleList";
 const commonStyles = {
   border: "1px solid #B388EB",
   borderRadius: "4px",
@@ -85,6 +86,7 @@ const TextArea = styled.textarea`
   &:hover {
     border-color: #5F0080;  
     border-width: 2px;
+  }
 `;
 
 const Buttons = styled.div`
@@ -199,16 +201,19 @@ const ImageUploadSection = styled.section`
 `;
 
 export default function ArticleModify() {
+
+
+  const articleId = useLocation().pathname.split("/")[3];
   //멤버 가져오기
   const member = useSelector((state) => state.MemberReducer);
 
   // 네비게이트 객체
   const navigate = useNavigate();
 
-  if (!member.id) {
-    alert("로그인을 해주세요!");
-    navigate("/");
-  }
+  // if (!member.id) {
+  //   alert("로그인을 해주세요!");
+  //   navigate("/");
+  // }
 
   const [showWeight, setShowWeight] = useState(false); // 토글 상태를 저장하기 위한 상태
 
@@ -222,7 +227,6 @@ export default function ArticleModify() {
         responseFunc: {
           200: (response) => {
             setWholeProductList(response.data);
-            console.log(wholeProductList);
           },
         },
       });
@@ -270,6 +274,11 @@ export default function ArticleModify() {
     "세종특별자치시",
   ];
 
+  function findLocationIdByLocationName(locationName){
+    return regionOptions.findIndex((location)=> locationName === location.locationName);
+  }
+
+
   const regionOptions = firstRegionOptions.map((region, index) => {
     return { locationId: index, locationName: region };
   });
@@ -294,14 +303,14 @@ export default function ArticleModify() {
   const [productTitle, setProductTitle] = useState("");
 
   //중량
-  const [productWeight, setProductWeight] = useState("");
+  const [productWeight, setProductWeight] = useState(null);
 
   //중량 단위
-  const [productWeightUnit, setProductWeightUnit] = useState("");
+  const [productWeightUnit, setProductWeightUnit] = useState(null);
 
   //개수
 
-  const [productAmount, setProductAmount] = useState("");
+  const [productAmount, setProductAmount] = useState(null);
 
   // 가격
   const [productPrice, setProductPrice] = useState("");
@@ -315,6 +324,63 @@ export default function ArticleModify() {
   // 대표 이미지
   const [profileImage, setProfileImage] = useState(null);
 
+  const [deletedUrls,setDeletedUrls] = useState([]);
+
+  const [mainImageChanged,setMainImageChanged] = useState(false);
+
+
+
+  // 처음 렌더링할때 해당하는 상품정보 가져오기
+  useEffect(() => {
+    async function fetchData() {
+      await readArticle({
+        responseFunc: {
+          200: (response) => {
+            const {
+              amount,
+              content,
+              id,
+              images,
+              itemId,
+              location,
+              mainImage,
+              mass,
+              price,
+              title,
+              tradeType
+            } = response.data.data;
+            setDeletedUrls(images);
+            fetch(mainImage).then(
+                (res)=> res.blob().then(
+                  (blob)=> {
+                    setProfileImage(blob)
+                  }
+                )
+            );
+            images.map((imageUrl)=>{
+              fetch(imageUrl).then(
+                (res)=> res.blob().then(
+                  (blob)=> setUploadedImages(prev=>[...prev,blob])
+                )
+              )
+            })
+            setSelectedTransactionOption(tradeType)
+            setSelectedRegionOption(findLocationIdByLocationName(location))
+            setSelectedCategoryOption(parseInt(itemId / 100));
+            setSelectedProductOption(itemId);
+            setProductAmount(amount);
+            setProductWeight(mass);
+            setProductPrice(price);
+            setProductTitle(title);
+            setProductContent(content);
+          },
+        },
+        articleId,
+      });
+    }
+    fetchData();
+  }, []);
+
   //카테고리 옵션 변경 콜백
   const handleCategoryOptionChange = (value) => {
     setSelectedCategoryOption(value);
@@ -327,7 +393,6 @@ export default function ArticleModify() {
         item.itemId.toString().startsWith(selectedCategoryOption)
       )
     );
-    setSelectedProductOption("999");
   }, [selectedCategoryOption]);
 
   const handleProductOptionChange = (value) => {
@@ -342,19 +407,20 @@ export default function ArticleModify() {
   // 거래 지역 변경시
   const handleRegionOptionChange = (value) => {
     setSelectedRegionOption(value);
-    console.log(value);
   };
 
   // 등록 버튼 눌렀을시
   const onSubmit = () => {
     async function fetchData() {
-      await writeArticle({
+      await modifyArticle({
         responseFunc: {
-          201: (response) => {
+          200: (response) => {
             console.log(response);
+            navigate(`/article/${articleId}`);
           },
         },
         data: {
+          articleId,
           memberId: member.id,
           productId: selectedProductOption,
           price: productPrice,
@@ -366,6 +432,8 @@ export default function ArticleModify() {
           tradeType: selectedTransactionOption,
           mainImage: profileImage,
           images: uploadedImages,
+          mainImageChanged,
+          deletedUrls
         },
       });
     }
@@ -447,7 +515,7 @@ export default function ArticleModify() {
       />
       <ImageUploadSection>
         <SectionTitle>대표 이미지등록</SectionTitle>
-        <ImageUpload image={profileImage} setImage={setProfileImage} />
+        <ImageUpload image={profileImage} setImage={setProfileImage} mainImageChanged={mainImageChanged} setMainImageChanged={setMainImageChanged}/>
       </ImageUploadSection>
       <ImageUploadSection>
         <SectionTitle>게시글 이미지등록</SectionTitle>
@@ -531,8 +599,8 @@ export default function ArticleModify() {
         ></TextArea>
       </Section>
       <Buttons>
-        <Button onClick={onSubmit}>등록하기</Button>
-        <Button secondary>취소하기</Button>
+        <Button onClick={onSubmit}>수정하기</Button>
+        <Button onClick={()=>{navigate(`/article/${articleId}`)}}>취소하기</Button>
       </Buttons>
     </Container>
   );
