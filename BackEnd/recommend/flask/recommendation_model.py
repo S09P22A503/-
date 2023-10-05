@@ -21,11 +21,9 @@ class RecommendationModel:
         except:
             memberIds = [i for i in range(1000)]
         
-        print(memberIds)
-        
         userSubset = CommonSparkSession() \
                                     .get_spark_session() \
-                                    .createDataFrame(memberIds, ["user_id"])
+                                    .createDataFrame([(id,) for id in memberIds], ["user_id"])
         recommendationsForUser = self.__model.recommendForUserSubset(userSubset, 5)
         recommendations_list = [row.asDict() for row in recommendationsForUser.collect()]
         recommendations_dict = {row['user_id']: row for row in recommendations_list}
