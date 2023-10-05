@@ -49,4 +49,8 @@ public class TradeHistory extends BaseEntity {
                 .title(title)
                 .build();
     }
+
+    public void successReview() {
+        this.isReviewed = true;
+    }
 }
