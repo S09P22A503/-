@@ -114,22 +114,24 @@ public class Article {
 
     public void modifyArticle(Article modifiedArticle) {
         Article originArticle = this;
-        this.price = modifiedArticle.price;
-        this.title = modifiedArticle.title;
-        this.content = modifiedArticle.content;
-        this.mainImage = modifiedArticle.mainImage; //메인 이미지 변경->원래 이미지 삭제하고 올리는 로직 추후에 추가
+        this.price = modifiedArticle.getPrice();
+        this.title = modifiedArticle.getTitle();
+        this.content = modifiedArticle.getContent();
+        this.mainImage = modifiedArticle.getMainImage();
 
         // 지역과 상품 정보가 변경되었으면 리스트에서 삭제하고 새로 추가
-        if(this.location != modifiedArticle.location) {
+        if(this.location != modifiedArticle.getLocation()) {
             this.location.removeArticle(originArticle);
-            this.location = modifiedArticle.location;
+            this.location = modifiedArticle.getLocation();
             this.location.addArticle(modifiedArticle);
         }
-        if(this.product != modifiedArticle.product) {
+        if(this.product != modifiedArticle.getProduct()) {
             this.product.removeArticle(originArticle);
-            this.product = modifiedArticle.product;
+            this.product = modifiedArticle.getProduct();
             this.product.addArticle(modifiedArticle);
         }
+
+        this.articleImages = modifiedArticle.getArticleImages();
     }
 
     public void removeArticle(Article article) {

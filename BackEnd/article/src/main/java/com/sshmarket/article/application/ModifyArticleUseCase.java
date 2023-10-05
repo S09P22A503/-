@@ -72,7 +72,7 @@ public class ModifyArticleUseCase {
         originalArticle.modifyArticle(modifiedArticle);
 
         articleRepository.saveArticle(originalArticle);
-        articleImageRepository.saveImages(modifiedArticle.getArticleImages());
+        articleImageRepository.saveImages(originalArticle.getArticleImages());
     }
 
     // 지워진 파일들의 url 리스트를 받아서 삭제
