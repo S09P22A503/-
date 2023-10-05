@@ -111,21 +111,25 @@ public class  FindArticleUseCase {
 
     // 특정 사용자가 작성한 글 리스트
     @Transactional(readOnly = true)
-    public List<ArticleCardResponseDto> memberArticleList(Long memberId, Pageable pageable){
+    public Page<ArticleCardResponseDto> memberArticleList(Long memberId, Pageable pageable){
         List<Article> articles = articleRepository.findArticleListByMember(memberId, pageable);
 
-        return articleListByArticles(articles);
+        List<ArticleCardResponseDto> result = articleListByArticles(articles);
+
+        return new PageImpl<>(result, pageable, result.size());
     }
 
     // 좋아요한 글 리스트 반환
     @Transactional(readOnly = true)
-    public List<ArticleCardResponseDto> bookmarkArticleList(Long memberId, Pageable pageable){
+    public Page<ArticleCardResponseDto> bookmarkArticleList(Long memberId, Pageable pageable){
         List<ArticleBookmark> articleBookmarks = articleBookmarkRepository.findArticleBookmarkByMemberId(memberId, pageable);
         List<Article> articleList = articleBookmarks.stream()
                 .map(ArticleBookmark::getArticle)
                 .collect(Collectors.toList());
 
-        return articleListByArticles(articleList);
+        List<ArticleCardResponseDto> result = articleListByArticles(articleList);
+
+        return new PageImpl<>(result, pageable, result.size());
     }
 
     //Article의 리스트를 카드 dto로 변환
