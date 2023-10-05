@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import ArticleCard from "../components/article/ArticleCard";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import ArticleCardList from "../components/article/organism/ArticleCardList";
+import RecommendArticle from "../components/article/organism/RecommendArticle";
 
 const Container = styled.div``;
 
@@ -70,6 +73,9 @@ export default function Main() {
 
   const categoryPath = "/article?category=";
 
+  const member = useSelector((state) => state.MemberReducer);
+
+
   const navigete = useNavigate();
 
   function handleClick(menu) {
@@ -100,30 +106,7 @@ export default function Main() {
         })}
       </CategoryBoxContainer>
       <MainArticleContainer>
-        <ArticleContainer>
-          <ArticleCard width={280}></ArticleCard>
-        </ArticleContainer>
-        <ArticleContainer>
-          <ArticleCard width={280}></ArticleCard>
-        </ArticleContainer>
-        <ArticleContainer>
-          <ArticleCard width={280}></ArticleCard>
-        </ArticleContainer>
-        <ArticleContainer>
-          <ArticleCard width={280}></ArticleCard>
-        </ArticleContainer>
-        <ArticleContainer>
-          <ArticleCard width={280}></ArticleCard>
-        </ArticleContainer>
-        <ArticleContainer>
-          <ArticleCard width={280}></ArticleCard>
-        </ArticleContainer>
-        <ArticleContainer>
-          <ArticleCard width={280}></ArticleCard>
-        </ArticleContainer>
-        <ArticleContainer>
-          <ArticleCard width={280}></ArticleCard>
-        </ArticleContainer>
+        <RecommendArticle memberId={member.id}></RecommendArticle>
       </MainArticleContainer>
     </Container>
   );
