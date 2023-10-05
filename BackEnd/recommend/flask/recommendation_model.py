@@ -27,6 +27,7 @@ class RecommendationModel:
         recommendationsForUser = self.__model.recommendForUserSubset(userSubset, 5)
         recommendations_list = [row.asDict() for row in recommendationsForUser.collect()]
         recommendations_dict = {row['user_id']: row for row in recommendations_list}
+        print(recommendations_dict)
         self.__recommendations = recommendations_dict
         
 
