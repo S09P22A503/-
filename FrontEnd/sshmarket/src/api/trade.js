@@ -113,6 +113,18 @@ const setTradeBuy = async ({ responseFunc, data }) => {
   }
 };
 
+const patchSuccessReview = async ({ responseFunc, data }) => {
+  const { tradeHistoryId } = data;
+
+  try {
+    const response = await instance.patch(`/trades/history/${tradeHistoryId}`);
+    processApiResponse({ responseFunc, response });
+    return response;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export {
   getTradeList,
   getTradeListByKeyword,
@@ -123,4 +135,5 @@ export {
   getTraderProfile,
   setTradeSell,
   setTradeBuy,
+  patchSuccessReview,
 };
