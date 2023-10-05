@@ -1,9 +1,7 @@
 package com.sshmarket.review.application;
 
-import com.sshmarket.review.adapter.in.web.request.ReviewModifyRequestDto;
 import com.sshmarket.review.application.port.in.ModifyReviewUseCase;
 import com.sshmarket.review.application.port.in.command.ModifyReviewCommand;
-import com.sshmarket.review.application.port.out.LoadReviewPort;
 import com.sshmarket.review.application.port.out.UpdateReviewPort;
 import com.sshmarket.review.common.UseCase;
 import com.sshmarket.review.domain.Review;
@@ -12,33 +10,31 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @UseCase
 @RequiredArgsConstructor
 @Transactional
 public class ModifyReviewService implements ModifyReviewUseCase {
 
-    private final LoadReviewPort loadReviewPort;
     private final UpdateReviewPort updateReviewPort;
-    private final AddReviewImageService addReviewImageService;
+    private final UploadReviewImageService uploadReviewImageService;
+
 
     @Override
     public void modifyReview(ModifyReviewCommand modifyReviewCommand) {
-        Review oldReview = loadReviewPort.findReviewById(modifyReviewCommand.getId());
+        Review modifyReview = Review.builder()
+                                    .id(modifyReviewCommand.getId())
+                                    .starRating(modifyReviewCommand.getStartRating())
+                                    .message(modifyReviewCommand.getMessage())
+                                    .reviewImages(new ArrayList<>())
+                                    .build();
 
-        // 새로운 리뷰 이미지 저장
-        List<ReviewImage> newReviewImages = addReviewImageService.addReviewImages(
+        List<ReviewImage> images = uploadReviewImageService.addReviewImages(
                 modifyReviewCommand.getNewReviewImages());
 
-        oldReview.modifyReview(modifyReviewCommand.getMessage(),
-                modifyReviewCommand.getStartRating(), modifyReviewCommand.getSavedReviewIds(),
-                newReviewImages);
+        modifyReview.addReviewImages(images);
 
-        updateReviewPort.updateReview(oldReview);
-
-
+        updateReviewPort.updateReview(modifyReview, modifyReviewCommand.getSavedReviewIds());
     }
 
 

@@ -16,21 +16,24 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
-@Table(name = "review")
 @Getter
+@Table(name = "review")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 class JPAReviewEntity {
 
     @Id
-    @Column(name = "review_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -44,9 +47,11 @@ class JPAReviewEntity {
     private Long buyHistoryId;
 
     @Column(nullable = false)
+    @Setter
     private String message;
 
     @Column(nullable = false)
+    @Setter
     private int starRating;
 
     @Column(nullable = false)
@@ -57,33 +62,32 @@ class JPAReviewEntity {
     private List<JPAReviewImageEntity> reviewImages = new ArrayList<>();
 
     @Builder
-    private JPAReviewEntity(Long id, Long memberId, Long articleId, Long buyHistoryId,
-            String message, int starRating, LocalDateTime createdAt,
-            List<JPAReviewImageEntity> reviewImages) {
-        this.id = id;
-        this.memberId = memberId;
+    private JPAReviewEntity(Long articleId, Long memberId, Long buyHistoryId, String message,
+            int starRating, List<JPAReviewImageEntity> reviewImages) {
         this.articleId = articleId;
+        this.memberId = memberId;
         this.buyHistoryId = buyHistoryId;
         this.message = message;
         this.starRating = starRating;
-        this.createdAt = createdAt;
         this.reviewImages = reviewImages;
     }
 
+
     protected static JPAReviewEntity from(Review review) {
         return JPAReviewEntity.builder()
-                              .articleId(review.getId())
+                              .articleId(review.getArticleId())
                               .memberId(review.getMemberId())
                               .buyHistoryId(review.getBuyHistoryId())
                               .message(review.getMessage())
                               .starRating(review.getStarRating())
+                              .reviewImages(new ArrayList<>())
                               .build();
     }
 
     protected Review convertToDomain() {
         return Review.createReviewWithId(this.id, this.memberId, this.articleId,
                 this.buyHistoryId,
-                this.message, this.starRating, this.reviewImages.stream()
+                this.message, this.starRating, this.createdAt ,this.reviewImages.stream()
                                                                 .map(JPAReviewImageEntity::convertToDomain)
                                                                 .collect(
                                                                         Collectors.toList()));

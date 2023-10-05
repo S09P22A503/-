@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AddReviewImageService {
+public class UploadReviewImageService {
 
     private final UploadReviewImagePort insertReviewImagePort;
 

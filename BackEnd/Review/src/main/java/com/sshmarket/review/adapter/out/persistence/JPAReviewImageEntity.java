@@ -2,6 +2,7 @@ package com.sshmarket.review.adapter.out.persistence;
 
 import com.sshmarket.review.domain.ReviewImage;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "review_image")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Builder
 class JPAReviewImageEntity {
 
@@ -28,23 +30,25 @@ class JPAReviewImageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id", nullable = false)
-    private JPAReviewEntity jpaReviewEntity;
+    private JPAReviewEntity review;
 
     @Column(nullable = false)
     private String imageUrl;
 
-    protected static JPAReviewImageEntity from(ReviewImage reviewImage) {
+
+    protected static JPAReviewImageEntity from(ReviewImage reviewImage, JPAReviewEntity review) {
         return JPAReviewImageEntity.builder()
                                    .imageUrl(reviewImage.getImageUrl())
+                                   .review(review)
                                    .build();
     }
 
     protected ReviewImage convertToDomain() {
         return ReviewImage.builder()
                           .id(this.id)
-                          .reviewId(this.jpaReviewEntity.getId())
+                          .reviewId(this.review.getId())
                           .imageUrl(this.imageUrl)
                           .build();
     }

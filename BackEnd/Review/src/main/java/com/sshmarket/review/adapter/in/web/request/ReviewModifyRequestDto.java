@@ -5,10 +5,16 @@ import com.sshmarket.review.application.port.in.command.AddReviewCommand;
 import com.sshmarket.review.application.port.in.command.ModifyReviewCommand;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewModifyRequestDto {
 
     @NotBlank
