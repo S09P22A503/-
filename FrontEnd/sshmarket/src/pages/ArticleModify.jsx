@@ -86,6 +86,7 @@ const TextArea = styled.textarea`
   &:hover {
     border-color: #5F0080;  
     border-width: 2px;
+  }
 `;
 
 const Buttons = styled.div`
