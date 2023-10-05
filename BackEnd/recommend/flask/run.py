@@ -30,6 +30,7 @@ def replace_train_model():
     raise ValueError("Redis에 학습된 모델이 없습니다.")
   
   RecommendationModel().set_recommendation_model(model)
+  print(model.userFactors.count())
   print("Debug: 추천시스템 모델 교체 완료")
 
 
