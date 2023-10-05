@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ReviewWriteModal from "../review/ReviewWriteModal";
 import { getTradeHistory } from "../../api/trade.js";
 import { useSelector } from "react-redux";
+import Pagination from "../common/pagination";
 
 function TradeHistory() {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
@@ -10,6 +11,8 @@ function TradeHistory() {
   const [targetTradeId, setTargetTradeId] = useState();
   const [tradeHistory, setTradeHistory] = useState([]);
   const memberId = useSelector((state) => state.MemberReducer).id;
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(0);
 
   const openReviewModal = (tradeId, articleId) => {
     setTargetTradeId(tradeId);
@@ -23,20 +26,30 @@ function TradeHistory() {
     setIsOpenReviewModal(false);
   };
 
+  function handleData (page) {
+    getTradeHistory({
+      responseFunc: {
+        200: handleApiResponse,
+      },
+      data: { memberId, page },
+    });
+  }
+
   useEffect(() => {
+    setPage((prev) => 0);
     // API 엔드포인트 URL을 정의합니다.
     getTradeHistory({
       responseFunc: {
         200: handleApiResponse,
       },
-      data: { memberId },
+      data: { memberId, page },
     });
   }, [memberId]);
 
   const handleApiResponse = (response) => {
     if (response.status === 200) {
       // API 호출이 성공하면 데이터를 설정합니다.
-      console.log(response.data.data.content);
+      setData(response.data.data)
       setTradeHistory(response.data.data.content);
     } else {
       // API 호출이 실패하면 오류를 처리합니다.
@@ -63,19 +76,29 @@ function TradeHistory() {
               <TradeDateWrapper>{tradeItem.boughtAt}</TradeDateWrapper>
             </ProductInfoBox>
           </ProductBox>
-          <ReviewButton>
-            <ReviewWrapper
-              onClick={
-                tradeItem.reviewed
-                  ? null
-                  : () => openReviewModal(tradeItem.id, tradeItem.articleId)
-              }
-            >
-              {tradeItem.reviewed ? "리뷰완료" : "리뷰쓰기"}
-            </ReviewWrapper>
-          </ReviewButton>
+          {tradeItem.reviewed ? (
+            <ReviewFinishButton>
+              <RevieFinishwWrapper>리뷰완료</RevieFinishwWrapper>
+            </ReviewFinishButton>
+          ) : (
+            <ReviewWriteButton>
+              <ReviewWriteWrapper
+                onClick={() =>
+                  openReviewModal(tradeItem.id, tradeItem.articleId)
+                }
+              >
+                리뷰쓰기
+              </ReviewWriteWrapper>
+            </ReviewWriteButton>
+          )}
         </TradeHistoryListBox>
       ))}
+      <Pagination
+        handleData={handleData}
+        maxPage={data.totalPages - 1}
+        setPage={setPage}
+        page={page}
+      ></Pagination>
     </TradeHistoryContainer>
   );
 }
@@ -137,7 +160,7 @@ const TradeDateWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-const ReviewButton = styled.div`
+const ReviewFinishButton = styled.div`
   display: flex;
   padding: 4px 16px;
   justify-content: center;
@@ -149,8 +172,27 @@ const ReviewButton = styled.div`
   cursor: pointer;
 `;
 
-const ReviewWrapper = styled.div`
+const RevieFinishwWrapper = styled.div`
   color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+`;
+
+const ReviewWriteButton = styled.div`
+  display: flex;
+  padding: 4px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  border: 1px solid #5f0080;
+  cursor: pointer;
+`;
+
+const ReviewWriteWrapper = styled.div`
+  color: #5f0080;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;

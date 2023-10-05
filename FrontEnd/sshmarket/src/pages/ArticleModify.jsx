@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate ,useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ImageUpload from "../components/article/ImageUpload";
 import MultipleImageUpload from "../components/article/MultipleImageUpload";
@@ -201,8 +201,6 @@ const ImageUploadSection = styled.section`
 `;
 
 export default function ArticleModify() {
-
-
   const articleId = useLocation().pathname.split("/")[3];
   //멤버 가져오기
   const member = useSelector((state) => state.MemberReducer);
@@ -274,10 +272,11 @@ export default function ArticleModify() {
     "세종특별자치시",
   ];
 
-  function findLocationIdByLocationName(locationName){
-    return regionOptions.findIndex((location)=> locationName === location.locationName);
+  function findLocationIdByLocationName(locationName) {
+    return regionOptions.findIndex(
+      (location) => locationName === location.locationName
+    );
   }
-
 
   const regionOptions = firstRegionOptions.map((region, index) => {
     return { locationId: index, locationName: region };
@@ -324,11 +323,9 @@ export default function ArticleModify() {
   // 대표 이미지
   const [profileImage, setProfileImage] = useState(null);
 
-  const [deletedUrls,setDeletedUrls] = useState([]);
+  const [deletedUrls, setDeletedUrls] = useState([]);
 
-  const [mainImageChanged,setMainImageChanged] = useState(false);
-
-
+  const [mainImageChanged, setMainImageChanged] = useState(false);
 
   // 처음 렌더링할때 해당하는 상품정보 가져오기
   useEffect(() => {
@@ -347,25 +344,24 @@ export default function ArticleModify() {
               mass,
               price,
               title,
-              tradeType
+              tradeType,
             } = response.data.data;
             setDeletedUrls(images);
-            fetch(mainImage).then(
-                (res)=> res.blob().then(
-                  (blob)=> {
-                    setProfileImage(blob)
-                  }
-                )
+            fetch(mainImage).then((res) =>
+              res.blob().then((blob) => {
+                setProfileImage(blob);
+              })
             );
-            images.map((imageUrl)=>{
-              fetch(imageUrl).then(
-                (res)=> res.blob().then(
-                  (blob)=> setUploadedImages(prev=>[...prev,blob])
-                )
-              )
-            })
-            setSelectedTransactionOption(tradeType)
-            setSelectedRegionOption(findLocationIdByLocationName(location))
+            images.map((imageUrl) => {
+              fetch(imageUrl).then((res) =>
+                res.blob().then((blob) => {
+                  console.log(blob);
+                  setUploadedImages((prev) => [...prev, blob]);
+                })
+              );
+            });
+            setSelectedTransactionOption(tradeType);
+            setSelectedRegionOption(findLocationIdByLocationName(location));
             setSelectedCategoryOption(parseInt(itemId / 100));
             setSelectedProductOption(itemId);
             setProductAmount(amount);
@@ -433,7 +429,7 @@ export default function ArticleModify() {
           mainImage: profileImage,
           images: uploadedImages,
           mainImageChanged,
-          deletedUrls
+          deletedUrls,
         },
       });
     }
@@ -515,7 +511,12 @@ export default function ArticleModify() {
       />
       <ImageUploadSection>
         <SectionTitle>대표 이미지등록</SectionTitle>
-        <ImageUpload image={profileImage} setImage={setProfileImage} mainImageChanged={mainImageChanged} setMainImageChanged={setMainImageChanged}/>
+        <ImageUpload
+          image={profileImage}
+          setImage={setProfileImage}
+          mainImageChanged={mainImageChanged}
+          setMainImageChanged={setMainImageChanged}
+        />
       </ImageUploadSection>
       <ImageUploadSection>
         <SectionTitle>게시글 이미지등록</SectionTitle>
@@ -600,7 +601,13 @@ export default function ArticleModify() {
       </Section>
       <Buttons>
         <Button onClick={onSubmit}>수정하기</Button>
-        <Button onClick={()=>{navigate(`/article/${articleId}`)}}>취소하기</Button>
+        <Button
+          onClick={() => {
+            navigate(`/article/${articleId}`);
+          }}
+        >
+          취소하기
+        </Button>
       </Buttons>
     </Container>
   );
