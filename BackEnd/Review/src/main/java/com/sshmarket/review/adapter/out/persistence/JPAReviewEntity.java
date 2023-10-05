@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -87,10 +88,10 @@ class JPAReviewEntity {
     protected Review convertToDomain() {
         return Review.createReviewWithId(this.id, this.memberId, this.articleId,
                 this.buyHistoryId,
-                this.message, this.starRating, this.createdAt ,this.reviewImages.stream()
-                                                                .map(JPAReviewImageEntity::convertToDomain)
-                                                                .collect(
-                                                                        Collectors.toList()));
+                this.message, this.starRating, this.createdAt, this.reviewImages.stream()
+                                                                                .map(JPAReviewImageEntity::convertToDomain)
+                                                                                .collect(
+                                                                                        Collectors.toList()));
     }
 
     protected void addReviewImages(List<JPAReviewImageEntity> reviewImages) {

@@ -10,7 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ReviewImagePersistenceAdapter implements UploadReviewImagePort {
 
     private final S3Uploader s3Uploader;
-    private static final String IMAGE_DIRECTORY = "https://chaekbang-bucket.s3.ap-northeast-2.amazonaws.com/";
+
+    private static final String IMAGE_DIRECTORY = "https://a503.s3.ap-northeast-2.amazonaws.com/";
 
     @Override
     public String uploadReviewImage(String fileName, MultipartFile image) {
@@ -18,3 +19,4 @@ public class ReviewImagePersistenceAdapter implements UploadReviewImagePort {
         return IMAGE_DIRECTORY + fileName;
     }
 }
+

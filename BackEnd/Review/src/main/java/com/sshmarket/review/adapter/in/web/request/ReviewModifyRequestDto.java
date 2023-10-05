@@ -3,6 +3,7 @@ package com.sshmarket.review.adapter.in.web.request;
 import com.sshmarket.review.adapter.in.web.request.valid.AllowedContentType;
 import com.sshmarket.review.application.port.in.command.AddReviewCommand;
 import com.sshmarket.review.application.port.in.command.ModifyReviewCommand;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class ReviewModifyRequestDto {
     @NotBlank(message = "별점을 입력해주세요.")
     private Integer starRating;
 
-    private List<Long> savedReviewIds;
+    private List<Long> savedReviewIds = new ArrayList<>();
 
     @AllowedContentType(allowedTypes = {"image/jpg", "image/jpeg", "image/png"},
             allowedExtensions = {"jpg", "jpeg", "png"})

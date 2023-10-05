@@ -48,29 +48,30 @@ class ReviewPersistenceAdapter implements SaveReviewPort, UpdateReviewPort {
         oldReview.setMessage(modifyReview.getMessage());
         oldReview.setStarRating(modifyReview.getStarRating());
 
-        jpaReviewImageRepository.saveAll(modifyReview.getReviewImages()
-                                                     .stream()
-                                                     .map(reviewImage ->
-                                                             JPAReviewImageEntity.from(reviewImage,
-                                                                     oldReview))
-                                                     .collect(Collectors.toList()));
+        jpaReviewImageRepository.saveAll(
+                modifyReview.getReviewImages()
+                            .stream()
+                            .map(reviewImage ->
+                                    JPAReviewImageEntity.from(reviewImage,
+                                            oldReview))
+                            .collect(Collectors.toList()));
 
         deleteReviewImages(oldReview, keepImageIds);
     }
 
     private void deleteReviewImages(JPAReviewEntity oldReview, List<Long> keepImageIds) {
-        List<Long> deleteIds = new ArrayList<>();
+        List<JPAReviewImageEntity> deleteImages = new ArrayList<>();
 
         List<JPAReviewImageEntity> savedReviewImages = jpaReviewImageRepository.findAllByReview(
                 oldReview);
 
         savedReviewImages.forEach(reviewImage -> {
             if (!keepImageIds.contains(reviewImage.getId())) {
-                deleteIds.add(reviewImage.getId());
+                deleteImages.add(reviewImage);
             }
         });
 
-        jpaReviewImageRepository.deleteAllById(deleteIds);
+        jpaReviewImageRepository.deleteAllInBatch(deleteImages);
     }
 
 }
