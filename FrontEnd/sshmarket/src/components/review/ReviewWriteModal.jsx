@@ -5,6 +5,7 @@ import StyledButton from "../Button/StyledButton";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { MemberReducer } from "./../../modules/memberReducer/memberReducer";
+import { patchSuccessReview } from "../../api/trade.js";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
@@ -177,6 +178,20 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
     document.getElementById("contentinput").value = "";
   };
 
+  const handleIsReviewedSubmit = async () => {
+    async function fetchData() {
+      await patchSuccessReview({
+        responseFunc: {
+          200: () => {},
+        },
+        data: {
+          tradeHistoryId: tradeId,
+        },
+      });
+    }
+    fetchData();
+  };
+
   const postReview = () => {
     if (!content) {
       alert("리뷰를 작성해주세요.");
@@ -207,6 +222,7 @@ export default function ReviewWriteModal({ tradeId, articleId, closeModal }) {
     })
       .then((res) => {
         alert(res.data.message);
+        handleIsReviewedSubmit();
         window.location.replace("/mypage?menu=3");
       })
       .catch((e) => {
