@@ -31,20 +31,21 @@ function TradeHistory() {
       responseFunc: {
         200: handleApiResponse,
       },
-      data: { memberId, page },
+      data: { memberId },
+      page: page,
     });
   }
 
   useEffect(() => {
     setPage((prev) => 0);
     // API 엔드포인트 URL을 정의합니다.
-    getTradeHistory({
-      responseFunc: {
-        200: handleApiResponse,
-      },
-      data: { memberId, page },
-    });
+    handleData(0);
   }, [memberId]);
+
+  useEffect(() => {
+    setPage(0);
+    handleData(0);
+  },[])
 
   const handleApiResponse = (response) => {
     if (response.status === 200) {
