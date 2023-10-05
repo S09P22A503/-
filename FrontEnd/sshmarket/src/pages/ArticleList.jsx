@@ -60,13 +60,15 @@ export default function ArticleList() {
   const [TradeSelect, setTradeSelect] = useState(TradeOption[0]);
   const [LocationSelect, setLocationSelect] = useState(LocationOption[0]);
 
-  useEffect(() => {
+  const [page, setPage] = useState(0);
+
+  function getList(page) {
     customAxios
       .get(
         `articles?${keyword ? "keyword=" + keyword : ""}&${
           category ? "category=" + category : ""
         }&locationId=${LocationSelect.value}&tradeType=${TradeSelect.value}` +
-          pageInfo
+          `&size=24&page=${page?page:0}`
       )
       .then((res) => {
         setData(res.data.data);
@@ -74,6 +76,11 @@ export default function ArticleList() {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  useEffect(() => {
+    setPage(0);
+    getList(0);
   }, [TradeSelect, LocationSelect]);
 
   const handleLocationChange = (option) => {
@@ -103,7 +110,7 @@ export default function ArticleList() {
           ></Select>
         </SelectContainger>
       </SelectBoxContainer>
-      <ArticleCardList data={data}></ArticleCardList>
+      <ArticleCardList data={data} page={page} setPage={setPage} handleData={getList}></ArticleCardList>
     </Container>
   );
 }
