@@ -139,16 +139,16 @@ public class  FindArticleUseCase {
                 .collect(Collectors.toMap(Article::getId, Function.identity()));
 
         // articleId에 맞는 리뷰 정보 가져오기
-        List<ReviewResponseDto> reviews = reviewFeignClient.getReviewList(articleIds);
-        Map<Long, ReviewResponseDto> reviewMap = reviews.stream()
-                .collect(Collectors.toMap(ReviewResponseDto::getArticleId, Function.identity()));
+        List<ReviewRatingAndNum> reviews = reviewFeignClient.getReviewList(articleIds);
+        Map<Long, ReviewRatingAndNum> reviewMap = reviews.stream()
+                .collect(Collectors.toMap(ReviewRatingAndNum::getArticleId, Function.identity()));
 
 
         // articleId에 맞게 맵핑하여 dto 생성
         List<ArticleCardResponseDto> result = new ArrayList<>();
         for (Long articleId : articleIds) {
             Article article = articleMap.get(articleId);
-            ReviewResponseDto reviewResponseDto = reviewMap.get(articleId);
+            ReviewRatingAndNum reviewResponseDto = reviewMap.get(articleId);
 
             result.add(ArticleCardResponseDto.builder()
                     .id(articleId)
