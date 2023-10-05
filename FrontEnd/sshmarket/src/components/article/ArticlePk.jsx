@@ -100,8 +100,7 @@ const TextContainer = styled.div`
 `;
 
 export default function ArticlePk({ res }) {
-  const defaultImage =
-    "https://a503.s3.ap-northeast-2.amazonaws.com/memberProfile/ch-4620081_1280.jpg";
+  const [bookmark, setBookmark] = useState(res.isLike);
 
   const [currentIndex, setCurrentIndex] = useState();
   function handleChange(index) {
@@ -111,24 +110,25 @@ export default function ArticlePk({ res }) {
   const param = useLocation().pathname.split("/")[2];
 
   const handleLike = () => {
-    axiosWithToken
-      .post(`articles/${param}/bookmarks`)
-      .then((res) => {
-        res.isLike = !res.isLike;
-        console.log("버튼 눌렸음");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    bookmark
+      ? axiosWithToken
+          .delete(`articles/${param}/bookmarks`)
+          .then((res) => {
+            setBookmark(!bookmark);
+          })
+          .catch((err) => console.log(err))
+      : axiosWithToken
+          .post(`articles/${param}/bookmarks`)
+          .then((res) => {
+            setBookmark(!bookmark);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
   };
 
-  const handleDislike = () => {
-    axiosWithToken
-      .delete(`articles/${param}/bookmarks`)
-      .then((res) => {
-        res.isLike = !res.isLike;
-      })
-      .catch((err) => console.log(err));
+  const Heart = (like) => {
+    return like ? <FillHeart></FillHeart> : <EmptyHeart></EmptyHeart>;
   };
 
   const navigate = useNavigate();
@@ -173,7 +173,7 @@ export default function ArticlePk({ res }) {
               ))
             ) : (
               <div>
-                <img src={defaultImage} alt={1} />
+                <img src={res.mainImage} alt={1} />
               </div>
             )}
           </Carousel>
@@ -181,16 +181,8 @@ export default function ArticlePk({ res }) {
       )}
       {res.title && (
         <ContentsContainer>
-          <ButtonContainer>
-            {res.isLike ? (
-              <BookmarkButton onClick={handleDislike}>
-                <FillHeart></FillHeart>
-              </BookmarkButton>
-            ) : (
-              <BookmarkButton onClick={handleLike}>
-                <EmptyHeart></EmptyHeart>
-              </BookmarkButton>
-            )}
+          <ButtonContainer onClick={handleLike}>
+            {Heart(bookmark)}
             <StyledButton
               content="채팅하기"
               width={500}
