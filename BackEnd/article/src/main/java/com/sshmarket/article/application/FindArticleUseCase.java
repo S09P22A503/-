@@ -86,6 +86,10 @@ public class  FindArticleUseCase {
     public Page<ArticleCardResponseDto> findArticleList(Integer category, Long locationId, TradeType tradeType, String keyword, Pageable pageable){
 
         List<Article> articleList = articleRepository.findArticleListByKeyword(category, locationId, tradeType, keyword, pageable);
+//
+//        for (Article article : articleList) {
+//            System.out.println(article.getTitle());
+//        }
 
         List<ArticleCardResponseDto> result = articleListByArticles(articleList);
 
