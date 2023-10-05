@@ -35,8 +35,12 @@ def collect_data():
 @bp.route('/recommend/user',methods=['GET'])
 def recommend_item_by_userId():
   userId = request.args.get('userId')
-
-  print(type(userId))
+  
+  try:
+    tmp = int(userId)
+  except:
+    userId = -1
+  
   # 추천리스트 받기
   recommendList = RecommendationModel().get_recommendation_for_user(int(userId))
   
