@@ -69,7 +69,6 @@ export default function ArticleList() {
           pageInfo
       )
       .then((res) => {
-        console.log(res.data.data);
         setData(res.data.data);
       })
       .catch((err) => {
@@ -79,11 +78,9 @@ export default function ArticleList() {
 
   const handleLocationChange = (option) => {
     setLocationSelect(option);
-    console.log(option);
   };
   const handleTradeChange = (option) => {
     setTradeSelect(option);
-    console.log(option);
   };
 
   return (
