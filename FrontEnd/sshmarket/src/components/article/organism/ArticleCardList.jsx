@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ArticleCard from "../ArticleCard";
 import { useEffect } from "react";
+import Pagination from "../../common/pagination";
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +19,7 @@ const CardContainer = styled.div`
   margin-right: 20px;
 `;
 
-export default function ArticleCardList({ data }) {
+export default function ArticleCardList({ data, page, setPage, handleData }) {
   return (
     <Container>
       {data.content && (
@@ -42,6 +43,7 @@ export default function ArticleCardList({ data }) {
           ))}
         </ListContainer>
       )}
+      <Pagination handleData={handleData} maxPage={data.totalPages -1} setPage={setPage} page={page}></Pagination>
     </Container>
   );
 }
