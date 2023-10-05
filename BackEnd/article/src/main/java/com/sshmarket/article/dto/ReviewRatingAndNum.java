@@ -22,4 +22,13 @@ public class ReviewRatingAndNum {
         this.starRating = starRating;
         this.reviewCnt = reviewCnt;
     }
+
+    @Override
+    public String toString() {
+        return "ReviewRatingAndNum{" +
+                "articleId=" + articleId +
+                ", starRating=" + starRating +
+                ", reviewCnt=" + reviewCnt +
+                '}';
+    }
 }
