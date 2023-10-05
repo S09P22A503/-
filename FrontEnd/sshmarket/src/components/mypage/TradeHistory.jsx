@@ -8,7 +8,7 @@ function TradeHistory() {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
   const [targetArticleId, setTargetArticleId] = useState();
   const [targetTradeId, setTargetTradeId] = useState();
-  const [tradeHistory, setTradeHistory] = useState();
+  const [tradeHistory, setTradeHistory] = useState([]);
   const memberId = useSelector((state) => state.MemberReducer).id;
 
   const openReviewModal = (tradeId, articleId) => {
