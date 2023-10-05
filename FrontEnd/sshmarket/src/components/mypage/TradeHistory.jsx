@@ -8,7 +8,7 @@ function TradeHistory() {
   const [isOpenReviewModal, setIsOpenReviewModal] = useState(false);
   const [targetArticleId, setTargetArticleId] = useState();
   const [targetTradeId, setTargetTradeId] = useState();
-  const [tradeHistory, setTradeHistory] = useState([]);
+  const [tradeHistory, setTradeHistory] = useState();
   const memberId = useSelector((state) => state.MemberReducer).id;
 
   const openReviewModal = (tradeId, articleId) => {
@@ -63,17 +63,21 @@ function TradeHistory() {
               <TradeDateWrapper>{tradeItem.boughtAt}</TradeDateWrapper>
             </ProductInfoBox>
           </ProductBox>
-          <ReviewButton>
-            <ReviewWrapper
-              onClick={
-                tradeItem.reviewed
-                  ? null
-                  : () => openReviewModal(tradeItem.id, tradeItem.articleId)
-              }
-            >
-              {tradeItem.reviewed ? "리뷰완료" : "리뷰쓰기"}
-            </ReviewWrapper>
-          </ReviewButton>
+          {tradeItem.reviewed ? (
+            <ReviewFinishButton>
+              <RevieFinishwWrapper>리뷰완료</RevieFinishwWrapper>
+            </ReviewFinishButton>
+          ) : (
+            <ReviewWriteButton>
+              <ReviewWriteWrapper
+                onClick={() =>
+                  openReviewModal(tradeItem.id, tradeItem.articleId)
+                }
+              >
+                리뷰쓰기
+              </ReviewWriteWrapper>
+            </ReviewWriteButton>
+          )}
         </TradeHistoryListBox>
       ))}
     </TradeHistoryContainer>
@@ -137,7 +141,7 @@ const TradeDateWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-const ReviewButton = styled.div`
+const ReviewFinishButton = styled.div`
   display: flex;
   padding: 4px 16px;
   justify-content: center;
@@ -149,8 +153,27 @@ const ReviewButton = styled.div`
   cursor: pointer;
 `;
 
-const ReviewWrapper = styled.div`
+const RevieFinishwWrapper = styled.div`
   color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+`;
+
+const ReviewWriteButton = styled.div`
+  display: flex;
+  padding: 4px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  border: 1px solid #5f0080;
+  cursor: pointer;
+`;
+
+const ReviewWriteWrapper = styled.div`
+  color: #5f0080;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
