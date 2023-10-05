@@ -32,6 +32,7 @@ const Image = styled.img`
 `;
 
 const InfoContainer = styled.div`
+  width: ${({ width }) => width}px; /* 원하는 가로 크기로 설정 */
   border: 1px solid #c2c2c2;
   padding: 10px 10px 0px 10px;
   border-radius: 0px 0px 15px 15px;
@@ -98,7 +99,7 @@ export default function ArticleCard({
       >
         <Image src={mainImage}></Image>
       </ImageContainer>
-      <InfoContainer>
+      <InfoContainer width={width ? width - 22 : 268}>
         <TitleContainer>{title}</TitleContainer>
         <FlexContainer>
           {amount != null ? <TextContainer>{amount}개</TextContainer> : <></>}

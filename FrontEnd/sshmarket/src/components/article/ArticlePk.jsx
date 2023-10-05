@@ -12,6 +12,7 @@ import PriceChart from "../common/PriceChart";
 import MemberProfile from "../common/MemberProfile";
 import { customAxios } from "../../api/customAxios";
 import axios from "axios";
+import { axiosWithToken } from "../../api/axiosWithToken";
 
 const Container = styled.div``;
 
@@ -110,14 +111,7 @@ export default function ArticlePk({ res }) {
   const param = useLocation().pathname.split("/")[2];
 
   const handleLike = () => {
-    axios
-      .create({
-        baseURL: process.env.REACT_APP_SERVER_URL,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
+    axiosWithToken
       .post(`articles/${param}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
@@ -129,14 +123,7 @@ export default function ArticlePk({ res }) {
   };
 
   const handleDislike = () => {
-    axios
-      .create({
-        baseURL: process.env.REACT_APP_SERVER_URL,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
+    axiosWithToken
       .delete(`articles/${param}/bookmarks`)
       .then((res) => {
         res.isLike = !res.isLike;
@@ -150,9 +137,6 @@ export default function ArticlePk({ res }) {
   const buyerId = id;
   const [sellerId, setSellerId] = useState("");
   useEffect(() => {
-    console.log("ArticlePk", res);
-    console.log("setSellerId", res.member?.id);
-    console.log("buyerId", id);
     setSellerId(res.member?.id);
   }, [res]);
   const createTrade = async () => {
