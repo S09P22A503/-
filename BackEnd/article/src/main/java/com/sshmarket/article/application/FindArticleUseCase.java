@@ -140,6 +140,11 @@ public class  FindArticleUseCase {
 
         // articleId에 맞는 리뷰 정보 가져오기
         List<ReviewRatingAndNum> reviews = reviewFeignClient.getReviewList(articleIds);
+
+        for (ReviewRatingAndNum r:reviews) {
+            System.out.println(r.toString());
+        }
+
         Map<Long, ReviewRatingAndNum> reviewMap = reviews.stream()
                 .collect(Collectors.toMap(ReviewRatingAndNum::getArticleId, Function.identity()));
 
