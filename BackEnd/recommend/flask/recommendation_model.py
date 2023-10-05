@@ -25,9 +25,13 @@ class RecommendationModel:
                                     .get_spark_session() \
                                     .createDataFrame([(id,) for id in memberIds], ["user_id"])
         recommendationsForUser = self.__model.recommendForUserSubset(userSubset, 5)
-        recommendations_list = [row.asDict() for row in recommendationsForUser.collect()]
+        recommendations_list = []
+        for row in recommendationsForUser.collect():
+            user_id = row['user_id']
+            article_ids = [rec['article_id'] for rec in row['recommendations']]
+            recommendations_list.append({'user_id': user_id, 'recommendations': article_ids})
+
         recommendations_dict = {row['user_id']: row for row in recommendations_list}
-        print(recommendations_dict)
         self.__recommendations = recommendations_dict
         
 
