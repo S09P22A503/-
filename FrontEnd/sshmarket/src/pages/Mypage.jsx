@@ -31,7 +31,8 @@ const NavMenu = styled.div`
   font-size: large;
   font-weight: bold;
   color: ${(props) => (props.iscurr ? "var(--primary)" : "black")};
-  border-bottom: ${(props) => (props.iscurr ? "5px solid var(--secondary)" : "")};
+  border-bottom: ${(props) =>
+    props.iscurr ? "5px solid var(--secondary)" : ""};
   cursor: pointer;
 `;
 
@@ -40,13 +41,12 @@ const CurrMenu = styled.div`
   justify-content: center;
 `;
 
-export default function Mypage({menu}) {
-
+export default function Mypage({ menu }) {
   const member = useSelector((state) => state.MemberReducer);
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const paramValue = searchParams.get('menu');
+  const paramValue = searchParams.get("menu") ? searchParams.get("menu") : 0;
 
   const navMenuList = [
     "내 프로필",
@@ -56,36 +56,45 @@ export default function Mypage({menu}) {
     "리뷰 관리",
   ];
 
-  const menuComponentList = [MyProfile, MyArticle, MyBookmark, TradeHistory, MyReview];
-
-  const [currMenu, setCurrMenu] = useState(menu?menu:0);
-  
   const changeMenu = (menu) => {
-    setCurrMenu(menu)
-  }
+    navigate(`/mypage?menu=${menu}`);
+  };
 
   useEffect(() => {
     if (!member.id) {
       alert("잘못된 접근입니다.");
       navigate("/");
     }
-  },[])
-
-  useEffect(() => {
-    if (paramValue) {
-      setCurrMenu(paramValue)
-    }
-  },[])
+  }, []);
 
   return (
     <Container>
       <NavBar>
         {navMenuList.map((name, i) => {
-          return <NavMenu key={i} onClick={()=>changeMenu(i)} iscurr={name === navMenuList[currMenu]}>{name}</NavMenu>;
+          return (
+            <NavMenu
+              key={i}
+              onClick={() => changeMenu(i)}
+            >
+              {name}
+            </NavMenu>
+          );
         })}
       </NavBar>
       <CurrMenu>
-        {React.createElement(menuComponentList[currMenu])}
+        {paramValue === "0" ? (
+          <MyProfile></MyProfile>
+        ) : paramValue === "1" ? (
+          <MyArticle></MyArticle>
+        ) : paramValue === "2" ? (
+          <MyBookmark></MyBookmark>
+        ) : paramValue === "3" ? (
+          <TradeHistory></TradeHistory>
+        ) : paramValue === "4" ? (
+          <MyReview></MyReview>
+        ) : (
+          <MyProfile></MyProfile>
+        )}
       </CurrMenu>
     </Container>
   );
