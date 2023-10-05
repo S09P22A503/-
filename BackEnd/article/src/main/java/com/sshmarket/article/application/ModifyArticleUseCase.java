@@ -109,7 +109,7 @@ public class ModifyArticleUseCase {
 
     private void validateAuthor(Long originAuthor, Long author){
         if(originAuthor != author){
-            throw new PermissionDeniedException("원글 작성자가 아닙니다.");
+            throw new PermissionDeniedException("원글 작성자:"+originAuthor+" 수정하는 사람:"+author+" 원글 작성자가 아닙니다.");
         }
     }
 
