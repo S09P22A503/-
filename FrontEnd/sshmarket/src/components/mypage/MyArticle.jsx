@@ -22,7 +22,7 @@ export default function MyArticle() {
 
   function handleData(page) {
     axiosWithToken
-      .get(`articles/member/${member.id}?size=24&page=${page}`)
+      .get(`articles/member/${member.id}?size=15&page=${page}`)
       .then((res) => {
         setData(res.data.data);
       })
