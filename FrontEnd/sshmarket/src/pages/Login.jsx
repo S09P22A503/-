@@ -56,12 +56,10 @@ export default function LoginPage() {
     })
       .then((res) => {
         dispatch(Login({...res.data.data}));
-        alert(res.data.message);
         navigate("/");
       })
       .catch((e) => {
-        if (e.response.status === 303) {
-          alert("회원가입 화면으로 이동합니다.");
+        if (e.response && e.response.status && e.response.status === 303) {
           localStorage.setItem("accessToken", e.response.data.message);
           navigate("/signup");
           return;
