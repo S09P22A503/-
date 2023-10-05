@@ -61,6 +61,27 @@ public class ArticleModifyRequestDto {
                 amount, mass, tradeType, title, content, mainImageUrl, imageUrls);
     }
 
+    @Override
+    public String toString() {
+        return "ArticleModifyRequestDto{" +
+                "IMAGE_DIRECTORY='" + IMAGE_DIRECTORY + '\'' +
+                ", id=" + id +
+                ", memberId=" + memberId +
+                ", itemId=" + itemId +
+                ", price=" + price +
+                ", amount=" + amount +
+                ", mass=" + mass +
+                ", locationId=" + locationId +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", tradeType=" + tradeType +
+                ", mainImage=" + mainImage +
+                ", mainImageChanged=" + mainImageChanged +
+                ", deletedUrls=" + deletedUrls +
+                ", images=" + images +
+                '}';
+    }
+
     public String makeImageUrl(String savedImageUrl) {
         return IMAGE_DIRECTORY + savedImageUrl;
     }

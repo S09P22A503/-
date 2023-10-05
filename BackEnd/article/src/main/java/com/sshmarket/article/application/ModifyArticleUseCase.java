@@ -49,13 +49,13 @@ public class ModifyArticleUseCase {
         if(productList.size()==0) throw new NotFoundResourceException("존재하지 않는 상품입니다.");
         else product = productList.get(0);
 
-
         String mainImageName = "";
 
         if(articleModifyRequestDto.getMainImageChanged()) {
             // 메인 이미지가 바꼈으면 다시 저장
             s3Uploader.delete(originalArticle.getMainImage().replaceFirst(imageDir, ""));
             mainImageName = makeFileName(directory, articleModifyRequestDto.getMainImage());
+            s3Uploader.upload(mainImageName, articleModifyRequestDto.getMainImage());
         }
         else{
             mainImageName = originalArticle.getMainImage().replaceFirst(imageDir, "");
@@ -71,25 +71,28 @@ public class ModifyArticleUseCase {
 
         originalArticle.modifyArticle(modifiedArticle);
 
+
+        List<ArticleImage> articleImages = new ArrayList<>();
+        for (String s:imageUrls) {
+            articleImages.add(ArticleImage.createArticleImage(s, originalArticle));
+        }
+
         articleRepository.saveArticle(originalArticle);
-        articleImageRepository.saveImages(originalArticle.getArticleImages());
+        articleImageRepository.saveImages(articleImages);
     }
 
     // 지워진 파일들의 url 리스트를 받아서 삭제
     private void removeImages(Article article, List<String> deletedImages, List<ArticleImage> imageFileNames) {
+        articleImageRepository.removeImagesById(article);
 
         for (String imageUrl : deletedImages) {
-            article.removeArticleImage(articleImageRepository.findImageByUrl(imageUrl)
-                    .orElseThrow(() -> new NotFoundResourceException("존재하지 않는 이미지입니다.")));
-
             articleImageRepository.removeImageByImageUrl(imageUrl);
             s3Uploader.delete(imageUrl.replaceFirst(imageDir, ""));
         }
+
     }
 
     private void uploadList(List<MultipartFile> images, List<String> imageUrls){
-        if(images.isEmpty()) return;
-
         String url = "";
 
         for (MultipartFile file : images) {
