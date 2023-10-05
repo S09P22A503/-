@@ -181,8 +181,10 @@ export default function ArticlePk({ res }) {
       )}
       {res.title && (
         <ContentsContainer>
-          <ButtonContainer onClick={handleLike}>
-            {Heart(bookmark)}
+          <ButtonContainer>
+            <BookmarkButton onClick={handleLike}>
+              {Heart(bookmark)}
+            </BookmarkButton>
             <StyledButton
               content="채팅하기"
               width={500}
