@@ -1,11 +1,14 @@
 package com.sshmarket.review.adapter.out.persistence;
 
+import com.sshmarket.review.application.UploadReviewImageService;
 import com.sshmarket.review.application.port.out.LoadReviewPort;
 import com.sshmarket.review.application.port.out.SaveReviewPort;
 import com.sshmarket.review.application.port.out.UpdateReviewPort;
 import com.sshmarket.review.common.PersistenceAdapter;
 import com.sshmarket.review.domain.Review;
+import com.sshmarket.review.domain.ReviewImage;
 import com.sshmarket.review.exception.NotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -37,17 +40,37 @@ class ReviewPersistenceAdapter implements SaveReviewPort, UpdateReviewPort {
 
 
     @Override
-    public void updateReview(Review review) {
-        JPAReviewEntity oldReview = JPAReviewEntity.from(review);
+    public void updateReview(Review modifyReview, List<Long> keepImageIds) {
+        JPAReviewEntity oldReview = reviewRepository.findById(modifyReview.getId())
+                                                    .orElseThrow(() -> new NotFoundException(
+                                                            "리뷰가 존재하지 않습니다."));
 
-        List<JPAReviewImageEntity> jpaReviewImageEntities = jpaReviewImageRepository.saveAll(
-                review.getReviewImages()
-                      .stream()
-                      .map(reviewImage -> JPAReviewImageEntity.from(reviewImage, oldReview))
-                      .collect(
-                              Collectors.toList()));
+        oldReview.setMessage(modifyReview.getMessage());
+        oldReview.setStarRating(modifyReview.getStarRating());
 
-        oldReview.addReviewImages(jpaReviewImageEntities);
+        jpaReviewImageRepository.saveAll(modifyReview.getReviewImages()
+                                                     .stream()
+                                                     .map(reviewImage ->
+                                                             JPAReviewImageEntity.from(reviewImage,
+                                                                     oldReview))
+                                                     .collect(Collectors.toList()));
 
+        deleteReviewImages(oldReview, keepImageIds);
     }
+
+    private void deleteReviewImages(JPAReviewEntity oldReview, List<Long> keepImageIds) {
+        List<Long> deleteIds = new ArrayList<>();
+
+        List<JPAReviewImageEntity> savedReviewImages = jpaReviewImageRepository.findAllByReview(
+                oldReview);
+
+        savedReviewImages.forEach(reviewImage -> {
+            if (!keepImageIds.contains(reviewImage.getId())) {
+                deleteIds.add(reviewImage.getId());
+            }
+        });
+
+        jpaReviewImageRepository.deleteAllById(deleteIds);
+    }
+
 }

@@ -9,33 +9,30 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
+@Setter
 public class Review {
 
     @Getter
     private Long id;
 
     @Getter
-    @NonNull
     private Long memberId;
 
     @Getter
-    @NonNull
     private Long articleId;
 
     @Getter
-    @NonNull
     private Long buyHistoryId;
 
     @Getter
-    @NonNull
     private String message;
 
     @Getter
-    @NonNull
     private int starRating;
 
     @Getter
@@ -84,11 +81,11 @@ public class Review {
     public void modifyReview(String message, int starRating, List<Long> savedReviewIds,
             List<ReviewImage> newReviewImages) {
         if (message != null) {
-            this.message = message;
+            setMessage(message);
         }
 
         if (starRating != 0) {
-            this.starRating = starRating;
+            setStarRating(starRating);
         }
 
         modifyReviewImages(savedReviewIds, newReviewImages);

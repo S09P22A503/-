@@ -10,15 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class ModifyReviewCommand extends SelfValidating<ModifyReviewCommand> {
+public class ModifyReviewCommand {
 
-    @NotBlank
     private final Long id;
 
-    @NotBlank
     private final Integer startRating;
 
-    @NotBlank
     private final String message;
 
     private final List<Long> savedReviewIds;
@@ -33,7 +30,6 @@ public class ModifyReviewCommand extends SelfValidating<ModifyReviewCommand> {
         this.message = message;
         this.savedReviewIds = savedReviewIds;
         this.newReviewImages = newReviewImages;
-        this.validateSelf();
     }
 
 }

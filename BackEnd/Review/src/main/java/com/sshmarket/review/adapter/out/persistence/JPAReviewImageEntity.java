@@ -2,6 +2,7 @@ package com.sshmarket.review.adapter.out.persistence;
 
 import com.sshmarket.review.domain.ReviewImage;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +30,7 @@ class JPAReviewImageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id", nullable = false)
     private JPAReviewEntity review;
 
