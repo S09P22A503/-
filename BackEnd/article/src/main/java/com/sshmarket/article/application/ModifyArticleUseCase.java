@@ -70,7 +70,7 @@ public class ModifyArticleUseCase {
         Article modifiedArticle = articleModifyRequestDto.toEntity(imageDir + mainImageName, imageUrls, location, product);
 
         originalArticle.modifyArticle(modifiedArticle);
-        
+
         articleRepository.saveArticle(originalArticle);
         articleImageRepository.saveImages(modifiedArticle.getArticleImages());
     }

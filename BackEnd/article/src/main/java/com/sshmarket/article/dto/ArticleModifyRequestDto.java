@@ -48,7 +48,6 @@ public class ArticleModifyRequestDto {
 
     @AllowedContentType(allowedTypes = {"image/jpg", "image/jpeg", "image/png"},
             allowedExtensions = {"jpg", "jpeg", "png"})
-    @NotNull(message = "대표 이미지를 선택해주세요.")
     private MultipartFile mainImage;
 
     private Boolean mainImageChanged;

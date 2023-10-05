@@ -1,6 +1,7 @@
 package com.sshmarket.article.infra.database;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sshmarket.article.domain.*;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,10 @@ public class QueryArticleRepository {
 
     // 카테고리, 지역, 거래방식, 검색어
     public List<Article> searchArticleList(Integer itemId, Long locationId, TradeType tradeType, String keyword, Pageable pageable){
-        return jpaQueryFactory.select(article)
+        return jpaQueryFactory.selectDistinct(article)
                 .from(article)
-                .join(article.location, location).fetchJoin()
-                .join(article.product, product).fetchJoin()
+                .leftJoin(article.location, location).fetchJoin()
+                .leftJoin(article.product, product).fetchJoin()
                 .where(productEq(itemId),
                         locationEq(locationId),
                         tradeTypeEq(tradeType),
@@ -48,6 +49,10 @@ public class QueryArticleRepository {
     }
 
     private BooleanExpression keywordContain(String keyword){
-        return article.title.contains(keyword);
+        if (keyword != null) {
+            return article.title.contains(keyword);
+        } else {
+            return null; // 또는 다른 기본적으로 false를 반환하는 조건
+        }
     }
 }
