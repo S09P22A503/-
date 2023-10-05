@@ -46,4 +46,4 @@ WORKDIR /model
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 나머지 애플리케이션 코드 컨테이너에 복사
-CMD ["python","SparkSession.py"]
+CMD ["python","SparkSession2.py"]

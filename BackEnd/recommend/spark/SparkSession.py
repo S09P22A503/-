@@ -49,10 +49,6 @@ print(PostgreSQLHost+" "+PostgreSQLPassword)
 if PostgreSQLHost is None:
    PostgreSQLHost = "localhost"
 
-# 개발 환경
-if(classPath is None):
-    classPath = r"C:\Users\SSAFY\Documents\spark_prac\driver\postgresql-42.6.0.jar"  
-
 # Spark 설정
 conf.set("spark.hadoop.fs.s3a.access.key",S3AccessKey)
 conf.set("spark.hadoop.fs.s3a.secret.key",S3SecretKey)
