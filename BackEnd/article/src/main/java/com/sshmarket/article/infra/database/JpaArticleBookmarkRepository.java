@@ -2,6 +2,7 @@ package com.sshmarket.article.infra.database;
 
 import com.sshmarket.article.domain.Article;
 import com.sshmarket.article.domain.ArticleBookmark;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,5 +15,5 @@ public interface JpaArticleBookmarkRepository extends JpaRepository<ArticleBookm
 
     Optional<ArticleBookmark> findByArticleAndMemberId(Article article, Long memberId);
 
-    List<ArticleBookmark> findByMemberId(Long memberId, Pageable pageable);
+    Page<ArticleBookmark> findByMemberId(Long memberId, Pageable pageable);
 }

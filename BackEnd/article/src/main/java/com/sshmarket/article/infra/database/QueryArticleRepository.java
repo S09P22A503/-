@@ -1,10 +1,13 @@
 package com.sshmarket.article.infra.database;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sshmarket.article.domain.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import org.springframework.data.domain.Pageable;
@@ -21,8 +24,8 @@ public class QueryArticleRepository {
     QProduct product = QProduct.product;
 
     // 카테고리, 지역, 거래방식, 검색어
-    public List<Article> searchArticleList(Integer itemId, Long locationId, TradeType tradeType, String keyword, Pageable pageable){
-        return jpaQueryFactory.selectDistinct(article)
+    public Page<Article> searchArticleList(Integer itemId, Long locationId, TradeType tradeType, String keyword, Pageable pageable){
+        QueryResults<Article> articleList = jpaQueryFactory.selectDistinct(article)
                 .from(article)
                 .leftJoin(article.location, location).fetchJoin()
                 .leftJoin(article.product, product).fetchJoin()
@@ -32,8 +35,9 @@ public class QueryArticleRepository {
                         keywordContain(keyword))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetch();
+                .fetchResults();
 
+        return new PageImpl<>(articleList.getResults(), pageable, articleList.getTotal());
     }
 
     private BooleanExpression productEq(Integer category) {

@@ -34,7 +34,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     }
 
     @Override
-    public List<Article> findArticleListByKeyword(Integer itemId, Long locationId, TradeType tradeType,
+    public Page<Article> findArticleListByKeyword(Integer itemId, Long locationId, TradeType tradeType,
                                                   String keyword, Pageable pageable){
 
         return queryArticleRepository.searchArticleList(itemId, locationId, tradeType, keyword, pageable);
@@ -46,7 +46,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
     }
 
     @Override
-    public List<Article> findArticleListByMember(Long memberId, Pageable pageable) {
+    public Page<Article> findArticleListByMember(Long memberId, Pageable pageable) {
         return jpaArticleRepository.findByMemberId(memberId, pageable);
     }
 
