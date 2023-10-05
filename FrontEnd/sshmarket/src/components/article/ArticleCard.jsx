@@ -19,6 +19,8 @@ const Container = styled(Link)`
 `;
 
 const ImageContainer = styled.div`
+  border-radius: 15px 15px 0px 0px;
+  border: 1px solid #c2c2c2;
   width: ${({ width }) => width}px; /* 원하는 가로 크기로 설정 */
   height: ${({ height }) => height}px; /* 원하는 세로 크기로 설정 */
   overflow: hidden;
@@ -29,11 +31,13 @@ const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover; /* 이미지를 가운데 정렬하고, 비율 유지하지 않고 크롭 */
+  z-index: -1;
 `;
 
 const InfoContainer = styled.div`
   width: ${({ width }) => width}px; /* 원하는 가로 크기로 설정 */
   border: 1px solid #c2c2c2;
+  border-style: none solid solid solid;
   padding: 10px 10px 0px 10px;
   border-radius: 0px 0px 15px 15px;
 `;
@@ -44,12 +48,24 @@ const FlexContainer = styled.div`
 
 const TextContainer = styled.div`
   margin-top: 8px;
+  margin-right: 5px;
 `;
 
 const TitleContainer = styled.div`
   /* font-size: larger; */
   font-weight: bold;
   margin-top: 8px;
+  height: 48px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.4;
+  /*        height: 4.8em;*/
+  text-align: left;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const ScoreContainer = styled.div`
@@ -94,7 +110,7 @@ export default function ArticleCard({
       width={width ? width : 290}
     >
       <ImageContainer
-        width={width ? width : 290}
+        width={width ? width - 2 : 290}
         height={height ? height : 300}
       >
         <Image src={mainImage}></Image>

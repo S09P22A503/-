@@ -22,7 +22,7 @@ export default function MyBookmark() {
 
   function handleData(page) {
     axiosWithToken
-      .get(`articles/bookmark/${member.id}?size=24&page=${page}`)
+      .get(`articles/bookmark/${member.id}?size=15&page=${page}`)
       .then((res) => {
         setData(res.data.data);
       })

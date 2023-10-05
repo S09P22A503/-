@@ -43,7 +43,12 @@ export default function ArticleCardList({ data, page, setPage, handleData }) {
           ))}
         </ListContainer>
       )}
-      <Pagination handleData={handleData} maxPage={data.totalPages -1} setPage={setPage} page={page}></Pagination>
+      <Pagination
+        handleData={handleData}
+        maxPage={data.totalPages - 1}
+        setPage={setPage}
+        page={page}
+      ></Pagination>
     </Container>
   );
 }
