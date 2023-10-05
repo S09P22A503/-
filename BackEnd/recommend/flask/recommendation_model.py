@@ -32,6 +32,7 @@ class RecommendationModel:
             recommendations_list.append({'user_id': user_id, 'recommendations': article_ids})
 
         recommendations_dict = {row['user_id']: row for row in recommendations_list}
+        print(recommendations_dict)
         self.__recommendations = recommendations_dict
         
 
