@@ -4,6 +4,7 @@ import ArticleCardList from "../article/organism/ArticleCardList";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { axiosWithToken } from "../../api/axiosWithToken";
 
 const Container = styled.div`
   margin-top: 3em;
@@ -13,28 +14,16 @@ const Container = styled.div`
   flex-direction: row;
 `;
 
-const ArticleContainer = styled.div`
-  margin-bottom: 2em;
-`;
-
 export default function MyBookmark() {
   const member = useSelector((state) => state.MemberReducer);
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios
-      .create({
-        baseURL: process.env.REACT_APP_SERVER_URL,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
+    axiosWithToken
       .get(`articles/bookmark/${member.id}`)
       .then((res) => {
         setData(res.data.data);
-        console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -43,7 +32,7 @@ export default function MyBookmark() {
 
   return (
     <Container>
-      <ArticleCardList></ArticleCardList>
+      <ArticleCardList data={data}></ArticleCardList>
     </Container>
   );
 }

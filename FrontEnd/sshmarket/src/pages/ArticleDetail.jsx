@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { customAxios } from "../api/customAxios";
+import { axiosWithToken } from "../api/axiosWithToken";
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +19,7 @@ export default function ArticleDetail() {
   const [review, setReview] = useState([]);
 
   useEffect(() => {
-    customAxios
+    axiosWithToken
       .get(`articles/${param}`)
       .then((res) => {
         setData(res.data.data);
@@ -28,7 +29,7 @@ export default function ArticleDetail() {
         console.log(err);
       });
 
-    customAxios
+    axiosWithToken
       .get(`reviews/${param}`)
       .then((res) => {
         console.log(res.data.data);
