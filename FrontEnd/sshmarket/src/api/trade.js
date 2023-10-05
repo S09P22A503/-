@@ -57,7 +57,7 @@ const getTradeHistory = async ({ responseFunc, data, page }) => {
   const { memberId } = data;
 
   try {
-    const response = await instance.get(`/trades/history/${memberId}?size=5&page=${page}`);
+    const response = await instance.get(`/trades/history/${memberId}?size=5&page=${page?page:0}`);
     processApiResponse({ responseFunc, response });
     return response;
   } catch (e) {
