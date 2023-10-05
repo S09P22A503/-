@@ -162,8 +162,8 @@ public class  FindArticleUseCase {
                     .mainImageUrl(article.getMainImage())
                     .title(article.getTitle())
                     .price(article.getPrice())
-                    .reviewCnt(reviewResponseDto.getReviewCnt())
-                    .starRating(reviewResponseDto.getStarRating())
+                    .reviewCnt(reviewResponseDto!=null ? reviewResponseDto.getReviewCnt() : 0)
+                    .starRating(reviewResponseDto!=null ? reviewResponseDto.getStarRating() : 0)
                     .build());
         }
         return result;
