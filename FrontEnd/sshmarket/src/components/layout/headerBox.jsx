@@ -88,6 +88,7 @@ const MenuList = styled.div`
   right: 0;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 5;
 `;
 
 const MenuItem = styled.div`
