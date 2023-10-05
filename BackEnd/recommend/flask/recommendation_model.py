@@ -21,6 +21,8 @@ class RecommendationModel:
         except:
             memberIds = [i for i in range(1000)]
         
+        print(memberIds)
+        
         userSubset = CommonSparkSession() \
                                     .get_spark_session() \
                                     .createDataFrame(memberIds, ["user_id"])
