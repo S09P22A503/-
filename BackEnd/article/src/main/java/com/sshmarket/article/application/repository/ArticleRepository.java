@@ -2,6 +2,7 @@ package com.sshmarket.article.application.repository;
 
 import com.sshmarket.article.domain.Article;
 import com.sshmarket.article.domain.TradeType;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -15,11 +16,11 @@ public interface ArticleRepository {
 
     Article findArticleDetailById(Long id);
 
-    List<Article> findArticleListByKeyword(Integer itemId, Long locationId, TradeType tradeType,
+    Page<Article> findArticleListByKeyword(Integer itemId, Long locationId, TradeType tradeType,
                                            String keyword, Pageable pageable);
 
     List<Article> findArticleByArticleIds(List<Long> articleIds);
 
-    List<Article> findArticleListByMember(Long memberId, Pageable pageable);
+    Page<Article> findArticleListByMember(Long memberId, Pageable pageable);
 
 }

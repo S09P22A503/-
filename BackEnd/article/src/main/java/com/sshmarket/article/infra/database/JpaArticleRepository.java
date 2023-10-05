@@ -1,6 +1,7 @@
 package com.sshmarket.article.infra.database;
 
 import com.sshmarket.article.domain.Article;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,6 @@ public interface JpaArticleRepository extends JpaRepository<Article, Long> {
 
     List<Article> findByIdIn(List<Long> idList);
 
-    List<Article> findByMemberId(Long memberId, Pageable pageable);
+    Page<Article> findByMemberId(Long memberId, Pageable pageable);
 
 }

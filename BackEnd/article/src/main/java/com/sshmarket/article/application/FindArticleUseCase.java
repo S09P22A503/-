@@ -56,9 +56,6 @@ public class  FindArticleUseCase {
             throw new RuntimeException(e);
         }
 
-
-//        Member member = Member.createWithPublicInfo(1L, "보숙", "https://images.chosun.com/resizer/iNZAEGcD0GFzHTGZrdNQpeiwTIw=/530x718/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/6NARDQ2I2QN3J3ZDAC4S6W5DHE.jpg");
-
         ArticleDetailResponseDto responseDto = ArticleDetailResponseDto.builder()
                 .id(articleId)
                 .title(article.getTitle())
@@ -85,15 +82,11 @@ public class  FindArticleUseCase {
     @Transactional(readOnly = true)
     public Page<ArticleCardResponseDto> findArticleList(Integer category, Long locationId, TradeType tradeType, String keyword, Pageable pageable){
 
-        List<Article> articleList = articleRepository.findArticleListByKeyword(category, locationId, tradeType, keyword, pageable);
-//
-//        for (Article article : articleList) {
-//            System.out.println(article.getTitle());
-//        }
+        Page<Article> articleList = articleRepository.findArticleListByKeyword(category, locationId, tradeType, keyword, pageable);
 
-        List<ArticleCardResponseDto> result = articleListByArticles(articleList);
+        List<ArticleCardResponseDto> result = articleListByArticles(articleList.getContent());
 
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result, pageable, articleList.getTotalElements());
     }
 
     // 글 id 리스트를 받아 id와 제목 리스트 반환
@@ -112,24 +105,24 @@ public class  FindArticleUseCase {
     // 특정 사용자가 작성한 글 리스트
     @Transactional(readOnly = true)
     public Page<ArticleCardResponseDto> memberArticleList(Long memberId, Pageable pageable){
-        List<Article> articles = articleRepository.findArticleListByMember(memberId, pageable);
+        Page<Article> articles = articleRepository.findArticleListByMember(memberId, pageable);
 
-        List<ArticleCardResponseDto> result = articleListByArticles(articles);
+        List<ArticleCardResponseDto> result = articleListByArticles(articles.getContent());
 
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result, pageable, articles.getTotalElements());
     }
 
     // 좋아요한 글 리스트 반환
     @Transactional(readOnly = true)
     public Page<ArticleCardResponseDto> bookmarkArticleList(Long memberId, Pageable pageable){
-        List<ArticleBookmark> articleBookmarks = articleBookmarkRepository.findArticleBookmarkByMemberId(memberId, pageable);
-        List<Article> articleList = articleBookmarks.stream()
+        Page<ArticleBookmark> articleBookmarks = articleBookmarkRepository.findArticleBookmarkByMemberId(memberId, pageable);
+        List<Article> articleList = articleBookmarks.getContent().stream()
                 .map(ArticleBookmark::getArticle)
                 .collect(Collectors.toList());
 
         List<ArticleCardResponseDto> result = articleListByArticles(articleList);
 
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result, pageable, articleBookmarks.getTotalElements());
     }
 
     //Article의 리스트를 카드 dto로 변환
@@ -144,10 +137,6 @@ public class  FindArticleUseCase {
 
         // articleId에 맞는 리뷰 정보 가져오기
         List<ReviewRatingAndNum> reviews = reviewFeignClient.getReviewList(articleIds);
-
-        for (ReviewRatingAndNum r:reviews) {
-            System.out.println(r.toString());
-        }
 
         Map<Long, ReviewRatingAndNum> reviewMap = reviews.stream()
                 .collect(Collectors.toMap(ReviewRatingAndNum::getArticleId, Function.identity()));
