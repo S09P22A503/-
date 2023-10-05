@@ -106,12 +106,16 @@ public class ArticleController {
     // 글 리스트 조회
     @GetMapping
     public ResponseEntity<?> articleList(@RequestParam(value = "category", required = false) Integer category,
-                                         @RequestParam(value = "LocationId", required = false) Long LocationId,
+                                         @RequestParam(value = "locationId", required = false) Long locationId,
                                          @RequestParam(value = "tradeType", required = false) TradeType tradeType,
                                          @RequestParam(value = "keyword", required = false) String keyword,
                                          Pageable pageable){
+
+        if(tradeType==TradeType.NONE) tradeType = null;
+        if(locationId==0L) locationId = null;
+
         return HttpResponse.okWithData(HttpStatus.OK, "판매글 리스트 조회 성공",
-                findArticleUseCase.findArticleList(category, LocationId, tradeType, keyword, pageable));
+                findArticleUseCase.findArticleList(category, locationId, tradeType, keyword, pageable));
     }
 
     @GetMapping("/articleTitle")
