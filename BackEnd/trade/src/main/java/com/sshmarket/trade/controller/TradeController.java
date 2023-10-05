@@ -1,12 +1,6 @@
 package com.sshmarket.trade.controller;
 
-import com.sshmarket.trade.application.AddTradeHistoryUseCase;
-import com.sshmarket.trade.application.AddTradeUseCase;
-import com.sshmarket.trade.application.FindTradeHistoryUseCase;
-import com.sshmarket.trade.application.FindTradeMessageUseCase;
-import com.sshmarket.trade.application.FindTradeUseCase;
-import com.sshmarket.trade.application.ModifyTradeUseCase;
-import com.sshmarket.trade.application.SendMessageUseCase;
+import com.sshmarket.trade.application.*;
 import com.sshmarket.trade.domain.Status;
 import com.sshmarket.trade.domain.Trade;
 import com.sshmarket.trade.dto.*;
@@ -41,6 +35,7 @@ public class TradeController {
     private final FindTradeMessageUseCase findTradeMessageUseCase;
     private final FindTradeUseCase findTradeUseCase;
     private final FindTradeHistoryUseCase findTradeHistoryUseCase;
+    private final ModifyTradeHistoryUseCase modifyTradeHistoryUseCase;
     private final ModifyTradeUseCase modifyTradeUseCase;
 
     //trade/pub/send로 요청한거 처리
@@ -118,5 +113,11 @@ public class TradeController {
         MemberResponseDto trader = findTradeUseCase.findTrader(tradeId, token);
         log.info("traderDetail", trader);
         return HttpResponse.okWithData(HttpStatus.OK, "상대방 프로필 조회 성공했습니다.", trader);
+    }
+
+    @PatchMapping("/trades/history/{tradeHistoryId}")
+    public ResponseEntity<?> tradeHistoryUpdate(@PathVariable("tradeHistoryId") Long tradeHistoryId) {
+        modifyTradeHistoryUseCase.successReview(tradeHistoryId);
+        return HttpResponse.ok(HttpStatus.OK, "리뷰 작성 처리에 성공했습니다.");
     }
 }
