@@ -95,50 +95,13 @@ export default function ReviewModifyModal({ review, closeModal }) {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
 
-<<<<<<< HEAD
-  const [rating, setRating] = useState(
-    review
-      ? new Array(review.starRating)
-          .fill(true)
-          .concat(new Array(5 - review.starRating).fill(false))
-      : ["true", "true", "true", "true", "true"]
-  );
-  const [content, setContent] = useState(review ? review.message : "");
-=======
   const [rating, setRating] = useState([true, true, true, true, true]);
   const [content, setContent] = useState("");
->>>>>>> 49e650aa35948a4de26f9db73341ea1da7d848ca
   const [fileList, setFileList] = useState([
     new File([], "tmp"),
     new File([], "tmp"),
     new File([], "tmp"),
   ]);
-<<<<<<< HEAD
-  const [previewList, setPreviewList] = useState(
-    review
-      ? review.images.concat(new Array(3 - review.images.length).fill(""))
-      : ["", "", ""]
-  );
-  const [fileIndex, setFileIndex] = useState(
-    review ? review.images.length : 0
-  );
-
-  useEffect(() => {
-    if (!review || !review.images) return;
-    let newFileList = [];
-    review.images.forEach(async (e,i) => {
-      try {
-        const res = await fetch(e);
-        const blob = await res.blob();
-        newFileList.push(new File(blob,"origin"+i));
-      } catch {
-        alert("리뷰 이미지를 불러오는 중 문제가 발생했습니다.");
-      }
-    })
-    newFileList.concat(new Array(3-newFileList.length).fill(new File([],"tmp")));
-    setFileList((prev) => newFileList);
-  },[])
-=======
   const [previewList, setPreviewList] = useState(["", "", ""]);
   const [fileIndex, setFileIndex] = useState(0);
 
@@ -166,7 +129,6 @@ export default function ReviewModifyModal({ review, closeModal }) {
     );
     setFileList((prev) => newFileList);
   }, [review]);
->>>>>>> 49e650aa35948a4de26f9db73341ea1da7d848ca
 
   const changeRate = (i) => {
     let newRate = [];
@@ -290,11 +252,7 @@ export default function ReviewModifyModal({ review, closeModal }) {
           }
           onChange={changeContent}
           id="contentinput"
-<<<<<<< HEAD
-          defaultValue={review?review.message:""}
-=======
           defaultValue={review ? review.message : ""}
->>>>>>> 49e650aa35948a4de26f9db73341ea1da7d848ca
         ></ContentInput>
       </ContentContainer>
       <FileInputContainer>

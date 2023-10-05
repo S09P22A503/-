@@ -1,14 +1,9 @@
 import styled from "styled-components";
 import ReviewBox from "./../review/ReviewBox";
 import SubButton from "../Button/SubButton";
-<<<<<<< HEAD
-import { useState } from "react";
-import ReviewModifyModal from "../review/ReviewModifyModal";
-=======
 import { useEffect, useState } from "react";
 import ReviewModifyModal from "../review/ReviewModifyModal";
 import axios from "axios";
->>>>>>> 49e650aa35948a4de26f9db73341ea1da7d848ca
 
 const Container = styled.div``;
 
@@ -21,6 +16,7 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  margin-top: 5em;
 `;
 
 const ModalContainer = styled.div`
@@ -32,11 +28,6 @@ const ModalContainer = styled.div`
 `;
 
 export default function MyReview() {
-<<<<<<< HEAD
-  const [isOpenModifyModal, setIsOpenModifyModal] = useState(false);
-  const [targetReview, setTargetReview] = useState();
-
-=======
   const [reviewList, setReviewList] = useState([]);
   const [isOpenModifyModal, setIsOpenModifyModal] = useState(false);
   const [targetReview, setTargetReview] = useState();
@@ -44,7 +35,6 @@ export default function MyReview() {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
 
->>>>>>> 49e650aa35948a4de26f9db73341ea1da7d848ca
   const openModifyModal = (review) => {
     setTargetReview(review);
     setIsOpenModifyModal(true);
@@ -55,8 +45,6 @@ export default function MyReview() {
     setIsOpenModifyModal(false);
   };
 
-<<<<<<< HEAD
-=======
   useEffect(() => {
     axios({
       baseURL: SERVER_URL,
@@ -82,7 +70,6 @@ export default function MyReview() {
 
   // }
   
->>>>>>> 49e650aa35948a4de26f9db73341ea1da7d848ca
   return (
     <Container>
       <ModalContainer hidden={!isOpenModifyModal}>
@@ -91,32 +78,6 @@ export default function MyReview() {
           closeModal={closeModal}
         ></ReviewModifyModal>
       </ModalContainer>
-<<<<<<< HEAD
-      <ReviewContainer>
-        <ReviewBox images={[]}></ReviewBox>
-        <ButtonContainer>
-          <SubButton
-            content={"수정하기"}
-            onClick={() => openModifyModal(undefined)}
-          ></SubButton>
-          <SubButton content={"삭제하기"}></SubButton>
-        </ButtonContainer>
-      </ReviewContainer>
-      <ReviewContainer>
-        <ReviewBox images={[]}></ReviewBox>
-        <ButtonContainer>
-          <SubButton content={"수정하기"}></SubButton>
-          <SubButton content={"삭제하기"}></SubButton>
-        </ButtonContainer>
-      </ReviewContainer>
-      <ReviewContainer>
-        <ReviewBox images={[]}></ReviewBox>
-        <ButtonContainer>
-          <SubButton content={"수정하기"}></SubButton>
-          <SubButton content={"삭제하기"}></SubButton>
-        </ButtonContainer>
-      </ReviewContainer>
-=======
       {reviewList.map((review, i) => {
         return (
           <ReviewContainer>
@@ -137,7 +98,6 @@ export default function MyReview() {
           </ReviewContainer>
         );
       })}
->>>>>>> 49e650aa35948a4de26f9db73341ea1da7d848ca
     </Container>
   );
 }
