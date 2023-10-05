@@ -29,4 +29,12 @@ public class MemberRepositoryImpl implements MemberRepository {
                 .collect(Collectors.toList());
         return memberList;
     }
+
+    @Override
+    public List<Member> findMemberList() {
+        return (List<Member>) docMemberRepository.findAll()
+                .stream()
+                .map(docMember -> PersistMapper.DocMemberToMember(docMember))
+                .collect(Collectors.toList());
+    }
 }

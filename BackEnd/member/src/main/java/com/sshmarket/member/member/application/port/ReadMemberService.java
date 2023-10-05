@@ -23,4 +23,9 @@ public class ReadMemberService implements ReadMemberUseCase {
     public List<Member> findMemberListByIdList(List<Long> idList) {
         return memberRepository.findMemberListByIdList(idList);
     }
+
+    @Override
+    public List<Member> findMemberList() {
+        return memberRepository.findMemberList();
+    }
 }

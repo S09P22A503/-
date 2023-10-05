@@ -42,4 +42,13 @@ public class MemberReadController {
                                                                                  .collect(Collectors.toList());
         return HttpResponse.okWithData(HttpStatus.OK, "조회에 성공했습니다.", memberInfoResponseDtoList);
     }
+
+    @GetMapping("/members/all")
+    public ResponseEntity<?> memberListAll() {
+        List<Long> idList = readMemberUseCase.findMemberList()
+                .stream()
+                .map(member -> member.getId())
+                .collect(Collectors.toList());
+        return HttpResponse.okWithData(HttpStatus.OK, "모든 멤버의 아이디 조회 성공", idList);
+    }
 }

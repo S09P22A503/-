@@ -9,4 +9,6 @@ public interface ReadMemberUseCase {
 
     public List<Member> findMemberListByIdList(List<Long> idList);
 
+    public List<Member> findMemberList();
+
 }

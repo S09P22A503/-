@@ -9,4 +9,6 @@ public interface MemberRepository {
 
     public List<Member> findMemberListByIdList(List<Long> idList);
 
+            List<Member> findMemberList();
+
 }
