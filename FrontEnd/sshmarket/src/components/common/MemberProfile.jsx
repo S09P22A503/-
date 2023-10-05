@@ -31,7 +31,7 @@ export default function MemberProfile({ member }) {
   return (
     <Container>
       <Proflie
-        src={member.profile ? member.profile : "defaultProfile.png"}
+        src={member.profile ? member.profile : "/defaultProfile.png"}
       ></Proflie>
       <Nickname>{member.nickname}</Nickname>
     </Container>
