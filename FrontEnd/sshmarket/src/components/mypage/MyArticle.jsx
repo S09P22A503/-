@@ -18,22 +18,27 @@ export default function MyArticle() {
   const member = useSelector((state) => state.MemberReducer);
 
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(0);
 
-  useEffect(() => {
+  function handleData(page) {
     axiosWithToken
-      .get(`articles/member/${member.id}`)
+      .get(`articles/member/${member.id}?size=24&page=${page}`)
       .then((res) => {
         setData(res.data.data);
-        console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  useEffect(() => {
+    setPage(0);
+    handleData(0);
   }, []);
 
   return (
     <Container>
-      <ArticleCardList data={data}></ArticleCardList>
+      <ArticleCardList data={data} handleData={handleData} page={page} setPage={setPage}></ArticleCardList>
     </Container>
   );
 }
