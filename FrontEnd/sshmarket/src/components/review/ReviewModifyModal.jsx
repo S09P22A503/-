@@ -111,12 +111,16 @@ export default function ReviewModifyModal({ review, closeModal }) {
     setFileIndex(oldImageCount);
     setRating(new Array(review.starRating).fill(true).concat(new Array(5 - review.starRating).fill(false)));
     setContent(review.message);
-    setPreviewList(review.images.concat(new Array(3 - oldImageCount).fill("")));
+    let oldUrlList = [];
+    review.images.map((image) => {
+      return oldUrlList.push(image.imageUrl);
+    })
+    setPreviewList((prev) => oldUrlList.concat(new Array(3 - oldUrlList.length).fill("")));
     let newFileList = [];
     review.images.forEach(async (e, i) => {
       try {
         let blob = undefined;
-        await fetch(e).then((res) => {
+        await fetch(e.imageUrl).then((res) => {
           blob = res.blob();
         });
         newFileList.push(new File(blob, "origin" + i));

@@ -16,6 +16,7 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  margin-top: 5em;
 `;
 
 const ModalContainer = styled.div`
@@ -35,6 +36,7 @@ export default function MyReview() {
   const CLIENT_URL = process.env.REACT_APP_CLIENT_URL;
 
   const openModifyModal = (review) => {
+    window.scrollTo(0,0);
     setTargetReview(review);
     setIsOpenModifyModal(true);
   };
