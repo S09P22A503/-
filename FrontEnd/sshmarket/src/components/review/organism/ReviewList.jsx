@@ -13,6 +13,12 @@ const TextContainer = styled.div`
   padding-left: 10px;
 `;
 
+const NoElemContainer = styled.div`
+  font-size: 20px;
+  margin-left: 10px;
+  margin-top: 30px;
+`;
+
 export default function ReviewList({ data }) {
   const isArticle =
     useLocation().pathname.split("/")[1] === "article" ? true : false;
@@ -20,6 +26,14 @@ export default function ReviewList({ data }) {
   return (
     <Container>
       <TextContainer>상품 리뷰</TextContainer>
+
+      {data.length < 1 ? (
+        <NoElemContainer>
+          리뷰가 없습니다. 첫번째 리뷰를 달아보세요!
+        </NoElemContainer>
+      ) : (
+        <></>
+      )}
 
       {data.map((review, idx) => (
         <React.Fragment key={idx}>

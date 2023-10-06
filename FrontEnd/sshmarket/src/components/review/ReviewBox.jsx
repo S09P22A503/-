@@ -15,7 +15,9 @@ const Line = styled.div`
   width: 920px;
 `;
 
-const ProfileContainer = styled.div``;
+const ProfileContainer = styled.div`
+  margin-bottom: 5px;
+`;
 
 const ContentContainer = styled.div`
   margin-bottom: 15px;
@@ -67,13 +69,6 @@ export default function ReviewBox({
 }) {
   const isMyPage =
     useLocation().pathname.split("/")[1] === "article" ? false : true;
-
-  /*
-프로필(판매글) / 글 제목(마이페이지)
-별점 & 날짜
-내용
-사진 좌좍
-*/
 
   return (
     <Container>
