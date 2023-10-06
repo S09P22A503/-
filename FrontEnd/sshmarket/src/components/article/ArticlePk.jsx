@@ -143,10 +143,17 @@ const TextContainer = styled.div`
 
 export default function ArticlePk({ res, starRating, reviewCnt }) {
   const [bookmark, setBookmark] = useState(res.isLike);
+  const [score, setScore] = useState(starRating);
+  const [cnt, setCnt] = useState(reviewCnt);
 
   useEffect(() => {
     setBookmark(res.isLike);
   }, [res.isLike]);
+
+  useEffect(() => {
+    setScore(starRating);
+    setCnt(reviewCnt);
+  }, [starRating, reviewCnt]);
 
   const [currentIndex, setCurrentIndex] = useState();
   function handleChange(index) {
@@ -255,10 +262,8 @@ export default function ArticlePk({ res, starRating, reviewCnt }) {
               <InfoDetail>판매지 : {res.location}</InfoDetail>
             )}
             <StarContainer>
-              <Star rating={starRating ? starRating : 0} fontSize={60}></Star>
-              <ScoreContainer>
-                &nbsp;{starRating ? starRating : 0}
-              </ScoreContainer>
+              <Star rating={score} fontSize={60}></Star>
+              <ScoreContainer>&nbsp;{score}</ScoreContainer>
               <CountContainer>({reviewCnt ? reviewCnt : 0})</CountContainer>
             </StarContainer>
             <ButtonContainer>
