@@ -14,6 +14,7 @@ import { customAxios } from "../../api/customAxios";
 import axios from "axios";
 import { axiosWithToken } from "../../api/axiosWithToken";
 import Star from "../common/Star";
+import SubButton from "../Button/SubButton";
 
 const Container = styled.div``;
 
@@ -141,6 +142,11 @@ const TextContainer = styled.div`
   margin: 70px 0px 30px 10px;
 `;
 
+const BoardListButton = styled.div`
+  margin-top: 20px;
+  float: right;
+`;
+
 export default function ArticlePk({ res, starRating, reviewCnt }) {
   const [bookmark, setBookmark] = useState(res.isLike);
   const [score, setScore] = useState(starRating);
@@ -176,8 +182,7 @@ export default function ArticlePk({ res, starRating, reviewCnt }) {
       : axiosWithToken
           .post(`articles/${param}/bookmarks`)
           .then((res) => {
-            setBookmark(!bookmark);
-            res.isLike = bookmark;
+            res.isLike = !res.isLike;
           })
           .catch((err) => {
             console.log(err);
@@ -275,6 +280,16 @@ export default function ArticlePk({ res, starRating, reviewCnt }) {
           </InfoContainer>
         )}
       </FlexContainer>
+      {buyerId === sellerId ? (
+        <BoardListButton>
+          <SubButton
+            content="수정하기"
+            onClick={() => navigate(`/article/modify/${param}`)}
+          ></SubButton>
+        </BoardListButton>
+      ) : (
+        <></>
+      )}
       <Line></Line>
       <TextContainer>도소매 가격 추이 그래프</TextContainer>
       <PriceChart itemId={res.itemId} orientation="vertical"></PriceChart>
