@@ -261,11 +261,6 @@ export default function ArticlePk({ res, starRating, reviewCnt }) {
             ) : (
               <InfoDetail>판매지 : {res.location}</InfoDetail>
             )}
-            <StarContainer>
-              <Star rating={score} fontSize={60}></Star>
-              <ScoreContainer>&nbsp;{score}</ScoreContainer>
-              <CountContainer>({reviewCnt ? reviewCnt : 0})</CountContainer>
-            </StarContainer>
             <ButtonContainer>
               <BookmarkButton onClick={handleLike}>
                 {Heart(bookmark)}
