@@ -35,6 +35,7 @@ public class QueryArticleRepository {
                         keywordContain(keyword))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(article.id.desc())
                 .fetchResults();
 
         return new PageImpl<>(articleList.getResults(), pageable, articleList.getTotal());
