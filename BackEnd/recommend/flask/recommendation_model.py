@@ -24,7 +24,7 @@ class RecommendationModel:
         userSubset = CommonSparkSession() \
                                     .get_spark_session() \
                                     .createDataFrame([(id,) for id in memberIds], ["user_id"])
-        recommendationsForUser = self.__model.recommendForUserSubset(userSubset, 5)
+        recommendationsForUser = self.__model.recommendForUserSubset(userSubset, 8  )
         recommendations_list = []
         for row in recommendationsForUser.collect():
             user_id = row['user_id']
