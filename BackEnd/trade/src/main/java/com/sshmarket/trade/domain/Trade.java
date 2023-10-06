@@ -94,7 +94,7 @@ public class Trade extends BaseEntity {
     }
 
     public Long findTrader(Long memberId) {
-        if (this.buyerId != memberId) {
+        if (this.buyerId.equals(memberId)) {
             return this.buyerId;
         }
         return this.sellerId;
