@@ -104,9 +104,13 @@ export default function ArticleCard({
 
   return (
     <Container
-      onClick={() => {
-        moveArticleDetail();
+      to={{
+        pathname: `/article/${articleId}`,
+        state: { starRating, reviewCnt },
       }}
+      // onClick={() => {
+      //   moveArticleDetail();
+      // }}
       width={width ? width : 290}
     >
       <ImageContainer
