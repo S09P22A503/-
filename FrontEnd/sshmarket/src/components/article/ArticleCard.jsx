@@ -97,7 +97,7 @@ export default function ArticleCard({
   height,
 }) {
   const navigate = useNavigate();
-
+  console.log(mainImage);
   const moveArticleDetail = () => {
     window.location.replace(`/article/${articleId}`);
   };
