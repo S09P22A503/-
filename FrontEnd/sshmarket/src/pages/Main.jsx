@@ -75,13 +75,11 @@ export default function Main() {
 
   const member = useSelector((state) => state.MemberReducer);
 
-
   const navigete = useNavigate();
 
   function handleClick(menu) {
     navigete(categoryPath + menu);
   }
-
 
   return (
     <Container>
@@ -100,7 +98,11 @@ export default function Main() {
                 onClick={() => handleClick(i)}
                 id={boxid}
               ></CategoryBox>
-              <CategoryText onClick={() => document.getElementById(boxid).click()}>{categoryArray[i]}</CategoryText>
+              <CategoryText
+                onClick={() => document.getElementById(boxid).click()}
+              >
+                {categoryArray[i]}
+              </CategoryText>
             </CategoryItem>
           ) : undefined;
         })}
