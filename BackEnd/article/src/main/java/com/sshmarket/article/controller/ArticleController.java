@@ -132,10 +132,13 @@ public class ArticleController {
     }
 
     @GetMapping("/bookmark/{memberId}")
-    public ResponseEntity<?> bookmarkArticleList(@PathVariable Long memberId, Pageable pageable){
+    public ResponseEntity<?> bookmarkArticleList(@PathVariable Long memberId, Pageable pageable,
+                                                 @CookieValue(value = "jwt", required = true) String token) {
+
+        Member member = jwtTranslator.translate(token);
 
         return HttpResponse.okWithData(HttpStatus.OK, "북마크한 판매글 리스트 조회 성공",
-                findArticleUseCase.bookmarkArticleList(memberId, pageable));
+                findArticleUseCase.bookmarkArticleList(member.getId(), pageable));
     }
 
     @GetMapping("/recommend")
