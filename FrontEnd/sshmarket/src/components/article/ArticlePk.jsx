@@ -276,7 +276,7 @@ export default function ArticlePk({ res, starRating, reviewCnt }) {
       <PriceChart itemId={res.itemId} orientation="vertical"></PriceChart>
       <ContentContainer>{res.content}</ContentContainer>
       <Line></Line>
-      <TextContainer>유사한 상품 추천</TextContainer>
+      <TextContainer>이런 상품은 어떠세요?</TextContainer>
       <RecommendArticle></RecommendArticle>
       <Line></Line>
     </Container>
