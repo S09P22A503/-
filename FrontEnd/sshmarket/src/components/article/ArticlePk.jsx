@@ -13,14 +13,32 @@ import MemberProfile from "../common/MemberProfile";
 import { customAxios } from "../../api/customAxios";
 import axios from "axios";
 import { axiosWithToken } from "../../api/axiosWithToken";
+import Star from "../common/Star";
 
 const Container = styled.div``;
 
-const ImageContainer = styled.div`
-  margin-bottom: 20px;
+const FlexContainer = styled.div`
+  display: flex;
+  margin-bottom: 50px;
 `;
 
-const ContentsContainer = styled.div``;
+const ImageContainer = styled.div`
+  /* border: 1px solid #c2c2c2; */
+  margin-bottom: 20px;
+  width: ${({ width }) => width}px; /* 원하는 가로 크기로 설정 */
+  height: ${({ height }) => height}px; /* 원하는 세로 크기로 설정 */
+  overflow: hidden;
+`;
+
+const Image = styled.img`
+  object-fit: cover; /* 이미지를 가운데 정렬하고, 비율 유지하지 않고 크롭 */
+  z-index: -1;
+`;
+
+const StarContainer = styled.div`
+  margin: 40px 0px 50px;
+  display: flex;
+`;
 
 const FillHeart = styled(IoMdHeart)`
   color: #ff0099;
@@ -37,10 +55,7 @@ const EmptyHeart = styled(IoMdHeart)`
 `;
 
 const BookmarkButton = styled.button`
-  width: 390px;
-  /* height: ${(props) => `${props.height}px`}; */
-
-  /* background: var(--secondary); */
+  width: 240px;
   background: #b082c0;
   font-family: inherit;
   padding: 0px;
@@ -66,69 +81,101 @@ const BookmarkButton = styled.button`
 `;
 
 const Title = styled.div`
-  font-size: x-large;
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 30px;
+  width: 500px;
+  line-height: 50px;
+  color: #282828;
+`;
+
+const Line = styled.div`
+  border-top: 1px solid #a5a5a5;
+  margin: 30px 0px;
 `;
 
 const InfoContainer = styled.div`
-  margin: 40px 0px 40px;
+  padding-left: 40px;
+  padding-top: 20px;
 `;
 
 const InfoDetail = styled.div`
-  margin-bottom: 5px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  font-size: 25px;
+  color: #2c2c2c;
 `;
 
 const ButtonContainer = styled.div`
+  margin-top: 20px;
   display: flex;
 `;
 
 const ProfileContainer = styled.div`
-  margin-bottom: 30px;
+  /* padding-left: 40px; */
+  margin-top: 10px;
+  margin-bottom: 40px;
 `;
 
+const ScoreContainer = styled.div`
+  font-size: 33px;
+  font-weight: 300;
+  margin-top: 20px;
+`;
+
+const CountContainer = styled.div`
+  font-size: 30px;
+  font-weight: 100;
+  margin-top: 20px;
+`;
 const ContentContainer = styled.div`
-  margin-top: 80px;
   text-align: center;
-  font-size: large;
+  font-size: 25px;
+  margin-top: 80px;
+  margin-bottom: 80px;
 `;
 
 const TextContainer = styled.div`
-  font-size: x-large;
-  font-weight: bold;
-  margin: 70px 0px 20px;
+  font-size: 25px;
+  font-weight: 600;
+  margin: 70px 0px 30px 10px;
 `;
 
-export default function ArticlePk({ res }) {
-  const defaultImage =
-    "https://a503.s3.ap-northeast-2.amazonaws.com/memberProfile/ch-4620081_1280.jpg";
+export default function ArticlePk({ res, starRating, reviewCnt }) {
+  const [bookmark, setBookmark] = useState(res.isLike);
 
   const [currentIndex, setCurrentIndex] = useState();
   function handleChange(index) {
     setCurrentIndex(index);
   }
 
+  function priceToString(price) {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   const param = useLocation().pathname.split("/")[2];
 
   const handleLike = () => {
-    axiosWithToken
-      .post(`articles/${param}/bookmarks`)
-      .then((res) => {
-        res.isLike = !res.isLike;
-        console.log("버튼 눌렸음");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    bookmark
+      ? axiosWithToken
+          .delete(`articles/${param}/bookmarks`)
+          .then((res) => {
+            setBookmark(!bookmark);
+            res.isLike = bookmark;
+          })
+          .catch((err) => console.log(err))
+      : axiosWithToken
+          .post(`articles/${param}/bookmarks`)
+          .then((res) => {
+            setBookmark(!bookmark);
+            res.isLike = bookmark;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
   };
 
-  const handleDislike = () => {
-    axiosWithToken
-      .delete(`articles/${param}/bookmarks`)
-      .then((res) => {
-        res.isLike = !res.isLike;
-      })
-      .catch((err) => console.log(err));
+  const Heart = (like) => {
+    return like ? <FillHeart></FillHeart> : <EmptyHeart></EmptyHeart>;
   };
 
   const navigate = useNavigate();
@@ -154,77 +201,84 @@ export default function ArticlePk({ res }) {
 
   return (
     <Container>
-      {res.title && (
-        <ImageContainer>
-          <Carousel
-            showArrows={false}
-            autoPlay={true}
-            infiniteLoop={true}
-            showThumbs={false}
-            selectedItem={res.images[currentIndex]}
-            onChange={handleChange}
-            width={900}
-          >
-            {res.images.length > 0 ? (
-              res.images.map((image, index) => (
+      <FlexContainer>
+        {res.title && (
+          <ImageContainer width={700} height={600}>
+            <Carousel
+              showArrows={false}
+              autoPlay={true}
+              infiniteLoop={true}
+              showThumbs={false}
+              selectedItem={res.images[currentIndex]}
+              onChange={handleChange}
+              width={700}
+              dynamicHeight={false}
+            >
+              {res.images.length > 0 ? (
+                res.images.map((image, index) => (
+                  <div>
+                    <Image height={600} src={image} key={index} alt={index} />
+                  </div>
+                ))
+              ) : (
                 <div>
-                  <img src={image} key={index} alt={index} />
+                  <Image src={res.mainImage} alt={1} />
                 </div>
-              ))
-            ) : (
-              <div>
-                <img src={defaultImage} alt={1} />
-              </div>
-            )}
-          </Carousel>
-        </ImageContainer>
-      )}
-      {res.title && (
-        <ContentsContainer>
-          <ButtonContainer>
-            {res.isLike ? (
-              <BookmarkButton onClick={handleDislike}>
-                <FillHeart></FillHeart>
-              </BookmarkButton>
-            ) : (
-              <BookmarkButton onClick={handleLike}>
-                <EmptyHeart></EmptyHeart>
-              </BookmarkButton>
-            )}
-            <StyledButton
-              content="채팅하기"
-              width={500}
-              onClick={createTrade}
-            ></StyledButton>
-          </ButtonContainer>
+              )}
+            </Carousel>
+          </ImageContainer>
+        )}
+        {res.title && (
           <InfoContainer>
+            <Title>{res.title}</Title>
             <ProfileContainer>
               <MemberProfile member={res.member}></MemberProfile>
             </ProfileContainer>
-            <Title>{res.title}</Title>
-            <InfoDetail>가격 : {res.price} 원</InfoDetail>
+            <InfoDetail>가격 : {priceToString(res.price)}원</InfoDetail>
             {res.mass == null ? (
               <></>
             ) : (
-              <InfoDetail>질량 : {res.mass} g</InfoDetail>
+              <InfoDetail>질량 : {res.mass}g</InfoDetail>
             )}
             {res.amount == null ? (
               <></>
             ) : (
-              <InfoDetail>수량 : {res.amount} 개</InfoDetail>
+              <InfoDetail>수량 : {res.amount}개</InfoDetail>
             )}
             {res.location == null ? (
               <></>
             ) : (
               <InfoDetail>판매지 : {res.location}</InfoDetail>
             )}
+            <StarContainer>
+              <Star rating={starRating ? starRating : 0} fontSize={60}></Star>
+              <ScoreContainer>
+                &nbsp;{starRating ? starRating : 0}
+              </ScoreContainer>
+              <CountContainer>({reviewCnt ? reviewCnt : 0})</CountContainer>
+            </StarContainer>
+            <ButtonContainer>
+              <BookmarkButton onClick={handleLike}>
+                {Heart(bookmark)}
+              </BookmarkButton>
+              <StyledButton
+                content="채팅하기"
+                width={240}
+                height={45}
+                onClick={createTrade}
+              ></StyledButton>
+            </ButtonContainer>
           </InfoContainer>
-          <PriceChart itemId={res.itemId} orientation="vertical"></PriceChart>
-          <ContentContainer>{res.content}</ContentContainer>
-          <TextContainer>유사한 상품 추천</TextContainer>
-          <RecommendArticle></RecommendArticle>
-        </ContentsContainer>
-      )}
+        )}
+      </FlexContainer>
+      <Line></Line>
+      <TextContainer>도소매 가격 추이 그래프</TextContainer>
+      <PriceChart itemId={res.itemId} orientation="vertical"></PriceChart>
+      <ContentContainer>{res.content}</ContentContainer>
+      <Line></Line>
+      <TextContainer>유사한 상품 추천</TextContainer>
+      <RecommendArticle></RecommendArticle>
+      <Line></Line>
     </Container>
   );
 }
