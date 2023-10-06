@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: eureka-client-auth
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    mongodb:
+      uri: mongodb://sshmarket-auth:sixback_auth_passwd_by_jojo!@auth-mongo:27017/sshmarket_member?authSource=admin
+      username: sshmarket-auth
+      password: sixback_auth_passwd_by_jojo!
+      mapping:
+        always-use-unnamed-parameters: true
+
+  datasource:
+    url: jdbc:mysql://auth-mysql/sshmarket_auth?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: sshmarket_auth_user
+    password: sixback_auth_passwd_by_jojo!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: wearesixbacknofronthere
+  expiration: 864000000
+
+server:
+  port: 8080
+
+# Eureka 설정
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url: 
+      defaultZone: http://eureka-server:8761/eureka/
+
+oauth2:
+  google:
+    clientId: 780664099270-6fkn1r7iq6p9eihagmebg9do4j1mm4vd.apps.googleusercontent.com
+    clientSecret: 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
+    redirectUri: "https://j9a503.p.ssafy.io/login/oauth2/code/google"
+    tokenUri: https://oauth2.googleapis.com/token
+    resourceUri: https://www.googleapis.com/oauth2/v2/userinfo
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAVBDPFAQOKFRIMRGE
+      secretKey: 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
+    s3:
+      bucket: a503
+      directory: memberProfile/
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+clientUrl: https://j9a503.p.ssafy.io

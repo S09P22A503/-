@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  auth-mysql:
+    container_name: auth-mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: sixback_auth_root_passwd_by_jojo!
+      MYSQL_USER: sshmarket_auth_user
+      MYSQL_PASSWORD: sixback_auth_passwd_by_jojo!
+      MYSQL_DATABASE: sshmarket_auth
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent" ]
+      interval: 10s
+      timeout: 2s
+      retries: 100
+    ports:
+      - 3307:3306
+    volumes:
+      - sshmarket-auth:/var/lib/mysql
+    networks:
+      - sshmarket-auth-net
+
+  auth-mongo:
+    container_name: auth-mongo
+    image: mongo:6.0
+    ports:
+      - 27018:27017
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sshmarket-auth
+      MONGO_INITDB_ROOT_PASSWORD: sixback_auth_passwd_by_jojo!
+    volumes:
+      - ./redis/data/:/data/db
+    networks:
+      - sshmarket-net
+
+volumes:
+  sshmarket-auth:
+
+networks:
+  sshmarket-auth-net:
+    external: true
+    name: "sshmarket-auth-net"

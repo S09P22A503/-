@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  apit-gateway-server:
+    container_name: api-gateway
+    image: j9a503.p.ssafy.io:8999/sshmarket-api-gateway:0.0
+    expose:
+      - "8081"
+    environment:
+      API_GATEWAY_PORT: 8081
+      EUREKA_SERVER_NAME: eureka-server
+      EUREKA_SERVER_PORT: 8761
+    networks:
+      - sshmarket-net
+networks:
+  sshmarket-net:
+    external: true
+    name: "sshmarket-net"

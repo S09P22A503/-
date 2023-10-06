@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  trade-mysql:
+    container_name: trade-mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: sixback_trade_root_passwd_by_jojo!
+      MYSQL_USER: sshmarket_trade_user
+      MYSQL_PASSWORD: sixback_trade_passwd_by_jojo!
+      MYSQL_DATABASE: sshmarket_trade
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent" ]
+      interval: 10s
+      timeout: 2s
+      retries: 100
+    ports:
+      - 3310:3306
+    volumes:
+      - sshmarket-trade:/var/lib/mysql
+    networks:
+      - sshmarket-trade-net
+
+  trade-mongo:
+    container_name: trade-mongo
+    image: mongo:6.0
+    ports:
+      - 27017:27017
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sshmarket-trade
+      MONGO_INITDB_ROOT_PASSWORD: sixback_trade_passwd_by_jojo!
+    volumes:
+      - ./redis/data/:/data/db
+    networks:
+      - sshmarket-trade-net
+
+  trade-redis:
+    container_name: trade-redis
+    image: redis:latest
+    expose:
+      - 6379
+    restart: always
+    command: redis-server --requirepass sixback_trade_passwd_by_jojo!
+    volumes:
+      - ./redis/data/:/data
+    networks:
+      - sshmarket-trade-net
+
+volumes:
+  sshmarket-trade:
+
+networks:
+  sshmarket-trade-net:
+    external: true
+    name: "sshmarket-trade-net"

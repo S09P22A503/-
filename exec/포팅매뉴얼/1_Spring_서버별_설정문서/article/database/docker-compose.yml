@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  article-mysql:
+    container_name: article-mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: sixback_article_root_passwd_by_jojo!
+      MYSQL_USER: sshmarket_article_user
+      MYSQL_PASSWORD: sixback_article_passwd_by_jojo!
+      MYSQL_DATABASE: sshmarket_article
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent" ]
+      interval: 10s
+      timeout: 2s
+      retries: 100
+    ports:
+      - 3308:3306
+    volumes:
+      - sshmarket-article:/var/lib/mysql
+    networks:
+      - sshmarket-article-net
+
+volumes:
+  sshmarket-article:
+
+networks:
+  sshmarket-article-net:
+    external: true
+    name: "sshmarket-article-net"

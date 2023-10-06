@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  auth-spring-app:
+    container_name: auth-spring-app
+    image: j9a503.p.ssafy.io:8999/sshmarket-dev-auth:0.0
+    environment:
+      MYSQL_HOST: auth-mysql
+    expose:
+      - "8080"
+    networks:
+      - sshmarket-net
+      - sshmarket-auth-net
+networks:
+  sshmarket-net:
+    external: true
+    name: "sshmarket-net"
+  sshmarket-auth-net:
+    external: true
+    name: "sshmarket-auth-net"

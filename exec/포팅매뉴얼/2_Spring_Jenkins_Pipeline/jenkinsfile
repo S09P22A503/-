@@ -1,0 +1,69 @@
+pipeline{
+
+  agent any
+
+  environment {
+    SERVER = "j9a503.p.ssafy.io"
+  }
+  
+  stages{
+
+        stage("Set ENV Variable"){
+            steps{
+                script{
+                  JENKINS_ITEM_NAME = "SSHM-{도메인명}"
+                  BRANCH =  "develop/{도메인명}"
+                  GITLAB_REPO = "https://lab.ssafy.com/s09-bigdata-dist-sub2/S09P22A503.git"
+
+                  cleanWs()
+                }
+            }
+          }
+
+        stage("Git Clone"){
+            steps{
+              git branch : BRANCH , url : GITLAB_REPO, credentialsId : 'GITLAB_ACCOUNT'
+            }
+        }
+
+        stage("Add Config File"){
+            steps{
+                withCredentials( [file(credentialsId: '{도메인명}_CONFIG', variable: 'applicationConfig'), ]) {
+                    script {
+                        sh 'mkdir BackEnd/{도메인명}/src/main/resources/'
+                        sh 'chmod +w BackEnd/{도메인명}/src/main/resources/'
+                        sh 'cp $applicationConfig BackEnd/{도메인명}/src/main/resources/application.yml'
+                        sh 'chmod -w BackEnd/{도메인명}/src/main/resources/'
+                    }
+                }
+            }
+        }
+
+        stage('build') {
+            steps {
+                dir('BackEnd/{도메인명}') {
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean build'
+                    sh "docker build -f dockerfile -t sshmarket-dev-{도메인명}:0.0 ."
+                }
+            }
+        }
+
+
+        stage('Docker Image Push') {
+            steps {            
+                withCredentials([
+                  string(credentialsId : 'DOCKER_REGISTRY_HTPASSW_ID', variable : 'DOCKER_REGISTRY_HTPASSW_ID'),
+                  string(credentialsId: 'DOCKER_REGISTRY_HTPASSW_PASSWORD', variable : 'DOCKER_REGISTRY_HTPASSW_PASSWORD'),
+                ]){
+                    sh '''
+                    docker login ${SERVER}:8999 -u ${DOCKER_REGISTRY_HTPASSW_ID} -p ${DOCKER_REGISTRY_HTPASSW_PASSWORD}
+                    docker tag sshmarket-dev-{도메인명}:0.0 ${SERVER}:8999/sshmarket-dev-{도메인명}:0.0
+                    docker push ${SERVER}:8999/sshmarket-dev-{도메인명}:0.0
+                    '''
+                }
+            }
+        }
+
+  }
+}

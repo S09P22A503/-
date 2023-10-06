@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: eureka-client-trade
+  data:
+    mongodb:
+      uri: mongodb://sshmarket-trade:sixback_trade_passwd_by_jojo!@trade-mongo:27017/sshmarket_trade
+      username: sshmarket-trade
+      password: sixback_trade_passwd_by_jojo!
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: sshmarket_trade_user
+    url: jdbc:mysql://trade-mysql/sshmarket_trade?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    password: sixback_trade_passwd_by_jojo!
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        format_sql: 'true'
+    show-sql: 'true'
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+
+
+jwt:
+  secret: wearesixbacknofronthere
+  expiration: 86400000
+
+# Eureka 설정
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url: 
+      defaultZone: http://eureka-server:8761/eureka/
+
+server:
+  port: 8085
+
+member:
+  url: http://member-spring-app:8082
+
+article:
+  url: http://article-spring-app:8083
+
+kafka:
+  server: "http://kafka:9092"

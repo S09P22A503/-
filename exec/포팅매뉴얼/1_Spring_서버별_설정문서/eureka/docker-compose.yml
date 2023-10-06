@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  eureka-server:
+    container_name: eureka-server
+    image: j9a503.p.ssafy.io:8999/sshmarket-eureka:0.0
+    ports:
+      - 8761:8761
+    networks:
+      - sshmarket-net
+networks:
+  sshmarket-net:
+    external: true
+    name: "sshmarket-net"
+      

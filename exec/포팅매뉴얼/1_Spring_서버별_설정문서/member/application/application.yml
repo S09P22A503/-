@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: eureka-client-member
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    mongodb:
+      uri: mongodb://sshmarket-auth:sixback_auth_passwd_by_jojo!@auth-mongo:27017/sshmarket_member?authSource=admin
+      username: sshmarket-auth
+      password: sixback_auth_passwd_by_jojo!
+      mapping:
+        always-use-unnamed-parameters: true
+
+server:
+  port: 8082
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url: 
+      defaultZone: http://eureka-server:8761/eureka/

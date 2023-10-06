@@ -1,0 +1,60 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://article-mysql/sshmarket_article?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: sshmarket_article_user
+    password: sixback_article_passwd_by_jojo!
+  application:
+    name: eureka-client-article
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
+# Eureka 설정
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url: 
+      defaultZone: http://eureka-server:8761/eureka/
+
+
+server:
+  port: 8083
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+cloud:
+  aws:
+    s3:
+      bucket: a503
+    credentials:
+      access-key: AKIAVBDPFAQOKFRIMRGE
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+
+jwt:
+  secret: wearesixbacknofronthere
+  expiration: 86400000
+
+member:
+  url: http://member-spring-app:8082
+
+review:
+  url: http://review-spring-app:8084/
