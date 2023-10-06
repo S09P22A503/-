@@ -4,7 +4,7 @@ import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
 const StarContainer = styled.div`
   display: flex;
   margin-bottom: 20px;
-  font-size: x-large;
+  font-size: ${({ fontSize }) => fontSize}px;
 `;
 
 const StarFill = styled(BsStarFill)`
@@ -19,7 +19,7 @@ const StarEmpty = styled(BsStar)`
   color: #b388eb;
 `;
 
-export default function Star({ rating }) {
+export default function Star({ rating, fontSize }) {
   const filledStars = Math.floor(rating); // 채워진 별의 개수
   const hasHalfStar = rating % 1 !== 0; // 0.5 이상인 경우 반 별이 존재
 
@@ -40,5 +40,9 @@ export default function Star({ rating }) {
     return stars;
   };
 
-  return <StarContainer>{renderStars()}</StarContainer>;
+  return (
+    <StarContainer fontSize={fontSize ? fontSize : 23}>
+      {renderStars()}
+    </StarContainer>
+  );
 }

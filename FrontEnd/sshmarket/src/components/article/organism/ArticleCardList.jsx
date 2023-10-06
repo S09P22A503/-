@@ -20,6 +20,10 @@ const CardContainer = styled.div`
 `;
 
 export default function ArticleCardList({ data, page, setPage, handleData }) {
+  function priceToString(price) {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   return (
     <Container>
       {data.content && (
@@ -30,7 +34,7 @@ export default function ArticleCardList({ data, page, setPage, handleData }) {
                 key={index}
                 title={res.title}
                 mainImage={res.mainImageUrl}
-                price={res.price}
+                price={priceToString(res.price)}
                 amount={res.amount}
                 mass={res.mass}
                 starRating={res.starRating}

@@ -68,7 +68,7 @@ export default function ArticleList() {
         `articles?${keyword ? "keyword=" + keyword : ""}&${
           category ? "category=" + category : ""
         }&locationId=${LocationSelect.value}&tradeType=${TradeSelect.value}` +
-          `&size=24&page=${page?page:0}`
+          `&size=24&page=${page ? page : 0}`
       )
       .then((res) => {
         setData(res.data.data);
@@ -110,7 +110,12 @@ export default function ArticleList() {
           ></Select>
         </SelectContainger>
       </SelectBoxContainer>
-      <ArticleCardList data={data} page={page} setPage={setPage} handleData={getList}></ArticleCardList>
+      <ArticleCardList
+        data={data}
+        page={page}
+        setPage={setPage}
+        handleData={getList}
+      ></ArticleCardList>
     </Container>
   );
 }

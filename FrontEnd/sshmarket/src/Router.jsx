@@ -38,11 +38,11 @@ const router = createBrowserRouter([
             path: "",
             element: <ArticleList />,
           },
-          {
-            path: ":articleId",
-            element: <ArticleDetail />,
-          },
         ],
+      },
+      {
+        path: "article/:articleId",
+        element: <ArticleDetail />,
       },
       {
         path: "article/write",
