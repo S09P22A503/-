@@ -8,6 +8,7 @@ import { customAxios } from "../api/customAxios";
 import { axiosWithToken } from "../api/axiosWithToken";
 import SubButton from "../components/Button/SubButton";
 import { IoIosArrowBack } from "react-icons/io";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 
 const Container = styled.div`
   display: flex;
@@ -30,13 +31,52 @@ export default function ArticleDetail() {
   const param = useLocation().pathname.split("/")[2];
   const navigate = useNavigate();
 
+  const member = useSelector((state) => state.MemberReducer);
+
   const [data, setData] = useState([]);
   const [review, setReview] = useState([]);
   const [averageScore, setAverageScore] = useState([0.0]);
   const [reviewCount, setReviewCount] = useState([0]);
 
+  const [entryTime, setEntryTime] = useState(new Date());
+
   useEffect(() => {
-    customAxios
+    console.log("param ", param);
+  }, []);
+
+  useEffect(() => {
+    axios
+      .post(
+        `${process.env.REACT_APP_PYTHON_SERVER_URL}/collect/data`,
+        {
+          user_id: member.id ? member.id : 1,
+          article_id: parseInt(param),
+          dtype: "viewcount",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .catch(() => {});
+
+    const exitTime = new Date();
+    const durationMilliseconds = exitTime - entryTime;
+    const durationSeconds = Math.round(durationMilliseconds / 1000);
+
+    // 서버에 POST 요청 보내기
+    axios.post(`${process.env.REACT_APP_PYTHON_SERVER_URL}/collect/data`, {
+      user_id: member.id ? member.id : 1,
+      article_id: param,
+      dtype: "viewingtime",
+      viewingtime: durationSeconds,
+    });
+
+    // 시간 업데이트
+    setEntryTime(exitTime);
+
+    axiosWithToken
       .get(`articles/${param}`)
       .then((res) => {
         setData(res.data.data);
@@ -46,7 +86,7 @@ export default function ArticleDetail() {
         console.log(err);
       });
 
-    customAxios
+    axiosWithToken
       .get(`reviews/${param}`)
       .then((res) => {
         console.log(res.data.data);
