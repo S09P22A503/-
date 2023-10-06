@@ -144,6 +144,10 @@ const TextContainer = styled.div`
 export default function ArticlePk({ res, starRating, reviewCnt }) {
   const [bookmark, setBookmark] = useState(res.isLike);
 
+  useEffect(() => {
+    setBookmark(res.isLike);
+  }, [res.isLike]);
+
   const [currentIndex, setCurrentIndex] = useState();
   function handleChange(index) {
     setCurrentIndex(index);
@@ -159,8 +163,7 @@ export default function ArticlePk({ res, starRating, reviewCnt }) {
       ? axiosWithToken
           .delete(`articles/${param}/bookmarks`)
           .then((res) => {
-            setBookmark(!bookmark);
-            res.isLike = bookmark;
+            res.isLike = !res.isLike;
           })
           .catch((err) => console.log(err))
       : axiosWithToken
@@ -186,6 +189,7 @@ export default function ArticlePk({ res, starRating, reviewCnt }) {
   useEffect(() => {
     setSellerId(res.member?.id);
   }, [res]);
+
   const createTrade = async () => {
     await postCreateTrade({
       responseFunc: {
