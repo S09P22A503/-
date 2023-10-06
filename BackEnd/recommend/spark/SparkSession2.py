@@ -88,7 +88,7 @@ print(os.path.exists(os.environ.get("SPARK_DRIVER_CLASSPATH") + "/postgresql-42.
 
 # Schedueling이 필요한 작업들
 
-@sched.scheduled_job('interval',seconds = 2400, id = 'train_the_model')
+@sched.scheduled_job('interval',seconds = 300, id = 'train_the_model')
 def train_als():
 
     print("모델 학습 시작")
