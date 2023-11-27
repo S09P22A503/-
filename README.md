@@ -1,32 +1,35 @@
 # 🥗생소한마켓
-
 ![플젝로고](https://github.com/moonstal1506/stock/assets/96678352/3acf0784-e215-4e4c-a39d-240bf44bdb4a)
 
 ## 📖목차
-
-- [README](#readme) - [🗓프로젝트 진행 기간](#-프로젝트-진행-기간) - [📑주제](#-주제) - [🎉프로젝트 기획](#-프로젝트-기획) - [🔑 주요 기능](#-주요-기능) - [🖥 서비스 화면](#-서비스-화면) - [🏗️ 아키텍쳐](#-아키텍쳐) - [📚 컨벤션](#-컨벤션) - [Git Commit](#git-commit) - [Git Branch](#git-branch) - [💾 결과물](#-결과물) - [UCC](#UCC)
+- [README](#readme)
+	- [🗓프로젝트 진행 기간](#-프로젝트-진행-기간)
+	- [📑주제](#-주제)
+	- [🎉프로젝트 기획](#-프로젝트-기획)
+	- [🔑 주요 기능](#-주요-기능)
+	- [🖥 서비스 화면](#-서비스-화면)
+	- [🏗️ 아키텍쳐](#-아키텍쳐)
+	- [📚 컨벤션](#-컨벤션)
+		- [Git Commit](#git-commit)
+		- [Git Branch](#git-branch)
+	- [💾 결과물](#-결과물)
+	    - [UCC](#UCC)
 <!-- <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small> -->
 
 ---
-
 ## 🗓 프로젝트 진행 기간
-
 `2023.08.28 ~ 2023.10.06 (약 7주)`
 
 ---
-
 ## 📑 주제
-
 생산자와 소비자를 한곳에 이어줄 수 있는 농산물 직거래 플랫폼
 
 ---
-
 ## 🎉 프로젝트 기획
 
 <img src="https://github.com/moonstal1506/stock/assets/96678352/33871178-97ed-40c8-b530-5351e4594c20" alt="프로젝트기획"/>
 
 ---
-
 ## 🔑 주요 기능
 
 - 농수산물 도소매 가격 정보 제공
@@ -36,23 +39,18 @@
 <img src="https://github.com/moonstal1506/stock/assets/96678352/57dfbb2e-4b6c-4604-9911-409a3e71a63b" alt="주요기능"/>
 
 ---
-
 ## 🏗️ 아키텍쳐
 
 ### 아키텍쳐
-
 <img     src="https://github.com/moonstal1506/stock/assets/96678352/d468ec4e-5327-4fd4-8699-d183667a5d7e" alt="아키텍쳐 페이지"/>
 
 ### ERD
-
 <img     src="https://github.com/moonstal1506/stock/assets/96678352/0e5a6c31-3a93-4c2f-8dcd-25746e94048e" alt="ERD 페이지"/>
 
 ---
-
 ## 🛠 기술 스택
 
 ### 기술 스택
-
 <div align=center>
     <img src="https://img.shields.io/badge/-GitLab-FCA121?style=flat-square&logo=gitlab&logoColor=white">
     <img src="https://img.shields.io/badge/-Jira-0052CC?style=flat-square&logo=jira&logoColor=white">
@@ -90,9 +88,7 @@
 </div>
 
 ---
-
 ## 🖥 서비스 화면
-
 ### 1. 최초 메인 화면
 
 - 최초 메인화면에서는 카테고리 전체 유저의 경향 데이터에 기반한 추천 판매글이 제공됩니다.
@@ -163,43 +159,41 @@
 
 ![상품등록상단.png](https://github.com/moonstal1506/stock/assets/96678352/7bee7385-e810-4027-be5b-76e3747959cf)
 
-## ![상품등록하단.png](https://github.com/moonstal1506/stock/assets/96678352/b771dbb2-029c-4503-a9c4-233d7c18ad85)
+![상품등록하단.png](https://github.com/moonstal1506/stock/assets/96678352/b771dbb2-029c-4503-a9c4-233d7c18ad85)
+---
 
 ## 📚 컨벤션
 
 ### Git 브랜치 전략
-
-| main                                         | develop/FE, develop/BE 브랜치가 통합되는 브랜치 운영용 서버 |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| develop/BE                                   | 백엔드 개발 브랜치                                          |
-| release/BE                                   | 백엔드 배포 브랜치                                          |
-| develop/도메인명                             | 각 도메인별 개발 브랜치                                     |
-| release/도메인명                             | 각 도메인별 배포 브랜치                                     |
-| develop/FE                                   | 프론트 개발 브랜치                                          |
-| release/FE                                   | 프론트 배포 브랜치                                          |
-| feature/{도메인명}-{기능이름}-{지라이슈번호} | 각 기능을 개발하는 이슈 번호                                |
+| main | develop/FE, develop/BE 브랜치가 통합되는 브랜치 운영용 서버 |
+| --- | --- |
+| develop/BE | 백엔드 개발 브랜치 |
+| release/BE | 백엔드 배포 브랜치 |
+| develop/도메인명 | 각 도메인별 개발 브랜치 |
+| release/도메인명 | 각 도메인별 배포 브랜치 |
+| develop/FE | 프론트 개발 브랜치 |
+| release/FE | 프론트 배포 브랜치 |
+| feature/{도메인명}-{기능이름}-{지라이슈번호} | 각 기능을 개발하는 이슈  번호 |
 
 ### Commit Convention
-
-| Prefix   | 설명                                                                               |
-| -------- | ---------------------------------------------------------------------------------- |
-| feat     | 새로운 기능 추가                                                                   |
-| fix      | 버그 수정 또는 typo                                                                |
-| refactor | 리팩토링                                                                           |
-| design   | css 등 사용자 UI 디자인 변경                                                       |
-| comment  | 필요한 주석 추가 및 변경                                                           |
-| style    | 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우                                  |
-| test     | 테스트(테스트 코드 추가, 수정 ,삭제 비즈니스 로직에 변경이 없는 경우               |
-| chore    | 위에 걸리지 않는 기타 변경사항(빌드 스크립트 수정, assets image, 패키지 매니저 등) |
-| init     | 프로젝트 초기 생성                                                                 |
-| rename   | 파일 혹은 폴더명 수정하거나 옮기는 경우                                            |
-| remove   | 파일 삭제하는 작업만 수행하는 경우                                                 |
-| docs     | readme 등 문서 수정 시                                                             |
+| Prefix | 설명 |
+| --- | --- |
+| feat | 새로운 기능 추가 |
+| fix | 버그 수정 또는 typo |
+| refactor | 리팩토링 |
+| design | css 등 사용자 UI 디자인 변경 |
+| comment | 필요한 주석 추가 및 변경 |
+| style | 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우 |
+| test | 테스트(테스트 코드 추가, 수정 ,삭제 비즈니스 로직에 변경이 없는 경우 |
+| chore | 위에 걸리지 않는 기타 변경사항(빌드 스크립트 수정, assets image, 패키지 매니저 등) |
+| init | 프로젝트 초기 생성 |
+| rename | 파일 혹은 폴더명 수정하거나 옮기는 경우 |
+| remove | 파일 삭제하는 작업만 수행하는 경우 |
+| docs | readme 등 문서 수정 시 |
 
 ---
-
 ## 💾 결과물
 
 ### 시연 영상
-
 https://youtu.be/6BolM7_jv-o
+
